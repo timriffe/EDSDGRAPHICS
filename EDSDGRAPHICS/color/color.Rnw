@@ -1,0 +1,64 @@
+\section{color}
+There are different ways to specify colors in R plots. In general, do not always limit yourself to always writting \texttt{"red"}, \texttt{"green"} and so forth. If you do, then your head quickly runs out of colors and your plots end up looking cheap. This place \url{http://research.stowers-institute.org/efg/R/Color/Chart/} is a good reference for colors if you just want a quick suggestion. 
+
+\subsection{Color tip \#1: use a palette}
+One thing that I find helpful for style and consistency is making a palette of colors to use within a project. Define a palette as a vector of colors something like this:
+
+<<results=verbatim>>=
+# Chose some nice colors:
+my7cols <- c("gold","darkturquoise","maroon1","olivedrab3",
+		"orangered","slateblue1","springgreen")
+# let's say they're for identifying countries
+names(my7cols) <- c("IT","FR","CZ","DE","ES","UK","DK")
+@
+
+Now whenever you go plot something, just use the object \texttt{my7cols} to grab the colors by index number, like this: \texttt{col=my7cols[1]}; or by name, like this\texttt{my7cols["IT"]}. The basic idea is to go go through your work, recycling the same nice palette. You'll need a bigger or smaller palette depending on what you're doing. The point is to avoid inconsistency in your figures: If age groups are indicated by color in more than one plot, then you need to be consistent about which color is for which age/variable/dimension in your data. It's easier 1) to avoid mistakes and 2) to make global changes to your color scheme if you simply define a palette once at the begining of your R script. This advice is valid for any of the 3 earlier-mentioned graphics systems. Seems obvious, but it's easy to get sloppy otherwise.
+
+\subsection{Color tip \#2: use color ramps}
+A ramp is a continuous color gradient from which you can select colors. Ramps have start and end color, and optionally specified intermediate colors. Color ramps in R are functions. You may be familar with the functions \texttt{heat.colors()} or \texttt{rainbow()}. These are standard color ramps. Many others are available in packages, and they are also easy to invent. Do:
+
+<<echo=TRUE,results=verbatim>>=
+rainbow(7)
+@
+
+The number 7 is how many colors you want back from the function, spread out evenly over the entire ramp. If you specify more colors, the starting and ending colors will be the same, but the intermediate colors change to new interpolated positions. You see that it spits back 7 colors specified as hexidecimal character strings. It's hard to look at those and imagine what colors they are, but a simple way to guess is to remember the pattern \texttt{RRGGBB}, that is to say the first 2 numbers/letters after the \texttt{\#} are reds, the 3rd and 4th are greens, and the 5th and 6th are blues. The last two are optional, and are for opacity, which I discuss later. Think of \texttt{FF} as \textit{full}. So the first color means 100\% red, the third is like 1/2 red and full green, and so forth\footnote{When you're feeling too lazy to go to the R Colors webpage, invent something random, keeping this pattern in mind.}. Color ramps are useful in demography when you want color to stand for a continuous variable. This might be age, time, intensity- anything that you can think of on a continuum. Do not use color gradients to represent qualitatively different things like population subgroups. I use them mostly for mortality (logged) and fertility surfaces\footnote{You could make a migration surface and you'd be the first!}.\\
+ 
+There is no standard color ramp for mortality surfaces at this time in demography. If you want one, you have to define it, and a legend is necessary for reference. At times you'll need to make a custom legend for it to work well. Here's how to make one:
+
+<<fig=TRUE,results=verbatim>>=
+library(grDevices) # this package is included in base
+# colors evenly spaced over range(values):
+mxcolors <- colorRampPalette(c("white","blue","palegreen",
+				"yellow","red","purple")) 
+# a sequence mx values:
+mxvals <- seq(from=log(.00001),to=log(1),length.out=500)
+# image() always wants a matrix to plot:
+COLMAT <- matrix(mxvals,ncol=1)
+# image() plots a gridded surface:
+image(z=COLMAT,
+	x=mxvals,
+	col=mxcolors(length(COLMAT)),
+	axes=FALSE,
+	main="custom color ramp for e.g. m(x)",
+	xlab="m(x) values")
+# defaults to log axis ticks, (negative numbers).
+# need to be tricky to get the labels right:
+axis(1,
+	at=log(c(.00001,.0001,.001,.01,.1,1)),
+	labels=c(.00001,.0001,.001,.01,.1,1))
+box() # give it a frame
+@
+\subsection{transparency}
+Transparency is useful for managing clutter and/or displaying density in your plots. It allows you to overlap plotted objects, fitting way more in the plot without confusing people's eyes. Let's say you have two different lines fit to data, or a few competing lowess smoothers on a scatterplot, or something like that. If you put in confidence interval lines for each, then your plot suddenly has 6 lines. That gets confusing. You can sort it out a bit with color, but the plot quickly becomes a jungle as the number of plotted lines grows. When that happens, most people just decide not to put in the confidence lines. Bad! Instead, plot the confidence interval as a shaded area using the \texttt{polygon()} function, and make them semitransparent so that these regions can overlap with no loss of information.\\
+
+To use transparency in R you need to specify the color in hexidecimal and add 2 digits to the end. Here's a convenience function to take a named color or a vector of named colors and give them 50\% transparency in hexidecimal, where \texttt{alpha} means opacity (transparency reversed!):
+
+<<>>=
+colalpha <- function(color,alpha){
+	colalphai <- function(color,alpha){
+		paste(rgb(t(col2rgb(color)/255)),alpha,sep="")
+	}
+	sapply(color,colalphai,alpha=alpha)
+}
+colalpha(my7cols,50)
+@

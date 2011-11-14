@@ -1,0 +1,191 @@
+% function called later in this script, shown earlier in text
+<<results=hide,echo=FALSE>>=
+my7cols <- c("gold","darkturquoise","maroon1","olivedrab3",
+		"orangered","slateblue1","springgreen")
+# let's say they're for identifying countries
+names(my7cols) <- c("IT","FR","CZ","DE","ES","UK","DK")
+colalpha <- function(color,alpha){
+	colalphai <- function(color,alpha){
+		paste(rgb(t(col2rgb(color)/255)),alpha,sep="")
+	}
+	sapply(color,colalphai,alpha=alpha)
+}
+colalpha(my7cols,50)
+@
+
+\subsection{An Example}
+We'll now walk through a semi-realistic example that uses both a palette and transparency to make a hectic plot intelligble. The data used are simulated below, but there's no need to examine it unless you're interested. Most aspects of this data are random, but the mechanism at work within each country subset is similar.
+
+<<>>=
+set.seed(236) # to get consistent random numbers:
+ctry_y <- rev(sort(sample(-100:400,7))) # some country effects
+ctry_x <- sort(sample(1:90,7))		 # x shifting for each country too...
+x <- y <- c()
+for (i in 1:7){
+	# the x range is random too
+	xi <- rep(seq(from=0,
+		to=runif(1,runif(1,10,30),runif(1,40,60)),
+		length.out=50),3)
+	x <- c(x,ctry_x[i]+xi)
+	# y takes the country effect plus obs noise
+	# a random country scalar and a random country exponential.
+	y <- c(y,
+		ctry_y[i]+
+		runif(150,runif(1,0,30),runif(1,30,80))+
+		runif(1,.8,3)*
+		xi^(runif(150,1.2,1.4)))
+}
+# stick together into a data.frame
+sdat <- data.frame(ctry=rep(names(my7cols),each=150),x=x,y=y)
+@
+
+Our point of departure plot suffers from 2 things: 1) The noise wins your attention rather than the line and 2) the line is very wrong. We will alter this plot iteratively to learn about R graphical parameters, i.e. this is not stats advice, although you can get an idea of how function syntax works from this. The whole Simpson's Paradox thing is to make the example more interesting, for an exuse for putting lots of lines on the plot, and to get you thinking about Jim's heterogeneity tricks.
+
+<<fig=TRUE>>=
+# naive linear regression
+LM <- lm(y~x,data=sdat) 
+plot(sdat$x,sdat$y,
+		main="*Simpson's paradox*, it can happen to you!",
+		sub="95% CI",
+		xlab="meaningless x",
+		ylab="meaningless y",
+		xlim=c(0,125),
+		ylim=c(0,700))
+abline(LM, col="red",lwd=2) # regression line (y~x) 
+clim <- as.data.frame(predict(LM, 
+			data.frame(x=0:125), 
+			level=0.95, 
+			interval="confidence")
+		)
+  # lower then upper CI
+lines(0:125,clim$lwr,col="red",lty=2) 
+lines(0:125,clim$upr,col="red",lty=2) 
+@
+
+There is some mixing in there that is difficult to separate visually, though it's clear that points are somehow grouped, probably by country. A quick and ugly diagnostic, and a plotting function you should frequently use when getting to know your data is \texttt{pairs()}, which plots a matrix of bivariate plots:
+
+<<>>=
+# try this, plot not included in document
+# pairs(y~x+country,data=sdat)
+@
+
+Back to the original scatter, it's now clear how we need to split the data visually. Let's use the \texttt{pch} parameter to make the points solid (19), make them stand out less by using transparency with the function \texttt{colalpha()} defined above, and separate them using our color palette defined earlier. One way to do this efficiently is to iterate over a vector of country codes (you can iterate over just about anything in R!). If this were a big computational task, I would not recommend using a for loop, but there are plenty of cases where it really makes no difference whether you use a for loop or not in R. For fancy plotting, I use them quite a bit. 
+
+<<fig=TRUE>>=
+# define empty plot of required dimensions
+plot(NULL,
+		type="n",
+		xlim=c(0,125),
+		ylim=c(0,700),
+		xlab="meaningless x",
+		ylab="meaningless y")
+# iterate over country names to add points:
+for (i in names(my7cols)){
+	ind <- sdat$ctry==i
+	points(sdat$x[ind],
+		sdat$y[ind],
+		pch=19,
+		col=colalpha(my7cols[i],30) 
+	)
+}
+legend("bottomleft",fill=my7cols,legend=names(my7cols))
+@
+
+It being clearly the case that each country shows a similar but shifted pattern, we can do away with the naive regression line and and control for country. This code chunk does this (still easily improved upon) regression and grabs us a few useful points for plottng in the next code chunk. I'll explain a bit the strange-looking loop. What I want to do for the plot is draw a line over each colored cloud of points, but I don't want it to cross the entire plot. This will be done with the function \texttt{segments()}, which like most functions in R is vectorized, meaning we can supply vectors as arguments and it will repeat same task running element-wise simultaneously down each of the argument vectors. \texttt{segments()} wants the x and y for the points forming each end of the segment, so this for-loop selects an appropriate x max and min for each country, and then finds the corresponding model-predicted y values. First we use \texttt{range()} to grab the min and max x values for a given country and stick them into \texttt{xi}. Then we stick it into the model formula, where \texttt{LM["x"]} is the slope coefficient, and \texttt{LM[paste("ctry",ctryi,sep="")]} grabs the additive country coefficient. \texttt{paste()} is used to concatenate character strings in R and is one of the most useful functions you can know.
+
+<<>>=
+LM <- unlist(lm(y~x+ctry,data=sdat)$coef)
+LM["ctryCZ"] <- 0 # a hack to make life easier
+xmin <- xmax <- ymin <- ymax <- c()
+for (i in 1:7){
+	ctryi <- names(my7cols)[i]
+	ind <- sdat$ctry==ctryi
+	xi <- range(sdat$x[ind])
+	xmin[i] <- xi[1]-5
+	ymin[i] <- LM[1]+LM["x"]*(xi[1]-5)+LM[paste("ctry",ctryi,sep="")]
+	xmax[i] <- xi[2]+5
+	ymax[i] <- LM[1]+LM["x"]*(xi[2]+5)+LM[paste("ctry",ctryi,sep="")]
+}
+@
+
+Now we have four vectors ready and can replot, drawing country-specific predicted line segments using \texttt{segments()}.
+
+<<fig=TRUE>>=
+# define empty plot of required dimensions
+plot(NULL,
+	type="n",
+	xlim=c(0,125),
+	ylim=c(0,700),
+	xlab="meaningless x",
+	ylab="meaningless y")
+# iterate over country names to add points:
+for (i in names(my7cols)){
+	ind <- sdat$ctry==i
+	points(sdat$x[ind],
+	   sdat$y[ind],
+	   pch=19,
+	   col=colalpha(my7cols[i],30) 
+	)
+}
+segments(xmin,ymin,xmax,ymax,my7cols,lwd=2)
+legend("bottomleft",fill=my7cols,legend=names(my7cols))
+@
+
+You could without much effort add lines for confidence intervals to these lines, using the same steps as for the naive(r) regression that we started with. For that you'd want to throw the \texttt{predict()} steps into a loop as well to be able to calculate separate lines for each country. Even better would be to refit the model allowing slopes to vary between countries, and even better still would be to allow a non-linear fit, since the within-country pattern is exponential, rather than linear. For your reference, you can do this using the \texttt{nlme()} function in the package \texttt{MASS} or with \texttt{glmer()} in \texttt{lme4a}, and there are multiple free online tutorials for doing that kind of thing. Instead of doing that, we'll pretend we don't know the true pattern to each point cloud, and we'll jump to non-parametric fitting. There are many ways to do this. You can find a good primer with John Fox's non-parametric regression tutorial here: \url{http://cran.r-project.org/doc/contrib/Fox-Companion/appendix-nonparametric-regression.pdf}. Really all we want is to put some decent-looking confidence bands on some decent-fitting line decribing each cluster. This we'll do using the \texttt{loess()} function, which, along with the spline family of functions, is extremely useful in demography. Here we just want an informative plot, but really you can use non-parametric function to smooth any kind of noisy data,  e.g. ASFR curves for small areas, or to infer single age rates from 5-year age groups, etc.\\
+
+Another good choice in that situation is to simply make all of your confidence bands a transparent light grey. To keep averything clear, plot points first, then the confidence bands, then the predicted fitted lines. Here's an example that iterates over everything:
+
+<<fig=TRUE>>=
+# define empty plot of required dimensions
+plot(NULL,
+	type="n",
+	xlim=c(0,125),
+	ylim=c(0,700),
+	xlab="meaningless x",
+	ylab="meaningless y",
+	main="color grid background\nsemitransparent 95% CI\nloess smoothing over points")
+# par["usr"] = coords of user area
+# make a light grey rectangle
+rect(par("usr")[1],par("usr")[3],par("usr")[2],par("usr")[4],col="#EBEBEB")
+# plot gridlines at ticks
+abline(v=axTicks(side=1),col="white")
+abline(h=axTicks(side=2),col="white")
+# iterate over country names to add points:
+for (i in names(my7cols)){
+	ind <- sdat$ctry==i
+	points(sdat$x[ind],
+	   sdat$y[ind],
+	   pch=19,
+	   col=colalpha(my7cols[i],30) 
+	)
+	# fit loess
+	lo.i <- loess(y~x,
+		data=sdat,
+		subset=ctry==i)
+	x <- seq(min(sdat$x[ind]),
+		max(sdat$x[ind]),
+		length.out=50)
+	xnew <- data.frame(x=x)
+	# predict center and s.e.
+	pred.i <- predict(lo.i,
+		newdata=xnew,
+		se=TRUE)
+	fit <- unlist(pred.i["fit"])
+	# 1.96*se = 95% conf
+	ci <- 1.96*unlist(pred.i["se.fit"])
+	# polygon explained in text
+	polygon(x=c(x,rev(x)),
+		y=c(fit+ci,rev(fit-ci)),
+		col="#44444430",
+		border=NA
+	)
+	# line for fit
+	lines(x,fit,col=my7cols[i],lwd=2)
+}
+@
+
+The background grid probably introduced you to the \texttt{axTicks()} function, which is pretty self-explanitory. This function is sometimes called by \texttt{plot()}- we use it to make sure our grid lines are on the same ticks. Then we plot the colored points in the same way as before, also semi transparent. Then we fit a loess line\footnote{you can make the line more or less sensistive to noise by setting the \texttt{span} argument, which we left at the default (.75)}. We want to extract from this the predicted fit and standard errors (of the loess fit). The \texttt{predict()} function takes the \texttt{newdata} argument, which are the x values for which we want predictions, which must be supplied as a \texttt{data.frame}. These values must be within the range of the original data, since this is a local regression (splines can go beyond the data range). I went ahead and multiplied the standard errors by 1.96 to get out to the 95\% level (\texttt{ci}).\\
+
+The way most eyes like to see confidence intervals plotted, rather than lines, is as a shaded region. It's a matter of preference, of course, but most R users don't bother to figure out the syntax. My idea is to use \texttt{polygon()} so simply draw the CI as a simple shape. Each x value for the prediction has a high and low estimate, thus we need to give each x twice.  Think of yourself as drawing a line \textit{around} the circumference of the area you want to shade: you need to go one way, then come back the other way, hence (\texttt{rev()}). The x argument, \texttt{c(x,rev(x))}, does this for us. The y argument must be given in the same order: first left to right over the top, then right to left around the bottom \texttt{c(fit+ci,rev(fit-ci))}. Your starting and ending points are automatically connected. \texttt{col} refers to the fill color and \texttt{border} is the shape outline. Last, we draw a thick colored line for the smoother itself.
+
+A mini-trick is also in the title: any argument that gets sent to \texttt{text()}, in this case \texttt{main}, inserts a line break whenever it sees \texttt{"\\n"} in the middle of the text. That's how the multiline title gets accomplished.

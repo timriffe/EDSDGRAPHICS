@@ -1,11 +1,21 @@
 % setwd("E:\\CODE\\EDSDGRAPHICS") ; getwd()
 \documentclass[a4paper]{article}
 \usepackage[OT1]{fontenc}
-\usepackage{Sweave}
+\usepackage[nogin]{Sweave}
+\usepackage{tikz}
+\usepackage{hyperref,url}
+\SweaveOpts{cache=FALSE,tidy=TRUE,keep.source=TRUE,tikz=TRUE,height=4.5,width=4.5,verbatim=TRUE}
+\SweaveOpts{prefix.string=figs/}
+\DefineVerbatimEnvironment{Sinput}{Verbatim} {xleftmargin=2em}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=2em}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 \begin{document}
 
 <<echo=FALSE,results=hide>>=
 options(continue=" ")
+options(width=70)
 @
 
 \title{Fancy Plotting in R for EDSDers: A tutorial}
@@ -14,92 +24,12 @@ options(continue=" ")
 \maketitle
 
 \begin{abstract}
-One of the strong points of R is its graphical power. Let's get to it.
+One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the information-to-ink ratio. I'll also include some thoughts on good form for presentations.
 \end{abstract}
 
-This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the information-to-ink ratio. I'll also include some thoughts on good form for presentations.
-
-\section{base vs lattice vs ggplot2}
-There are several \textit{systems} for graphics in R. The two main power-houses are \texttt{lattice} and \texttt{ggplot2}. I am in a minority because I prefer \texttt{base} graphics. If you know enough about any of these systems, you find out that they are all perfectly capable of doing the same things. My advice is to choose your weapon, and learn it well. When you are begining to learn R (during the EDSD), do not waste your time trying to figure them all out. Just choose one,  power through a tutorial for it, and use it for all your assignments. If you have a high standard for your plots and always insist on getting the details right, then by the end of the EDSD year you will be a guru in that graphics system because you will have been forced to creatively use the tools provided in that system. Here is an incomplete summary of the 3 weapons you can choose from:
-
-\begin{enumerate}
-\item{\texttt{lattice}}: for \texttt{lattice} graphics, I recommend the following materials from Prof. Jakoby: \url{http://polisci.msu.edu/jacoby/icpsr/graphics/}. This includes a pdf tutorial, example R scripts and datasets to execute them. His examples start easy and end up getting very advanced. Here's my run-down on \texttt{lattice}, from the little exposure I've had; 1) (+1) if you follow those tutorials and apply the same concepts to your data, you can get started in a single afternoon; 2) (-1) it's a rather self-contained system: you have to learn the lattice way of doing things, so you can't combine base graphics functions with \texttt{lattice}; 3) (+1) \texttt{lattice} has better default aesthetics than base graphics, and is generally color-blind friendly; 4) (+1) the package is capable of handling massive datasets and can often convert huge data into the plot faster than either of the other two systems; 5) (+1) it can make really cool plot matrices that are useful for diagnostics; 6) (-1) it is a legacy system. Most of its dedicated users have been using it for many years and are experts, and so it has a low presence in current discussion forums, but you can still find answers to questions in old mail lists.
-\item{\texttt{ggplot2}}: Every second question in online discussion forums is about a package called \texttt{ggplot2}. There are many programmers of other languages that use R \textit{only} because it has \texttt{ggplot2}. The main idea is to \texttt{ggplot2}, as I understand it, is to implement a so-called \textit{grammar of graphics} (hence gg). That is good because it formalizes ones approach to graphics (+1), but it's also a disadvantage because you have to learn a self-contained system, like with lattice (-1). Stackexchange has tons of help for \texttt{ggplot2} (+1) and it has a rapidy growing user base. The system has aesthetically awesome defaults (+1). I have not experimented with it, so I can't be very helpful. Once you learn how things work, I'm convinced that there's nothing you can't do with it. I have the \texttt{ggplot2} manual, if some wants to borrow it, and there is also a pdf copy available on request.
-\item{\texttt{base}}: for some reason I never graduated from \texttt{base} graphics. That's bad because \texttt{ggplot2} is where the party is at, but good because 1) you can get really proficient in \texttt{base} graphics simply by trying (and succeeding) to emulate either lattice or ggplot2, 2) (+1) its easier to invent new plots using primitive tools in \texttt{base}, 3) (+1) I have the impression that interactive graphics are easier in base too using the \texttt{locator()} function. (+1) Using its primitive tools, I have been able to write functions for plotting Lexis surfaces as triangles rather than as a grid. This is implemented using primitive \texttt{base} functions, and likewise for population pyramids and Lexis diagrams. I think even a guru would have to struggle for days to figure out how to do that in \texttt{ggplot2}, but everything follows intuitively in \texttt{base}. I'm certain you can do beautiful pyramids in either \texttt{lattice} or \texttt{ggplot2}.
-\end{enumerate}
-
-That being said, most of the tricks that I can show you now are only valid for \texttt{base}, altough 1) color works the same in all systems and 2) most base graphics functions have parallels in \texttt{lattice} and \texttt{ggplot2}. In order to use the latter two, you need to install them as packages and call them using \texttt{library(lattice)}, etc. For base, there's no need to load a package.
-
-\section{color}
-There are different ways to specify colors in R. In general, do not always limit yourself to always writting \texttt{"red"}, \texttt{"green"} and so forth. If you do, then your head quickly runs out of colors and your plots look cheap. This place \url{http://research.stowers-institute.org/efg/R/Color/Chart/} is a good reference for colors if you just a quick suggestion. 
-
-\subsection{Color tip #1: use a palette}
-One thing that I find helpful is making a palette of colors to use within a project. Define an objects something like this:
-
-<<results=verbatim>>=
-# Chose some nice colors from the above-linked chart.
-my7cols <- c("gold","darkturquoise","maroon1","olivedrab3",
-		"orangered","slateblue1","springgreen")
-@
-Now whenever you go plot something, just use the object \texttt{my7cols} to grab the colors by index number, like this: \texttt{col=my7cols[1]}, \texttt{col=my7cols[2]}. The basic idea is to go go through your work, recycling the same nice palette. You'll need a bigger or smaller palette depending on what you're doing. The point is to avoid trashy inconsistency in your figures: If age groups are indicated by color in more than one plot, then you need to be consistent about which color is for which age/variable/dimension in your data. It's easier 1) to avoid mistakes and 2) to make global changes to your color scheme if you simply define a palette once at the begining of your R script. This advice is valid for any of the 3 earlier-mentioned graphics systems.
-
-\subsection{Color tip #2: use color ramps}
-A ramp is a continuous color gradient from which you can select colors. They have start and end color, and optionally intermediate colors. Color ramps in R are functions. You may be familar with the functions \texttt{heat.colors()} or \texttt{rainbow()}. These are standard color ramps. Many others are available in packages, and they are also easy to invent. Do:
-
-<<>>=
-rainbow(7)
-@
-
-The number 7 is how many colors you want back from the function, spread out evenly over the entire ramp. If you specify more colors, the starting and ending colors will be the same, but the intermediate colors change to new interpolated positions. You see that it spits back 7 colors specified as hexidecimal character strings. It's hard to look at those and imagine what colors they are, but a simple way to guess is to remember the pattern \texttt{RRGGBB}, that is to say the first 2 numbers/letters after the \texttt{#} are reds, the 3rd and 4th are greens, and the 5th and 6th are blues. The last two are optional, and are for opacity, which I discuss later. Think of \texttt{FF} as \textit{full}. So the first color means 100\% red, the third is like 1/2 red and full green, and so forth\footnote{When you're feeling too lazy to go to the R Colors webpage, invent something random, keeping this pattern in mind.}. Color ramps are useful in demography when you want color to stand for a continuous variable. This might be age, time, intensity- anything that you can think of on a continuum. Do not use color gradients to represent qualitatively different things like population subgroups. I use them mostly for mortality (logged) and fertility surfaces\footnote{You could make a migration surface and you'd be the first!}.\\
- 
-There is no standard color ramp for mortality surfaces at this time in demography. If you want one, you have to define it, and a legend is necessary for reference. At times you'll need to make a custom legend for it to work well. Here's how to make one:
-
-<<fig=TRUE,results=verbatim>>=
-library(grDevices) # this package is included in base
-# a progression of colors, to be evenly spaced over range(values):
-mxcolors <- colorRampPalette(c("white","blue","palegreen","yellow","red","purple")) 
-# a sequence mx values:
-mxvals <- seq(from=log(.00001),to=log(1),length.out=500)
-# image() always wants a matrix to plot:
-COLMAT <- matrix(mxvals,ncol=1)
-# image() plots a gridded surface:
-image(z=COLMAT,
-		x=mxvals,
-		col=mxcolors(length(COLMAT)),
-		axes=FALSE,
-		main="custom color ramp for e.g. m(x)")
-# it would by default give you log axis ticks, with negative numbers.
-# you need to be tricky to get the labels right:
-axis(1,
-		at=log(c(.00001,.0001,.001,.01,.1,1)),
-		labels=c(.00001,.0001,.001,.01,.1,1))
-box() # give it a frame
-@
-\subsection{transparency}
-Transparency is useful for managing clutter in your plots. It allows you to overlap plotted objects, fitting way more in the plot without confusing people's eyes. Let's say you have two different lines fit to data, or a few competing lowess smoothers on a scatterplot, or something like that. If you put in confidence interval lines for each, then your plot suddenly has 6 lines. That gets confusing. You can sort it out a bit with color, but the plot quickly becomes useless as the number of plotted lines grows. When that happens, most people just decide not to put in the confidence lines. Bad! Instead, plot the confidence interval as a shaded area using the \texttt{polygon()} function, and make them semitransparent so that these regions can overlap with no loss of information.\\
-
-To use transparency in R you need to specify the color in hexidecimal and add 2 digits to the end. Here's a convenience function to take a named color or a vector of named colors and give them 50\% transparency in hexidecimal, where \texttt{alpha} means opacity (transparency reversed!):
-
-<<>>=
-colalpha <- function(color,alpha){
-	colalphai <- function(color,alpha){
-		paste(rgb(t(col2rgb(color)/255)),alpha,sep="")
-	}
-	sapply(color,colalphai,alpha=alpha)
-}
-colalpha(my7cols,50)
-@
-
-Another good choice in that situation is to simply make all of your confidence bands a transparent light grey. In that case, always plot the bands first, then the lines on top of them, otherwise the lines get blurred out! Here's an example:
-
-<<>>=
-simd <- rpois(100,5)
-simdata <- as.matrix(table(simd))
-simdata <- data.frame(y=simdata,x=as.numeric(rownames(simdata)))
-
-SIMPOIS <- glm(y~x,data=simdata,family="poisson")
-@
-
+\SweaveInput{compare/compare}
+\SweaveInput{color/color}
+\SweaveInput{color/colorexample}
 
 \section{overplotting}
 \section{transparency}
