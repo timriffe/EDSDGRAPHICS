@@ -1,4 +1,4 @@
-% setwd("E:\\CODE\\EDSDGRAPHICS") ; getwd()
+% setwd("C:\\Users\\triffe\\git\\EDSDGRAPHICS\\EDSDGRAPHICS") ; getwd()
 \documentclass[a4paper]{article}
 \newcommand{\hlnumber}[1]{\textcolor[rgb]{0.0823529411764706,0.0784313725490196,0.709803921568627}{#1}}%
 \newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{1,0,0}{#1}}%
@@ -390,7 +390,7 @@
 \maketitle
 
 \begin{abstract}
-One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the information-to-ink ratio. I'll also include some thoughts on good form for presentations.
+One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the so-called information-to-ink ratio. I'll also include some thoughts on good form for presentations.
 \end{abstract}
 
 \section{base vs lattice vs ggplot2}
@@ -405,8 +405,8 @@ There are several \textit{systems} for graphics in R. The two main power-houses 
 \end{enumerate}
 
 That being said, most of the tricks that I can show you now are only valid for \texttt{base}, altough 1) color works the same in all systems and 2) most base graphics functions have parallels in \texttt{lattice} and \texttt{ggplot2}. In order to use the latter two, you need to install them as packages and call them using \texttt{library(lattice)}, etc.
-\section{color}
-There are different ways to specify colors in R plots. In general, do not always limit yourself to always writting \texttt{"red"}, \texttt{"green"} and so forth. If you do, then your head quickly runs out of colors and your plots end up looking cheap. This place \url{http://research.stowers-institute.org/efg/R/Color/Chart/} is a good reference for colors if you just want a quick suggestion. 
+\section{On the topic of color in R}
+There are different ways to specify colors in R plots. In general, do not always limit yourself to writting \texttt{"red"}, \texttt{"green"} and so forth. If you do, then your head quickly runs out of colors and your plots end up looking cheap. This place \url{http://research.stowers-institute.org/efg/R/Color/Chart/} is a good reference for colors if you just want a quick suggestion. 
 
 \subsection{Color tip \#1: use a palette}
 One thing that I find helpful for style and consistency is making a palette of colors to use within a project. Define a palette as a vector of colors something like this:
@@ -434,7 +434,7 @@ One thing that I find helpful for style and consistency is making a palette of c
 \hlstd{}
 \end{Houtput}
 
-Now whenever you go plot something, just use the object \texttt{my7cols} to grab the colors by index number, like this: \texttt{col=my7cols[1]}; or by name, like this\texttt{my7cols["IT"]}. The basic idea is to go go through your work, recycling the same nice palette. You'll need a bigger or smaller palette depending on what you're doing. The point is to avoid inconsistency in your figures: If age groups are indicated by color in more than one plot, then you need to be consistent about which color is for which age/variable/dimension in your data. It's easier 1) to avoid mistakes and 2) to make global changes to your color scheme if you simply define a palette once at the begining of your R script. This advice is valid for any of the 3 earlier-mentioned graphics systems. Seems obvious, but it's easy to get sloppy otherwise.
+Now whenever you go plot something, just use the object \texttt{my7cols} to grab the colors by index number, like this: \texttt{col=my7cols[1]}; or by name, like this\texttt{my7cols["IT"]}. The basic idea is to go go through your work, recycling the same nice palette. You'll need a bigger or smaller palette depending on what you're doing. The point is to avoid inconsistency in your figures: If age groups are indicated by color in more than one plot, then you need to be consistent about which color is for which age/variable/dimension in your data. It's easier 1) to avoid mistakes and 2) to make global changes to your color scheme if you simply define a palette once at the begining of your R figures script\footnote{Tangential advice: within a project (paper, assignment,thesis), don't cram all of your R work into a single script. It get's long and impossible to navegate. Instead, write a separate R file for the major steps of analysis: 1) reading in data, 2) data pre-processing, 3) model 4) results 5) figures (change these to suit your style) and put these in your project folder. Then get a single file that just calls the other scripts sequentially, using source("path\\to\\readindata.R")}. This advice is valid for any of the 3 earlier-mentioned graphics systems. Seems obvious, but it's easy to get sloppy otherwise.
 
 \subsection{Color tip \#2: use color ramps}
 A ramp is a continuous color gradient from which you can select colors. Ramps have start and end color, and optionally specified intermediate colors. Color ramps in R are functions. You may be familar with the functions \texttt{heat.colors()} or \texttt{rainbow()}. These are standard color ramps. Many others are available in packages, and they are also easy to invent. Do:
@@ -456,7 +456,7 @@ A ramp is a continuous color gradient from which you can select colors. Ramps ha
 
 The number 7 is how many colors you want back from the function, spread out evenly over the entire ramp. If you specify more colors, the starting and ending colors will be the same, but the intermediate colors change to new interpolated positions. You see that it spits back 7 colors specified as hexidecimal character strings. It's hard to look at those and imagine what colors they are, but a simple way to guess is to remember the pattern \texttt{RRGGBB}, that is to say the first 2 numbers/letters after the \texttt{\#} are reds, the 3rd and 4th are greens, and the 5th and 6th are blues. The last two are optional, and are for opacity, which I discuss later. Think of \texttt{FF} as \textit{full}. So the first color means 100\% red, the third is like 1/2 red and full green, and so forth\footnote{When you're feeling too lazy to go to the R Colors webpage, invent something random, keeping this pattern in mind.}. Color ramps are useful in demography when you want color to stand for a continuous variable. This might be age, time, intensity- anything that you can think of on a continuum. Do not use color gradients to represent qualitatively different things like population subgroups. I use them mostly for mortality (logged) and fertility surfaces\footnote{You could make a migration surface and you'd be the first!}.\\
  
-There is no standard color ramp for mortality surfaces at this time in demography. If you want one, you have to define it, and a legend is necessary for reference. At times you'll need to make a custom legend for it to work well. Here's how to make one:
+There is no standard color ramp for mortality surfaces at this time in demography. If you want one, you have to define it, and a legend is necessary for reference. At times you'll need to make a custom legend for it to work well. Here's how to make one (\texttt{mxcolors()}):
 
 \begin{Houtput}
 \hspace*{\fill}\\
@@ -523,7 +523,7 @@ There is no standard color ramp for mortality surfaces at this time in demograph
 {\tikzexternaldisable
 \input{figs/-004.tikz}
 }
-\subsection{transparency}
+\subsection{Color tip \#3: use transparency}
 Transparency is useful for managing clutter and/or displaying density in your plots. It allows you to overlap plotted objects, fitting way more in the plot without confusing people's eyes. Let's say you have two different lines fit to data, or a few competing lowess smoothers on a scatterplot, or something like that. If you put in confidence interval lines for each, then your plot suddenly has 6 lines. That gets confusing. You can sort it out a bit with color, but the plot quickly becomes a jungle as the number of plotted lines grows. When that happens, most people just decide not to put in the confidence lines. Bad! Instead, plot the confidence interval as a shaded area using the \texttt{polygon()} function, and make them semitransparent so that these regions can overlap with no loss of information.\\
 
 To use transparency in R you need to specify the color in hexidecimal and add 2 digits to the end. Here's a convenience function to take a named color or a vector of named colors and give them 50\% transparency in hexidecimal, where \texttt{alpha} means opacity (transparency reversed!):
@@ -854,12 +854,22 @@ The background grid probably introduced you to the \texttt{axTicks()} function, 
 The way most eyes like to see confidence intervals plotted, rather than lines, is as a shaded region. It's a matter of preference, of course, but most R users don't bother to figure out the syntax. My idea is to use \texttt{polygon()} so simply draw the CI as a simple shape. Each x value for the prediction has a high and low estimate, thus we need to give each x twice.  Think of yourself as drawing a line \textit{around} the circumference of the area you want to shade: you need to go one way, then come back the other way, hence (\texttt{rev()}). The x argument, \texttt{c(x,rev(x))}, does this for us. The y argument must be given in the same order: first left to right over the top, then right to left around the bottom \texttt{c(fit+ci,rev(fit-ci))}. Your starting and ending points are automatically connected. \texttt{col} refers to the fill color and \texttt{border} is the shape outline. Last, we draw a thick colored line for the smoother itself.
 
 A mini-trick is also in the title: any argument that gets sent to \texttt{text()}, in this case \texttt{main}, inserts a line break whenever it sees \texttt{"\\n"} in the middle of the text. That's how the multiline title gets accomplished.
+% 
+\section{Demographic Surfaces in R}
+Whenever you have data cross-classified along three or more continuous dimensions, you should think about looking at it as a surface. These might not even be strictly demographic dimensions! You could in principal plot a surface of mortality by income over time \footnote{you'd probably be the first, and a righteous demographer indeed}. Demographers generally choose to plot the variable of interest over age and time. You could also however plot a marriage or fertility surface where age of female runs over one axis and age of male over another- these are rarely seen in the wild, but have a straightforward interpretation. I mention all these atypical examples precisely so that you can start to think creatlively with the powerful tools at your fingertips: You can get really great ideas just by looking at your data in a different way. In any case, data that are cross-tabulated like this are easy to find or can easily be aggregated from microdata.  I'll start this part by running over the simplest surface functions in R, and how to get the most out of them, then we'll do some examples with real data (and make some more color ramps).
 
-\section{overplotting}
-\section{transparency}
-\section{surfaces and animation}
-\section{pairs}
-\section{confidence intervals}
+\subsection{Functions for plotting surfaces in R}
+
+\begin{enumerate}
+\item{\texttt{image()}} base (\texttt{graphics}). Simplest- Be careful which axis is which if your data happen to be square. \texttt{heat.colors(12)} is the default color ramp
+\item{\texttt{heatmap()}} base (\texttt{stats})- puts a dendogram (cluster tree) in the margins too. Beware- it might reorganize your data according to the dendogram!
+\item{\texttt{image.plot()}} \texttt{fields} package. like \texttt{image()}, but includes legend. Default color ramp goes from cool to hot colors (\texttt{tim.colors(64)})
+\item{\texttt{levelplot()}} \texttt{lattice} package. Transposes data (columns in y, rows in x). Default color ramp is cyan to pink
+\item{\texttt{contourplot()}} in \texttt{lattice} package. Plots isolines like a topo-map. For color, add \texttt{region=TRUE}. Also transposed.
+\item{\texttt{geom\_tile}} in \texttt{ggplot2} package. No matrices: organize your data as a data.frame with 3 columns "age", "year", and "z". See example later on.
+\end{enumerate}
+
+
 
 
 \end{document}

@@ -182,6 +182,7 @@ for (i in names(my7cols)){
 	# line for fit
 	lines(x,fit,col=my7cols[i],lwd=2)
 }
+legend("bottomleft",fill=my7cols,legend=names(my7cols))
 @
 
 The background grid probably introduced you to the \texttt{axTicks()} function, which is pretty self-explanitory. This function is sometimes called by \texttt{plot()}- we use it to make sure our grid lines are on the same ticks. Then we plot the colored points in the same way as before, also semi transparent. Then we fit a loess line\footnote{you can make the line more or less sensistive to noise by setting the \texttt{span} argument, which we left at the default (.75)}. We want to extract from this the predicted fit and standard errors (of the loess fit). The \texttt{predict()} function takes the \texttt{newdata} argument, which are the x values for which we want predictions, which must be supplied as a \texttt{data.frame}. These values must be within the range of the original data, since this is a local regression (splines can go beyond the data range). I went ahead and multiplied the standard errors by 1.96 to get out to the 95\% level (\texttt{ci}).\\

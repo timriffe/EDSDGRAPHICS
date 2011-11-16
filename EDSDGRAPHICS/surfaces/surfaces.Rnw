@@ -1,0 +1,14 @@
+% 
+\section{Demographic Surfaces in R}
+Whenever you have data cross-classified along three or more continuous dimensions, you should think about looking at it as a surface. These might not even be strictly demographic dimensions! You could in principal plot a surface of mortality by income over time \footnote{you'd probably be the first, and a righteous demographer indeed}. Demographers generally choose to plot the variable of interest over age and time. You could also however plot a marriage or fertility surface where age of female runs over one axis and age of male over another- these are rarely seen in the wild, but have a straightforward interpretation. I mention all these atypical examples precisely so that you can start to think creatlively with the powerful tools at your fingertips: You can get really great ideas just by looking at your data in a different way. In any case, data that are cross-tabulated like this are easy to find or can easily be aggregated from microdata.  I'll start this part by running over the simplest surface functions in R, and how to get the most out of them, then we'll do some examples with real data (and make some more color ramps).
+
+\subsection{Functions for plotting surfaces in R}
+
+\begin{enumerate}
+\item{\texttt{image()}} base (\texttt{graphics}). Simplest- Be careful which axis is which if your data happen to be square. \texttt{heat.colors(12)} is the default color ramp
+\item{\texttt{heatmap()}} base (\texttt{stats})- puts a dendogram (cluster tree) in the margins too. Beware- it might reorganize your data according to the dendogram!
+\item{\texttt{image.plot()}} \texttt{fields} package. like \texttt{image()}, but includes legend. Default color ramp goes from cool to hot colors (\texttt{tim.colors(64)})
+\item{\texttt{levelplot()}} \texttt{lattice} package. Transposes data (columns in y, rows in x). Default color ramp is cyan to pink
+\item{\texttt{contourplot()}} in \texttt{lattice} package. Plots isolines like a topo-map. For color, add \texttt{region=TRUE}. Also transposed.
+\item{\texttt{geom\_tile}} in \texttt{ggplot2} package. No matrices: organize your data as a data.frame with 3 columns "age", "year", and "z". See example later on.
+\end{enumerate}

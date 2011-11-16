@@ -1,4 +1,4 @@
-% setwd("E:\\CODE\\EDSDGRAPHICS") ; getwd()
+% setwd("C:\\Users\\triffe\\git\\EDSDGRAPHICS\\EDSDGRAPHICS") ; getwd()
 \documentclass[a4paper]{article}
 \usepackage[OT1]{fontenc}
 \usepackage[nogin]{Sweave}
@@ -24,18 +24,15 @@ options(width=70)
 \maketitle
 
 \begin{abstract}
-One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the information-to-ink ratio. I'll also include some thoughts on good form for presentations.
+One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the so-called information-to-ink ratio. I'll also include some thoughts on good form for presentations.
 \end{abstract}
 
 \SweaveInput{compare/compare}
 \SweaveInput{color/color}
 \SweaveInput{color/colorexample}
+\SweaveInput{surfaces/surfaces}
 
-\section{overplotting}
-\section{transparency}
-\section{surfaces and animation}
-\section{pairs}
-\section{confidence intervals}
+
 
 
 \end{document}
