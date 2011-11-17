@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.6.1 on 2011-11-16 18:13:07
+% Created by tikzDevice version 0.6.1 on 2011-11-17 18:50:25
 % !TEX encoding = UTF-8 Unicode
 \begin{tikzpicture}[x=1pt,y=1pt]
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
@@ -6,7 +6,7 @@
 \fill[color=fillColor,] (0,0) rectangle (325.21,325.21);
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (325.21,325.21);
-\definecolor[named]{drawColor}{rgb}{0.24,0.00,0.33}
+\definecolor[named]{drawColor}{rgb}{0.13,0.00,0.33}
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 
 \node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.20] at (174.61,296.47) {\bfseries custom color ramp for e.g. m(x)%
@@ -17,7 +17,7 @@
 \end{scope}
 \begin{scope}
 \path[clip] ( 49.20, 61.20) rectangle (300.01,276.01);
-\definecolor[named]{drawColor}{rgb}{0.24,0.00,0.33}
+\definecolor[named]{drawColor}{rgb}{0.13,0.00,0.33}
 \definecolor[named]{fillColor}{rgb}{1.00,1.00,1.00}
 
 \draw[fill=fillColor,draw opacity=0.00,] ( 49.20, 61.20) rectangle ( 49.70,276.01);
@@ -1521,7 +1521,7 @@
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (325.21,325.21);
-\definecolor[named]{drawColor}{rgb}{0.24,0.00,0.33}
+\definecolor[named]{drawColor}{rgb}{0.13,0.00,0.33}
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 
 \draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 49.45, 61.20) -- (299.76, 61.20);

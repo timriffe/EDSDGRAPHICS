@@ -372,6 +372,7 @@
 \usetikzlibrary{external}
 \tikzexternalize[mode=list and make]
 
+\usepackage{graphicx}
 \usepackage{hyperref,url}
 
 
@@ -843,6 +844,10 @@ Another good choice in that situation is to simply make all of your confidence b
 \hlstd{}\hlprompt{{\ }}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
 \normalfont
 \hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{legend}\hlkeyword{(}\hlstring{"bottomleft"}\hlkeyword{,}{\ }\hlargument{fill}{\ }\hlargument{=}{\ }\hlsymbol{my7cols}\hlkeyword{,}{\ }\hlargument{legend}{\ }\hlargument{=}{\ }\hlfunctioncall{names}\hlkeyword{(}\hlsymbol{my7cols}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
 \hlstd{}
 \end{Houtput}
 {\tikzexternaldisable
@@ -868,6 +873,242 @@ Whenever you have data cross-classified along three or more continuous dimension
 \item{\texttt{contourplot()}} in \texttt{lattice} package. Plots isolines like a topo-map. For color, add \texttt{region=TRUE}. Also transposed.
 \item{\texttt{geom\_tile}} in \texttt{ggplot2} package. No matrices: organize your data as a data.frame with 3 columns "age", "year", and "z". See example later on.
 \end{enumerate}
+
+In general, you need to pay attention to whether surface plotting functions need your data as a matrix, data.frame, in gridded or long format. The examples here use data from the HMD for the USA, 1933-2007 (75 years), ages 0-110+ (111 ages).
+
+\subsubsection{image()}
+Let's jump straight into examples. \texttt{image()} is probably the easiest function to use if you just want to take a quick look at patterns in your data, but its defaults aren't necessarily the most convenient for for Lexis-like surfaces. Function input must be a \texttt{matrix} (no \texttt{data.frame}s). If your data matrix has years across the columns and ages going down the rows, beware: it will be plotted transposed, with years going down the y-axis and ages going over the x axis, and you will not necessarily notice this because 1) axes are scaled to go from 0 to 1 and 2) data are stretched to fit into the plot region evenly. For Lexis surfaces you always want proportionality between the rendering of age and years. This we can force by specifying an aspect ratio of 1 with $\texttt{asp=1}$. \footnote{Notice that I've inserted surfaces into this pdf as raster rather than vector graphics, whereas all the other graphics have been vector so far. You need to experiment to get decent results with surfaces because vector rendering get get complicated. If you have to use a raster in a document or a presentation, make it at least 300 ppi resolution so it doesn't look pixely (but not too big because then your file will get huge)}
+
+
+
+\begin{figure}
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/Image1.png}
+\end{figure}
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{load}\hlkeyword{(}\hlstring{"data//MxMat.RData"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{image}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{MxMat}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+Now we'll run through a variety of pointers for how to get the most out of the image function. Many of these will be little details, and we'll do a large amount of \textit{overplotting} (layering) to get the details.\\ 
+
+First we set value breaks. Remember that one the one hand you want to render your data in logged form, but you want labels to be nice round intuitive numbers. Always specify break points if you'll be 1) making more than one surface plot or 2) want to have a clean and understandable legend. Be sure to specify 1 more break point than you have colors, and that all of your data are contained within your extreme breakpoints. I wanted 20 colors here, so I chose 21 evenly spaced breaks over the range \texttt{log(1e-5)} to \texttt{0}, which will therefore include several nice clean points to be picked out for labelling later: 1e-5, 1e-4, 1e-3, .01, .1, 1 (along with some ugly numbers in between).\\
+
+Second, we reverse the \texttt{heat.colors()} because to most people red is more intense than yellow (don't argue this point with chemists). We are sure this time to take the transpose \texttt{t()} of the matrix, so that ages run up the y axis. The default axes plot ugly, so we switch them off with $\texttt{axes = FALSE}$ and then manually add on axes later with \texttt{axis()}. We also give our own bounding box. One very fine point to get the cells properly centered is to remember that the data begin in 1933, but end at the \textit{end} of 2007, so we specify the x range from 1933 to 2008, rather than 2007. If you specify up until 2007, you'll notice that individual cells overlap years and ages. Likewise, add 1 to your highest age. In this way we have x and y values that cleanly \textit{bound} the data grid.
+
+% first save code chunks so they can be either run together or separately
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{image}\hlkeyword{(}\hlargument{x}{\ }\hlargument{=}{\ }\hlnumber{1933}\hlkeyword{:}\hlnumber{2008}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{:}\hlnumber{111}\hlkeyword{,}{\ }\hlargument{z}{\ }\hlargument{=}{\ }\hlfunctioncall{t}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{MxMat}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{asp}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"Year"}\hlkeyword{,}{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{""}\hlkeyword{,}{\ }\hlargument{breaks}{\ }\hlargument{=}{\ }\hlsymbol{brks}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"US{\ }females,{\ }ln(Mx),{\ }1933-2007{\ }(HMD)"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rect}\hlkeyword{(}\hlnumber{1933}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{2008}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{,}{\ }\hlargument{xpd}{\ }\hlargument{=}{\ }\hlsymbol{T}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{1940}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{2}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{1933}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{mtext}\hlkeyword{(}\hlstring{"Age"}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{,}{\ }\hlkeyword{-}\hlnumber{2}\hlkeyword{,}{\ }\hlargument{xpd}{\ }\hlargument{=}{\ }\hlsymbol{T}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+Unfortunately \texttt{image()} does not offer a legend, but we'll go through and design a nice one here, in case you need to make one for future reference. By the way, we'll be doing \textit{manual} rescaling and shifting in order to get this thing looking good. If you're OK using some else's default color strip legend, then jump to \texttt{image.plot()}, which simply gives you one. Honestly this one is better, though:
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }the{\ }legend{\ }is{\ }a{\ }bit{\ }tricky{\ }to{\ }do{\ }by{\ }hand:}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendymax}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{100}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendymin}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{10}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendxleft}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{2012}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendxright}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{2020}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendy}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlsymbol{legendymax}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlsymbol{legendymin}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rect}\hlkeyword{(}\hlsymbol{legendxleft}\hlkeyword{,}{\ }\hlsymbol{legendy}\hlkeyword{[}\hlkeyword{-}\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{legendxright}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{legendy}\hlkeyword{[}\hlkeyword{-}\hlnumber{21}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{xpd}{\ }\hlargument{=}{\ }\hlsymbol{T}\hlkeyword{,}{\ }\hlargument{border}{\ }\hlargument{=}{\ }\hlnumber{NA}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rect}\hlkeyword{(}\hlsymbol{legendxleft}\hlkeyword{,}{\ }\hlsymbol{legendymin}\hlkeyword{,}{\ }\hlsymbol{legendxright}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{legendymax}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }actually{\ }just{\ }the{\ }ticks{\ }are{\ }tricky:}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendticks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{legendlabs}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendticksscale}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlkeyword{(}\hlsymbol{legendymax}{\ }\hlkeyword{-}{\ }\hlsymbol{legendymin}\hlkeyword{)}\hlkeyword{/}\hlfunctioncall{diff}\hlkeyword{(}\hlfunctioncall{range}\hlkeyword{(}\hlsymbol{legendticks}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendticks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlkeyword{(}\hlsymbol{legendticks}{\ }\hlkeyword{+}{\ }\hlfunctioncall{abs}\hlkeyword{(}\hlfunctioncall{min}\hlkeyword{(}\hlsymbol{legendticks}\hlkeyword{)}\hlkeyword{)}\hlkeyword{)}{\ }\hlkeyword{*}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{legendticksscale}{\ }\hlkeyword{+}{\ }\hlsymbol{legendymin}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlsymbol{legendxright}\hlkeyword{,}{\ }\hlsymbol{legendticks}\hlkeyword{,}{\ }\hlsymbol{legendxright}{\ }\hlkeyword{+}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{2}\hlkeyword{,}{\ }\hlsymbol{legendticks}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{text}\hlkeyword{(}\hlsymbol{legendxright}{\ }\hlkeyword{+}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlsymbol{legendticks}\hlkeyword{,}{\ }\hlsymbol{legendlabs}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+The above code chunk could very easily be converted into a function, but we're not that far along yet. Summarizing, we specify the upper and lower limits of the area where we want to put the legend (over in the right margin, so the coordinates actually go beyond the data). Then we want 21 evenly spaced points to draw the color ramp into (\texttt{legendy}), and we can go ahead and draw the colored rectangles (\texttt{rect()} is vectorized, no need to loop). Remember we want clean labels (\texttt{legendlabs}), but that colors are mapped into log space. Furthermore, we need to spread our ticks out over a different range (in plot coordinates) than that directly given by \texttt{log(legendlabs)}. That's why we make \texttt{legendticksscale} (it stretches our ticks out over the given range), and we shift the whole series upward. Whew! With \texttt{legendticks} defined, we can draw the ticks manually with \texttt{segments()}, which is also vectorized, and likewise with the labels (\texttt{text()}).\\
+
+This however just gets us the major tick marks. Ocassionally, to make such scales clear to the viewer, you'll want to plot minor tick marks in such a way as to make clear that the scale is log (or remind the reader what that means). This little code chunk puts in the minor ticks, by 1) getting a clean sequence from e.g. 1 to .1 (1, .9, .8, .7, .6, .5, .4, .3, .2, .1), then logging, scaling and shifting it prior to drawing the ticks. When completed, it does the same for a clean sequence from .1 to .01, and so forth, until the intermediate legend ranges are filled up nicely. If and when you want to add log ticks that work like these, you'll have to find a manual solution, such as this, as there is no standard or common way of doing it.
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }and{\ }if{\ }you{\ }really{\ }want{\ }to{\ }be{\ }clear{\ }about{\ }the{\ }log}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }{\ }{\ }scale:}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{i}{\ }\hlkeyword{in}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{5}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{yi}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{seq}\hlkeyword{(}\hlsymbol{legendlabs}\hlkeyword{[}\hlsymbol{i}\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{legendlabs}\hlkeyword{[}\hlsymbol{i}{\ }\hlkeyword{+}{\ }\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{yi}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlkeyword{(}\hlsymbol{yi}{\ }\hlkeyword{+}{\ }\hlfunctioncall{abs}\hlkeyword{(}\hlfunctioncall{min}\hlkeyword{(}\hlsymbol{yi}\hlkeyword{)}\hlkeyword{)}\hlkeyword{)}{\ }\hlkeyword{*}{\ }\hlsymbol{legendticksscale}{\ }\hlkeyword{+}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlsymbol{legendticks}\hlkeyword{)}\hlkeyword{[}\hlsymbol{i}\hlkeyword{]}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{segments}\hlkeyword{(}\hlsymbol{legendxright}\hlkeyword{,}{\ }\hlsymbol{yi}\hlkeyword{,}{\ }\hlsymbol{legendxright}{\ }\hlkeyword{+}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlsymbol{yi}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+Finally, another nice detail is to overlay Lexis reference lines. The horizontal and vertical lines are straightforward, but the diagonals are taken care of with a rather hacky but effective solution: we know we'll need 18 or 19 diagonals in order  to cover the whole surface (number of vertical reference lines plus number of horizontal reference lines), and each will have a lower left and an upper right coordinate. \texttt{cmat} is just a container for these coordinates, in order the columns hold: x left, y low, x right, y high. At first they are given coordinates as if the surface drawn were not bounded by years, the the function \texttt{cslicer()} does proportional snipping (to maintain the 45 degree angle) to make sure that none of the lines go beyond the surface. If and when you want to add reference lines to your surface, you'll always have to think of some kind of hack because there is no standard way to do it. My mantra: if it looks good, adds information to the plot and doesn't cost a lot of ink, then do it. Reference lines in this case turn a shapeless ocean of death into an interpretable Lexis surface.
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlnumber{1933}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{2008}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }cohort{\ }lines{\ }are{\ }always{\ }a{\ }head-scratcher:}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{cmat}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{matrix}\hlkeyword{(}\hlargument{ncol}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{,}{\ }\hlargument{nrow}{\ }\hlargument{=}{\ }\hlnumber{18}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{cmat}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{]}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1830}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{cmat}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{]}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{18}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{cmat}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{3}\hlkeyword{]}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{]}{\ }\hlkeyword{+}{\ }\hlnumber{111}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{cmat}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{]}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{111}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{cslicer}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlkeyword{function}\hlkeyword{(}\hlformalargs{x}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlkeyword{if}{\ }\hlkeyword{(}\hlsymbol{x}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}{\ }\hlkeyword{\usebox{\hlnormalsizeboxlessthan}}{\ }\hlnumber{1933}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{d}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{1933}{\ }\hlkeyword{-}{\ }\hlsymbol{x}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{x}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{1933}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{x}\hlkeyword{[}\hlnumber{2}\hlkeyword{]}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{0}{\ }\hlkeyword{+}{\ }\hlsymbol{d}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlkeyword{if}\hlkeyword{}{\ }\hlkeyword{(}\hlsymbol{x}\hlkeyword{[}\hlnumber{3}\hlkeyword{]}{\ }\hlkeyword{\usebox{\hlnormalsizeboxgreaterthan}}{\ }\hlnumber{2008}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{d}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{x}\hlkeyword{[}\hlnumber{3}\hlkeyword{]}{\ }\hlkeyword{-}{\ }\hlnumber{2008}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{x}\hlkeyword{[}\hlnumber{3}\hlkeyword{]}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{2008}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{x}\hlkeyword{[}\hlnumber{4}\hlkeyword{]}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{x}\hlkeyword{[}\hlnumber{4}\hlkeyword{]}{\ }\hlkeyword{-}{\ }\hlsymbol{d}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{x}\hlsymbol{}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{cmat}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{apply}\hlkeyword{(}\hlsymbol{cmat}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlsymbol{cslicer}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlsymbol{cmat}\hlkeyword{[}\hlnumber{1}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{2}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{3}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{4}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+
+
+\begin{figure}
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/LexisImage.png}
+\end{figure}
 
 
 

@@ -2,77 +2,119 @@ chunk: figs/-001
 chunkprefix: figs/-001
 fig:
 cacheDB:
-time: 2011-11-16 18:13:07
+time: 2011-11-17 18:50:24
 
 chunk: figs/-002
 chunkprefix: figs/-002
 fig:
 cacheDB:
-time: 2011-11-16 18:13:07
+time: 2011-11-17 18:50:24
 
 chunk: figs/-003
 chunkprefix: figs/-003
 fig:
 cacheDB:
-time: 2011-11-16 18:13:07
+time: 2011-11-17 18:50:24
 
 chunk: figs/-004
 chunkprefix: figs/-004
 fig: figs/-004.tikz
 cacheDB:
-time: 2011-11-16 18:13:07
+time: 2011-11-17 18:50:24
 
 chunk: figs/-005
 chunkprefix: figs/-005
 fig:
 cacheDB:
-time: 2011-11-16 18:13:07
+time: 2011-11-17 18:50:25
 
 chunk: figs/-006
 chunkprefix: figs/-006
 fig:
 cacheDB:
-time: 2011-11-16 18:13:07
+time: 2011-11-17 18:50:25
 
 chunk: figs/-007
 chunkprefix: figs/-007
 fig:
 cacheDB:
-time: 2011-11-16 18:13:07
+time: 2011-11-17 18:50:25
 
 chunk: figs/-008
 chunkprefix: figs/-008
 fig: figs/-008.tikz
 cacheDB:
-time: 2011-11-16 18:13:07
+time: 2011-11-17 18:50:25
 
 chunk: figs/-009
 chunkprefix: figs/-009
 fig:
 cacheDB:
-time: 2011-11-16 18:13:08
+time: 2011-11-17 18:50:25
 
 chunk: figs/-010
 chunkprefix: figs/-010
 fig: figs/-010.tikz
 cacheDB:
-time: 2011-11-16 18:13:08
+time: 2011-11-17 18:50:25
 
 chunk: figs/-011
 chunkprefix: figs/-011
 fig:
 cacheDB:
-time: 2011-11-16 18:13:08
+time: 2011-11-17 18:50:26
 
 chunk: figs/-012
 chunkprefix: figs/-012
 fig: figs/-012.tikz
 cacheDB:
-time: 2011-11-16 18:13:08
+time: 2011-11-17 18:50:26
 
 chunk: figs/-013
 chunkprefix: figs/-013
 fig: figs/-013.tikz
 cacheDB:
-time: 2011-11-16 18:13:09
+time: 2011-11-17 18:50:26
+
+chunk: figs/-014
+chunkprefix: figs/-014
+fig:
+cacheDB:
+time: 2011-11-17 18:50:27
+
+chunk: figs/-015
+chunkprefix: figs/-015
+fig:
+cacheDB:
+time: 2011-11-17 18:50:27
+
+chunk: a
+chunkprefix: figs/-a
+fig:
+cacheDB:
+time: 2011-11-17 18:50:27
+
+chunk: b
+chunkprefix: figs/-b
+fig:
+cacheDB:
+time: 2011-11-17 18:50:28
+
+chunk: c
+chunkprefix: figs/-c
+fig:
+cacheDB:
+time: 2011-11-17 18:50:28
+
+chunk: d
+chunkprefix: figs/-d
+fig:
+cacheDB:
+time: 2011-11-17 18:50:28
+
+chunk: figs/-020
+chunkprefix: figs/-020
+fig:
+cacheDB:
+time: 2011-11-17 18:50:28
 

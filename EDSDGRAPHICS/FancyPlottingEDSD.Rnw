@@ -3,6 +3,7 @@
 \usepackage[OT1]{fontenc}
 \usepackage[nogin]{Sweave}
 \usepackage{tikz}
+\usepackage{graphicx}
 \usepackage{hyperref,url}
 \SweaveOpts{cache=FALSE,tidy=TRUE,keep.source=TRUE,tikz=TRUE,height=4.5,width=4.5,verbatim=TRUE}
 \SweaveOpts{prefix.string=figs/}
