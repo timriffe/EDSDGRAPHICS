@@ -373,6 +373,7 @@
 \tikzexternalize[mode=list and make]
 
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{hyperref,url}
 
 
@@ -394,6 +395,7 @@
 One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the so-called information-to-ink ratio. I'll also include some thoughts on good form for presentations.
 \end{abstract}
 
+\pagebreak
 \section{base vs lattice vs ggplot2}
 There are several \textit{systems} for graphics in R. The two main power-houses are \texttt{lattice} and \texttt{ggplot2}. I am in a minority because I prefer \texttt{base} graphics. If you know enough about any of these systems, you find out that they are all perfectly capable of doing the same things. My advice is to choose your weapon, and learn it well. When you are begining to learn R (during the EDSD), do not waste your time trying to figure them all out. Just choose one,  power through a tutorial for it, and use it for all your assignments. If you have a high standard for your plots and always insist on getting the details right, then by the end of the EDSD year you will be a guru in that graphics system because you will have been forced to creatively use the tools provided in that system. Here is an incomplete summary of the 3 weapons you can choose from:
 
@@ -406,6 +408,7 @@ There are several \textit{systems} for graphics in R. The two main power-houses 
 \end{enumerate}
 
 That being said, most of the tricks that I can show you now are only valid for \texttt{base}, altough 1) color works the same in all systems and 2) most base graphics functions have parallels in \texttt{lattice} and \texttt{ggplot2}. In order to use the latter two, you need to install them as packages and call them using \texttt{library(lattice)}, etc.
+\pagebreak
 \section{On the topic of color in R}
 There are different ways to specify colors in R plots. In general, do not always limit yourself to writting \texttt{"red"}, \texttt{"green"} and so forth. If you do, then your head quickly runs out of colors and your plots end up looking cheap. This place \url{http://research.stowers-institute.org/efg/R/Color/Chart/} is a good reference for colors if you just want a quick suggestion. 
 
@@ -419,8 +422,8 @@ One thing that I find helpful for style and consistency is making a palette of c
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{my7cols}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"gold"}\hlkeyword{,}{\ }\hlstring{"darkturquoise"}\hlkeyword{,}{\ }\hlstring{"maroon1"}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlstring{"olivedrab3"}\hlkeyword{,}{\ }\hlstring{"orangered"}\hlkeyword{,}{\ }\hlstring{"slateblue1"}\hlkeyword{,}{\ }\hlstring{"springgreen"}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{my7cols}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"gold"}\hlkeyword{,}{\ }\hlstring{"darkturquoise"}\hlkeyword{,}{\ }\hlstring{"maroon1"}\hlkeyword{,}{\ }\hlstring{"olivedrab3"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlstring{"orangered"}\hlkeyword{,}{\ }\hlstring{"slateblue1"}\hlkeyword{,}{\ }\hlstring{"springgreen"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -428,8 +431,8 @@ One thing that I find helpful for style and consistency is making a palette of c
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{names}\hlkeyword{(}\hlsymbol{my7cols}\hlkeyword{)}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"IT"}\hlkeyword{,}{\ }\hlstring{"FR"}\hlkeyword{,}{\ }\hlstring{"CZ"}\hlkeyword{,}{\ }\hlstring{"DE"}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlstring{"ES"}\hlkeyword{,}{\ }\hlstring{"UK"}\hlkeyword{,}{\ }\hlstring{"DK"}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{names}\hlkeyword{(}\hlsymbol{my7cols}\hlkeyword{)}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"IT"}\hlkeyword{,}{\ }\hlstring{"FR"}\hlkeyword{,}{\ }\hlstring{"CZ"}\hlkeyword{,}{\ }\hlstring{"DE"}\hlkeyword{,}{\ }\hlstring{"ES"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlstring{"UK"}\hlkeyword{,}{\ }\hlstring{"DK"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}
@@ -448,8 +451,8 @@ A ramp is a continuous color gradient from which you can select colors. Ramps ha
 \hspace*{\fill}\\
 \hlstd{}\begin{Schunk}
 \begin{Soutput}
-[1] "#FF0000FF" "#FFDB00FF" "#49FF00FF" "#00FF92FF" "#0092FFFF"
-[6] "#4900FFFF" "#FF00DBFF"
+[1] "#FF0000FF" "#FFDB00FF" "#49FF00FF" "#00FF92FF" "#0092FFFF" "#4900FFFF"
+[7] "#FF00DBFF"
 \end{Soutput}
 
 \end{Schunk}
@@ -459,6 +462,7 @@ The number 7 is how many colors you want back from the function, spread out even
  
 There is no standard color ramp for mortality surfaces at this time in demography. If you want one, you have to define it, and a legend is necessary for reference. At times you'll need to make a custom legend for it to work well. Here's how to make one (\texttt{mxcolors()}):
 
+% we show the code here, but not the pdf part
 \begin{Houtput}
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -470,8 +474,8 @@ There is no standard color ramp for mortality surfaces at this time in demograph
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{mxcolors}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{colorRampPalette}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlstring{"white"}\hlkeyword{,}{\ }\hlstring{"blue"}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlstring{"palegreen"}\hlkeyword{,}{\ }\hlstring{"yellow"}\hlkeyword{,}{\ }\hlstring{"red"}\hlkeyword{,}{\ }\hlstring{"purple"}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{mxcolors}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{colorRampPalette}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlstring{"white"}\hlkeyword{,}{\ }\hlstring{"blue"}\hlkeyword{,}{\ }\hlstring{"palegreen"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlstring{"yellow"}\hlkeyword{,}{\ }\hlstring{"red"}\hlkeyword{,}{\ }\hlstring{"purple"}\hlkeyword{)}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -479,8 +483,7 @@ There is no standard color ramp for mortality surfaces at this time in demograph
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{mxvals}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlnumber{1}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{500}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{mxvals}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlnumber{1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{500}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -497,8 +500,7 @@ There is no standard color ramp for mortality surfaces at this time in demograph
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{image}\hlkeyword{(}\hlargument{z}{\ }\hlargument{=}{\ }\hlsymbol{COLMAT}\hlkeyword{,}{\ }\hlargument{x}{\ }\hlargument{=}{\ }\hlsymbol{mxvals}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{mxcolors}\hlkeyword{(}\hlfunctioncall{length}\hlkeyword{(}\hlsymbol{COLMAT}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"custom{\ }color{\ }ramp{\ }for{\ }e.g.{\ }m(x)"}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"m(x){\ }values"}\hlkeyword{)}\mbox{}
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"custom{\ }color{\ }ramp{\ }for{\ }e.g.{\ }m(x)"}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"m(x){\ }values"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -510,9 +512,8 @@ There is no standard color ramp for mortality surfaces at this time in demograph
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -521,9 +522,15 @@ There is no standard color ramp for mortality surfaces at this time in demograph
 \hspace*{\fill}\\
 \hlstd{}
 \end{Houtput}
-{\tikzexternaldisable
-\input{figs/-004.tikz}
-}
+% hidden, make pdf using above code
+
+% insert pdf into document
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/colorramp.pdf}
+\caption{Matching labels to a logged color ramp}
+\end{figure}
+
 \subsection{Color tip \#3: use transparency}
 Transparency is useful for managing clutter and/or displaying density in your plots. It allows you to overlap plotted objects, fitting way more in the plot without confusing people's eyes. Let's say you have two different lines fit to data, or a few competing lowess smoothers on a scatterplot, or something like that. If you put in confidence interval lines for each, then your plot suddenly has 6 lines. That gets confusing. You can sort it out a bit with color, but the plot quickly becomes a jungle as the number of plotted lines grows. When that happens, most people just decide not to put in the confidence lines. Bad! Instead, plot the confidence interval as a shaded area using the \texttt{polygon()} function, and make them semitransparent so that these regions can overlap with no loss of information.\\
 
@@ -546,10 +553,10 @@ To use transparency in R you need to specify the color in hexidecimal and add 2 
 \hspace*{\fill}\\
 \hlstd{}\begin{Schunk}
 \begin{Soutput}
-         IT          FR          CZ          DE          ES 
-"#FFD70050" "#00CED150" "#FF34B350" "#9ACD3250" "#FF450050" 
-         UK          DK 
-"#836FFF50" "#00FF7F50" 
+         IT          FR          CZ          DE          ES          UK 
+"#FFD70050" "#00CED150" "#FF34B350" "#9ACD3250" "#FF450050" "#836FFF50" 
+         DK 
+"#00FF7F50" 
 \end{Soutput}
 
 \end{Schunk}
@@ -583,15 +590,13 @@ We'll now walk through a semi-realistic example that uses both a palette and tra
 \hlstd{}\ttfamily\noindent
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlkeyword{for}{\ }\hlkeyword{(}\hlsymbol{i}{\ }\hlkeyword{in}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{7}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }the{\ }x{\ }range{\ }is{\ }random{\ }too}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{xi}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{10}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{30}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{40}\hlkeyword{,}{\ }\hlnumber{60}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{50}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{3}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{xi}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{10}\hlkeyword{,}{\ }\hlnumber{30}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{40}\hlkeyword{,}{\ }\hlnumber{60}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{50}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{3}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{x}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlsymbol{x}\hlkeyword{,}{\ }\hlsymbol{ctry\usebox{\hlnormalsizeboxunderscore}x}\hlkeyword{[}\hlsymbol{i}\hlkeyword{]}{\ }\hlkeyword{+}{\ }\hlsymbol{xi}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }y{\ }takes{\ }the{\ }country{\ }effect{\ }plus{\ }obs{\ }noise}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }a{\ }random{\ }country{\ }scalar{\ }and{\ }a{\ }random{\ }country}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }{\ }{\ }exponential.}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{y}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlsymbol{y}\hlkeyword{,}{\ }\hlsymbol{ctry\usebox{\hlnormalsizeboxunderscore}y}\hlkeyword{[}\hlsymbol{i}\hlkeyword{]}{\ }\hlkeyword{+}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{150}\hlkeyword{,}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{30}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{30}\hlkeyword{,}{\ }\hlnumber{80}\hlkeyword{)}\hlkeyword{)}{\ }\hlkeyword{+}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.8}\hlkeyword{,}{\ }\hlnumber{3}\hlkeyword{)}{\ }\hlkeyword{*}{\ }\hlsymbol{xi}\hlkeyword{\usebox{\hlnormalsizeboxhat}}\hlkeyword{(}\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{150}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{1.2}\hlkeyword{,}{\ }\hlnumber{1.4}\hlkeyword{)}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }a{\ }random{\ }country{\ }scalar{\ }and{\ }a{\ }random{\ }country{\ }exponential.}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{y}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlsymbol{y}\hlkeyword{,}{\ }\hlsymbol{ctry\usebox{\hlnormalsizeboxunderscore}y}\hlkeyword{[}\hlsymbol{i}\hlkeyword{]}{\ }\hlkeyword{+}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{150}\hlkeyword{,}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{30}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{30}\hlkeyword{,}{\ }\hlnumber{80}\hlkeyword{)}\hlkeyword{)}{\ }\hlkeyword{+}{\ }\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.8}\hlkeyword{,}{\ }\hlnumber{3}\hlkeyword{)}{\ }\hlkeyword{*}{\ }\hlsymbol{xi}\hlkeyword{\usebox{\hlnormalsizeboxhat}}\hlkeyword{(}\hlfunctioncall{runif}\hlkeyword{(}\hlnumber{150}\hlkeyword{,}{\ }\hlnumber{1.2}\hlkeyword{,}{\ }\hlnumber{1.4}\hlkeyword{)}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
 \normalfont
 \hspace*{\fill}\\
@@ -600,8 +605,8 @@ We'll now walk through a semi-realistic example that uses both a palette and tra
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{sdat}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{data.frame}\hlkeyword{(}\hlargument{ctry}{\ }\hlargument{=}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlfunctioncall{names}\hlkeyword{(}\hlsymbol{my7cols}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{each}{\ }\hlargument{=}{\ }\hlnumber{150}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{x}{\ }\hlargument{=}{\ }\hlsymbol{x}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlsymbol{y}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{sdat}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{data.frame}\hlkeyword{(}\hlargument{ctry}{\ }\hlargument{=}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlfunctioncall{names}\hlkeyword{(}\hlsymbol{my7cols}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{each}{\ }\hlargument{=}{\ }\hlnumber{150}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{x}{\ }\hlargument{=}{\ }\hlsymbol{x}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlsymbol{y}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}
@@ -649,9 +654,15 @@ Our point of departure plot suffers from 2 things: 1) The noise wins your attent
 \hspace*{\fill}\\
 \hlstd{}
 \end{Houtput}
+
+\begin{figure}[H]
+\centering
+
 {\tikzexternaldisable
-\input{figs/-008.tikz}
+\input{figs/-010.tikz}
 }
+\caption{A deceptive scatterplot}
+\end{figure}
 
 There is some mixing in there that is difficult to separate visually, though it's clear that points are somehow grouped, probably by country. A quick and ugly diagnostic, and a plotting function you should frequently use when getting to know your data is \texttt{pairs()}, which plots a matrix of bivariate plots:
 
@@ -669,6 +680,7 @@ There is some mixing in there that is difficult to separate visually, though it'
 \end{Houtput}
 
 Back to the original scatter, it's now clear how we need to split the data visually. Let's use the \texttt{pch} parameter to make the points solid (19), make them stand out less by using transparency with the function \texttt{colalpha()} defined above, and separate them using our color palette defined earlier. One way to do this efficiently is to iterate over a vector of country codes (you can iterate over just about anything in R!). If this were a big computational task, I would not recommend using a for loop, but there are plenty of cases where it really makes no difference whether you use a for loop or not in R. For fancy plotting, I use them quite a bit. 
+
 
 \begin{Houtput}
 \hspace*{\fill}\\
@@ -699,9 +711,15 @@ Back to the original scatter, it's now clear how we need to split the data visua
 \hspace*{\fill}\\
 \hlstd{}
 \end{Houtput}
+
+\begin{figure}[H]
+\centering
+
 {\tikzexternaldisable
-\input{figs/-010.tikz}
+\input{figs/-013.tikz}
 }
+\caption{Assign to colors to subsets in a loop}
+\end{figure}
 
 It being clearly the case that each country shows a similar but shifted pattern, we can do away with the naive regression line and and control for country. This code chunk does this (still easily improved upon) regression and grabs us a few useful points for plottng in the next code chunk. I'll explain a bit the strange-looking loop. What I want to do for the plot is draw a line over each colored cloud of points, but I don't want it to cross the entire plot. This will be done with the function \texttt{segments()}, which like most functions in R is vectorized, meaning we can supply vectors as arguments and it will repeat same task running element-wise simultaneously down each of the argument vectors. \texttt{segments()} wants the x and y for the points forming each end of the segment, so this for-loop selects an appropriate x max and min for each country, and then finds the corresponding model-predicted y values. First we use \texttt{range()} to grab the min and max x values for a given country and stick them into \texttt{xi}. Then we stick it into the model formula, where \texttt{LM["x"]} is the slope coefficient, and \texttt{LM[paste("ctry",ctryi,sep="")]} grabs the additive country coefficient. \texttt{paste()} is used to concatenate character strings in R and is one of the most useful functions you can know.
 
@@ -762,8 +780,7 @@ Now we have four vectors ready and can replot, drawing country-specific predicte
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlsymbol{xmin}\hlkeyword{,}{\ }\hlsymbol{ymin}\hlkeyword{,}{\ }\hlsymbol{xmax}\hlkeyword{,}{\ }\hlsymbol{ymax}\hlkeyword{,}{\ }\hlsymbol{my7cols}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{lwd}{\ }\hlargument{=}{\ }\hlnumber{2}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlsymbol{xmin}\hlkeyword{,}{\ }\hlsymbol{ymin}\hlkeyword{,}{\ }\hlsymbol{xmax}\hlkeyword{,}{\ }\hlsymbol{ymax}\hlkeyword{,}{\ }\hlsymbol{my7cols}\hlkeyword{,}{\ }\hlargument{lwd}{\ }\hlargument{=}{\ }\hlnumber{2}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -772,13 +789,18 @@ Now we have four vectors ready and can replot, drawing country-specific predicte
 \hspace*{\fill}\\
 \hlstd{}
 \end{Houtput}
+\begin{figure}[H]
+\centering
+
 {\tikzexternaldisable
-\input{figs/-012.tikz}
+\input{figs/-016.tikz}
 }
+\caption{Fitting multiple OLS to subsets, assuming linearity and equal slopes}
+\end{figure}
 
 You could without much effort add lines for confidence intervals to these lines, using the same steps as for the naive(r) regression that we started with. For that you'd want to throw the \texttt{predict()} steps into a loop as well to be able to calculate separate lines for each country. Even better would be to refit the model allowing slopes to vary between countries, and even better still would be to allow a non-linear fit, since the within-country pattern is exponential, rather than linear. For your reference, you can do this using the \texttt{nlme()} function in the package \texttt{MASS} or with \texttt{glmer()} in \texttt{lme4a}, and there are multiple free online tutorials for doing that kind of thing. Instead of doing that, we'll pretend we don't know the true pattern to each point cloud, and we'll jump to non-parametric fitting. There are many ways to do this. You can find a good primer with John Fox's non-parametric regression tutorial here: \url{http://cran.r-project.org/doc/contrib/Fox-Companion/appendix-nonparametric-regression.pdf}. Really all we want is to put some decent-looking confidence bands on some decent-fitting line decribing each cluster. This we'll do using the \texttt{loess()} function, which, along with the spline family of functions, is extremely useful in demography. Here we just want an informative plot, but really you can use non-parametric function to smooth any kind of noisy data,  e.g. ASFR curves for small areas, or to infer single age rates from 5-year age groups, etc.\\
 
-Another good choice in that situation is to simply make all of your confidence bands a transparent light grey. To keep averything clear, plot points first, then the confidence bands, then the predicted fitted lines. Here's an example that iterates over everything:
+Another good choice in that situation is to simply make all of your confidence bands a transparent light grey. To keep everything clear, plot points first, then the confidence bands, then the predicted fitted lines. Here's an example that iterates over everything:
 
 \begin{Houtput}
 \hspace*{\fill}\\
@@ -788,8 +810,7 @@ Another good choice in that situation is to simply make all of your confidence b
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{plot}\hlkeyword{(}NULL\hlkeyword{,}{\ }\hlargument{type}{\ }\hlargument{=}{\ }\hlstring{"n"}\hlkeyword{,}{\ }\hlargument{xlim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{125}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{ylim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{700}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"meaningless{\ }x"}\hlkeyword{,}{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{"meaningless{\ }y"}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"color{\ }grid{\ }background\usebox{\hlnormalsizeboxbackslash}nsemitransparent{\ }95\usebox{\hlnormalsizeboxpercent}{\ }CI\usebox{\hlnormalsizeboxbackslash}nloess{\ }smoothing{\ }over{\ }points"}\hlkeyword{)}\mbox{}
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{700}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"meaningless{\ }x"}\hlkeyword{,}{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{"meaningless{\ }y"}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"color{\ }grid{\ }background\usebox{\hlnormalsizeboxbackslash}nsemitransparent{\ }95\usebox{\hlnormalsizeboxpercent}{\ }CI\usebox{\hlnormalsizeboxbackslash}nloess{\ }smoothing{\ }over{\ }points"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -817,6 +838,13 @@ Another good choice in that situation is to simply make all of your confidence b
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{abline}\hlkeyword{(}\hlargument{h}{\ }\hlargument{=}{\ }\hlfunctioncall{axTicks}\hlkeyword{(}\hlargument{side}{\ }\hlargument{=}{\ }\hlnumber{2}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"white"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+The above chunk gets the plot area set up. The following piece repeats the same routine for each country subset of points.
+
+\begin{Houtput}
+\hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }iterate{\ }over{\ }country{\ }names{\ }to{\ }add{\ }points:}\mbox{}
 \normalfont
@@ -827,8 +855,7 @@ Another good choice in that situation is to simply make all of your confidence b
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{points}\hlkeyword{(}\hlsymbol{sdat}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{x}\hlkeyword{[}\hlsymbol{ind}\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{sdat}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\hlkeyword{[}\hlsymbol{ind}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{pch}{\ }\hlargument{=}{\ }\hlnumber{19}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{colalpha}\hlkeyword{(}\hlsymbol{my7cols}\hlkeyword{[}\hlsymbol{i}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{30}\hlkeyword{)}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }fit{\ }loess}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{lo.i}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{loess}\hlkeyword{(}\hlsymbol{y}{\ }\hlkeyword{\urltilda{}}{\ }\hlsymbol{x}\hlkeyword{,}{\ }\hlargument{data}{\ }\hlargument{=}{\ }\hlsymbol{sdat}\hlkeyword{,}{\ }\hlargument{subset}{\ }\hlargument{=}{\ }\hlsymbol{ctry}{\ }==\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{i}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{lo.i}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{loess}\hlkeyword{(}\hlsymbol{y}{\ }\hlkeyword{\urltilda{}}{\ }\hlsymbol{x}\hlkeyword{,}{\ }\hlargument{data}{\ }\hlargument{=}{\ }\hlsymbol{sdat}\hlkeyword{,}{\ }\hlargument{subset}{\ }\hlargument{=}{\ }\hlsymbol{ctry}{\ }=={\ }\hlsymbol{i}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{x}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlfunctioncall{min}\hlkeyword{(}\hlsymbol{sdat}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{x}\hlkeyword{[}\hlsymbol{ind}\hlkeyword{]}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{max}\hlkeyword{(}\hlsymbol{sdat}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{x}\hlkeyword{[}\hlsymbol{ind}\hlkeyword{]}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{50}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{xnew}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{data.frame}\hlkeyword{(}\hlargument{x}{\ }\hlargument{=}{\ }\hlsymbol{x}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }predict{\ }center{\ }and{\ }s.e.}\hspace*{\fill}\\
@@ -837,8 +864,8 @@ Another good choice in that situation is to simply make all of your confidence b
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }1.96*se{\ }={\ }95\usebox{\hlnormalsizeboxpercent}{\ }conf}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{ci}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{1.96}{\ }\hlkeyword{*}{\ }\hlfunctioncall{unlist}\hlkeyword{(}\hlsymbol{pred.i}\hlkeyword{[}\hlstring{"se.fit"}\hlkeyword{]}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }polygon{\ }explained{\ }in{\ }text}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{polygon}\hlkeyword{(}\hlargument{x}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlsymbol{x}\hlkeyword{,}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlsymbol{x}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlsymbol{fit}{\ }\hlkeyword{+}{\ }\hlsymbol{ci}\hlkeyword{,}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlsymbol{fit}{\ }\hlkeyword{-}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{ci}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}44444430"}\hlkeyword{,}{\ }\hlargument{border}{\ }\hlargument{=}{\ }\hlnumber{NA}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{polygon}\hlkeyword{(}\hlargument{x}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlsymbol{x}\hlkeyword{,}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlsymbol{x}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlsymbol{fit}{\ }\hlkeyword{+}{\ }\hlsymbol{ci}\hlkeyword{,}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlsymbol{fit}{\ }\hlkeyword{-}{\ }\hlsymbol{ci}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}44444430"}\hlkeyword{,}{\ }\hlargument{border}{\ }\hlargument{=}{\ }\hlnumber{NA}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }line{\ }for{\ }fit}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{lines}\hlkeyword{(}\hlsymbol{x}\hlkeyword{,}{\ }\hlsymbol{fit}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlsymbol{my7cols}\hlkeyword{[}\hlsymbol{i}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{lwd}{\ }\hlargument{=}{\ }\hlnumber{2}\hlkeyword{)}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
@@ -850,16 +877,23 @@ Another good choice in that situation is to simply make all of your confidence b
 \hspace*{\fill}\\
 \hlstd{}
 \end{Houtput}
+
+% hard to place this figure for some reason
+\begin{figure}[H]
+\centering
+
 {\tikzexternaldisable
-\input{figs/-013.tikz}
+\input{figs/-019.tikz}
 }
+\caption{Adding loess smoothers with confidence bands to subsets}
+\end{figure}
 
 The background grid probably introduced you to the \texttt{axTicks()} function, which is pretty self-explanitory. This function is sometimes called by \texttt{plot()}- we use it to make sure our grid lines are on the same ticks. Then we plot the colored points in the same way as before, also semi transparent. Then we fit a loess line\footnote{you can make the line more or less sensistive to noise by setting the \texttt{span} argument, which we left at the default (.75)}. We want to extract from this the predicted fit and standard errors (of the loess fit). The \texttt{predict()} function takes the \texttt{newdata} argument, which are the x values for which we want predictions, which must be supplied as a \texttt{data.frame}. These values must be within the range of the original data, since this is a local regression (splines can go beyond the data range). I went ahead and multiplied the standard errors by 1.96 to get out to the 95\% level (\texttt{ci}).\\
 
 The way most eyes like to see confidence intervals plotted, rather than lines, is as a shaded region. It's a matter of preference, of course, but most R users don't bother to figure out the syntax. My idea is to use \texttt{polygon()} so simply draw the CI as a simple shape. Each x value for the prediction has a high and low estimate, thus we need to give each x twice.  Think of yourself as drawing a line \textit{around} the circumference of the area you want to shade: you need to go one way, then come back the other way, hence (\texttt{rev()}). The x argument, \texttt{c(x,rev(x))}, does this for us. The y argument must be given in the same order: first left to right over the top, then right to left around the bottom \texttt{c(fit+ci,rev(fit-ci))}. Your starting and ending points are automatically connected. \texttt{col} refers to the fill color and \texttt{border} is the shape outline. Last, we draw a thick colored line for the smoother itself.
 
-A mini-trick is also in the title: any argument that gets sent to \texttt{text()}, in this case \texttt{main}, inserts a line break whenever it sees \texttt{"\\n"} in the middle of the text. That's how the multiline title gets accomplished.
-% 
+A mini-trick is also in the title: any argument that gets sent to \texttt{text()}, in this case \texttt{main}, inserts a line break whenever it sees \texttt{"\{\}n"} in the middle of the text. That's how the multiline title gets accomplished.
+\pagebreak
 \section{Demographic Surfaces in R}
 Whenever you have data cross-classified along three or more continuous dimensions, you should think about looking at it as a surface. These might not even be strictly demographic dimensions! You could in principal plot a surface of mortality by income over time \footnote{you'd probably be the first, and a righteous demographer indeed}. Demographers generally choose to plot the variable of interest over age and time. You could also however plot a marriage or fertility surface where age of female runs over one axis and age of male over another- these are rarely seen in the wild, but have a straightforward interpretation. I mention all these atypical examples precisely so that you can start to think creatlively with the powerful tools at your fingertips: You can get really great ideas just by looking at your data in a different way. In any case, data that are cross-tabulated like this are easy to find or can easily be aggregated from microdata.  I'll start this part by running over the simplest surface functions in R, and how to get the most out of them, then we'll do some examples with real data (and make some more color ramps).
 
@@ -867,23 +901,47 @@ Whenever you have data cross-classified along three or more continuous dimension
 
 \begin{enumerate}
 \item{\texttt{image()}} base (\texttt{graphics}). Simplest- Be careful which axis is which if your data happen to be square. \texttt{heat.colors(12)} is the default color ramp
-\item{\texttt{heatmap()}} base (\texttt{stats})- puts a dendogram (cluster tree) in the margins too. Beware- it might reorganize your data according to the dendogram!
-\item{\texttt{image.plot()}} \texttt{fields} package. like \texttt{image()}, but includes legend. Default color ramp goes from cool to hot colors (\texttt{tim.colors(64)})
+\item{\texttt{heatmap()}} base (\texttt{stats})- puts a dendogram (cluster tree) in the margins too. Beware- it might reorganize your data according to the dendogram! Do not use this for demographic surfaces- it's for finding clusters in your data!
+\item{\texttt{image.plot()}} \texttt{fields} package. Like \texttt{image()}, but includes legend. Default color ramp goes from cool to hot colors (\texttt{tim.colors(64)})
 \item{\texttt{levelplot()}} \texttt{lattice} package. Transposes data (columns in y, rows in x). Default color ramp is cyan to pink
 \item{\texttt{contourplot()}} in \texttt{lattice} package. Plots isolines like a topo-map. For color, add \texttt{region=TRUE}. Also transposed.
 \item{\texttt{geom\_tile}} in \texttt{ggplot2} package. No matrices: organize your data as a data.frame with 3 columns "age", "year", and "z". See example later on.
 \end{enumerate}
 
-In general, you need to pay attention to whether surface plotting functions need your data as a matrix, data.frame, in gridded or long format. The examples here use data from the HMD for the USA, 1933-2007 (75 years), ages 0-110+ (111 ages).
+In general, you need to pay attention to whether surface plotting functions need your data as a matrix, data.frame, in gridded or long format. The examples here use data from the HMD for the USA, 1933-2007 (75 years), ages 0-110+ (111 ages). We start with a matrix object, \texttt{MxMat}, extracted from the HMD and organized to have years across the columns and ages going down the rows (as opposed to the default long format given by the HMD).
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{load}\hlkeyword{(}\hlstring{"data//MxMat.RData"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{MxMat}\hlkeyword{[}\hlnumber{1}\hlkeyword{:}\hlnumber{4}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{:}\hlnumber{6}\hlkeyword{]}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\begin{Schunk}
+\begin{Soutput}
+      1933     1934     1935     1936     1937     1938
+0 0.054391 0.059665 0.053952 0.055168 0.053667 0.050897
+1 0.008746 0.009953 0.008258 0.008141 0.007856 0.007369
+2 0.004013 0.004540 0.003789 0.003887 0.003717 0.003322
+3 0.002868 0.002979 0.002756 0.002692 0.002490 0.002250
+\end{Soutput}
+
+\end{Schunk}
+\end{Houtput}
+
 
 \subsubsection{image()}
-Let's jump straight into examples. \texttt{image()} is probably the easiest function to use if you just want to take a quick look at patterns in your data, but its defaults aren't necessarily the most convenient for for Lexis-like surfaces. Function input must be a \texttt{matrix} (no \texttt{data.frame}s). If your data matrix has years across the columns and ages going down the rows, beware: it will be plotted transposed, with years going down the y-axis and ages going over the x axis, and you will not necessarily notice this because 1) axes are scaled to go from 0 to 1 and 2) data are stretched to fit into the plot region evenly. For Lexis surfaces you always want proportionality between the rendering of age and years. This we can force by specifying an aspect ratio of 1 with $\texttt{asp=1}$. \footnote{Notice that I've inserted surfaces into this pdf as raster rather than vector graphics, whereas all the other graphics have been vector so far. You need to experiment to get decent results with surfaces because vector rendering get get complicated. If you have to use a raster in a document or a presentation, make it at least 300 ppi resolution so it doesn't look pixely (but not too big because then your file will get huge)}
+Let's jump straight into examples. \texttt{image()} is probably the most primitive and flexible function for plotting surfaces, but its defaults aren't necessarily the most convenient for for Lexis-like surfaces. That is to say, you can do whatever you want with it, if you have the time. Function input must be a \texttt{matrix} (no \texttt{data.frame}s). If your data matrix has years across the columns and ages going down the rows, beware: it will be plotted transposed, with years going down the y-axis and ages going over the x axis, and you will not necessarily notice this because 1) axes are scaled to go from 0 to 1 and 2) data are stretched to fit into the plot region evenly. For Lexis surfaces you always want proportionality between the rendering of age and years. This we can force by specifying an aspect ratio of 1 with $\texttt{asp=1}$.
 
 
 
-\begin{figure}
+\begin{figure}[H]
 \centering
-\includegraphics[width=4.5in,height=4.5in]{figs/Image1.png}
+\includegraphics[width=4.5in,height=4.5in]{figs/Image1.pdf}
+\caption{image() function, leaving all defaults.}
 \end{figure}
 
 \begin{Houtput}
@@ -899,9 +957,9 @@ Let's jump straight into examples. \texttt{image()} is probably the easiest func
 \hlstd{}
 \end{Houtput}
 
-Now we'll run through a variety of pointers for how to get the most out of the image function. Many of these will be little details, and we'll do a large amount of \textit{overplotting} (layering) to get the details.\\ 
+Now we'll run through a variety of pointers for how to get the most out of the \texttt{image} function. Many of these will be little details, and we'll do a large amount of \textit{overplotting} (layering) to get the details.\\ 
 
-First we set value breaks. Remember that one the one hand you want to render your data in logged form, but you want labels to be nice round intuitive numbers. Always specify break points if you'll be 1) making more than one surface plot or 2) want to have a clean and understandable legend. Be sure to specify 1 more break point than you have colors, and that all of your data are contained within your extreme breakpoints. I wanted 20 colors here, so I chose 21 evenly spaced breaks over the range \texttt{log(1e-5)} to \texttt{0}, which will therefore include several nice clean points to be picked out for labelling later: 1e-5, 1e-4, 1e-3, .01, .1, 1 (along with some ugly numbers in between).\\
+First we set value breaks. Remember that one the one hand you want to render your data in logged form, but you want legend labels to be nice round intuitive numbers. Always specify break points if you'll be 1) making more than one surface plot or 2) want to have a clean and understandable legend. Be sure to specify 1 more break point than you have colors, and that all of your data are contained within your extreme breakpoints. I wanted 20 colors here, so I chose 21 evenly spaced breaks over the range \texttt{log(1e-5)} to \texttt{0}, which will therefore include several nice clean points to be picked out for labelling later: 1e-5, 1e-4, 1e-3, .01, .1, 1 (along with some ugly numbers in between).\\
 
 Second, we reverse the \texttt{heat.colors()} because to most people red is more intense than yellow (don't argue this point with chemists). We are sure this time to take the transpose \texttt{t()} of the matrix, so that ages run up the y axis. The default axes plot ugly, so we switch them off with $\texttt{axes = FALSE}$ and then manually add on axes later with \texttt{axis()}. We also give our own bounding box. One very fine point to get the cells properly centered is to remember that the data begin in 1933, but end at the \textit{end} of 2007, so we specify the x range from 1933 to 2008, rather than 2007. If you specify up until 2007, you'll notice that individual cells overlap years and ages. Likewise, add 1 to your highest age. In this way we have x and y values that cleanly \textit{bound} the data grid.
 
@@ -914,8 +972,8 @@ Second, we reverse the \texttt{heat.colors()} because to most people red is more
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{image}\hlkeyword{(}\hlargument{x}{\ }\hlargument{=}{\ }\hlnumber{1933}\hlkeyword{:}\hlnumber{2008}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{:}\hlnumber{111}\hlkeyword{,}{\ }\hlargument{z}{\ }\hlargument{=}{\ }\hlfunctioncall{t}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{MxMat}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{asp}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"Year"}\hlkeyword{,}{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{""}\hlkeyword{,}{\ }\hlargument{breaks}{\ }\hlargument{=}{\ }\hlsymbol{brks}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"US{\ }females,{\ }ln(Mx),{\ }1933-2007{\ }(HMD)"}\hlkeyword{)}\mbox{}
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{asp}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"Year"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{""}\hlkeyword{,}{\ }\hlargument{breaks}{\ }\hlargument{=}{\ }\hlsymbol{brks}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"US{\ }females,{\ }ln(Mx),{\ }1933-2007{\ }(HMD)"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -923,12 +981,12 @@ Second, we reverse the \texttt{heat.colors()} because to most people red is more
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{1940}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{1940}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{cex}{\ }\hlargument{=}{\ }\hlnumber{0.75}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{2}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{1933}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{2}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{1933}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -968,13 +1026,12 @@ Unfortunately \texttt{image()} does not offer a legend, but we'll go through and
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rect}\hlkeyword{(}\hlsymbol{legendxleft}\hlkeyword{,}{\ }\hlsymbol{legendy}\hlkeyword{[}\hlkeyword{-}\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{legendxright}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{legendy}\hlkeyword{[}\hlkeyword{-}\hlnumber{21}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{xpd}{\ }\hlargument{=}{\ }\hlsymbol{T}\hlkeyword{,}{\ }\hlargument{border}{\ }\hlargument{=}{\ }\hlnumber{NA}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rect}\hlkeyword{(}\hlsymbol{legendxleft}\hlkeyword{,}{\ }\hlsymbol{legendy}\hlkeyword{[}\hlkeyword{-}\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{legendxright}\hlkeyword{,}{\ }\hlsymbol{legendy}\hlkeyword{[}\hlkeyword{-}\hlnumber{21}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{xpd}{\ }\hlargument{=}{\ }\hlsymbol{T}\hlkeyword{,}{\ }\hlargument{border}{\ }\hlargument{=}{\ }\hlnumber{NA}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rect}\hlkeyword{(}\hlsymbol{legendxleft}\hlkeyword{,}{\ }\hlsymbol{legendymin}\hlkeyword{,}{\ }\hlsymbol{legendxright}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{legendymax}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rect}\hlkeyword{(}\hlsymbol{legendxleft}\hlkeyword{,}{\ }\hlsymbol{legendymin}\hlkeyword{,}{\ }\hlsymbol{legendxright}\hlkeyword{,}{\ }\hlsymbol{legendymax}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -982,8 +1039,7 @@ Unfortunately \texttt{image()} does not offer a legend, but we'll go through and
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1005,8 +1061,7 @@ Unfortunately \texttt{image()} does not offer a legend, but we'll go through and
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{text}\hlkeyword{(}\hlsymbol{legendxright}{\ }\hlkeyword{+}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlsymbol{legendticks}\hlkeyword{,}{\ }\hlsymbol{legendlabs}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{text}\hlkeyword{(}\hlsymbol{legendxright}{\ }\hlkeyword{+}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlsymbol{legendticks}\hlkeyword{,}{\ }\hlsymbol{legendlabs}\hlkeyword{,}{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{4}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}
@@ -1019,11 +1074,7 @@ This however just gets us the major tick marks. Ocassionally, to make such scale
 \begin{Houtput}
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }and{\ }if{\ }you{\ }really{\ }want{\ }to{\ }be{\ }clear{\ }about{\ }the{\ }log}\mbox{}
-\normalfont
-\hspace*{\fill}\\
-\hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }{\ }{\ }scale:}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }and{\ }if{\ }you{\ }really{\ }want{\ }to{\ }be{\ }clear{\ }about{\ }the{\ }log{\ }scale:}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1042,13 +1093,13 @@ Finally, another nice detail is to overlay Lexis reference lines. The horizontal
 \begin{Houtput}
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlnumber{1933}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{2008}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlnumber{1933}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{2008}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1076,6 +1127,10 @@ Finally, another nice detail is to overlay Lexis reference lines. The horizontal
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }the{\ }x{\ }argument{\ }is{\ }a{\ }row{\ }of{\ }cmat}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{cslicer}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlkeyword{function}\hlkeyword{(}\hlformalargs{x}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlkeyword{if}{\ }\hlkeyword{(}\hlsymbol{x}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}{\ }\hlkeyword{\usebox{\hlnormalsizeboxlessthan}}{\ }\hlnumber{1933}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlsymbol{d}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{1933}{\ }\hlkeyword{-}{\ }\hlsymbol{x}\hlkeyword{[}\hlnumber{1}\hlkeyword{]}\hspace*{\fill}\\
@@ -1096,8 +1151,113 @@ Finally, another nice detail is to overlay Lexis reference lines. The horizontal
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlsymbol{cmat}\hlkeyword{[}\hlnumber{1}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{2}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{3}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{4}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{segments}\hlkeyword{(}\hlsymbol{cmat}\hlkeyword{[}\hlnumber{1}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{2}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{3}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{4}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/LexisImage.pdf}
+\caption{image() function, tweaked to produce a Lexis surface.}
+\end{figure}
+
+In brief, most of the jewlery for this Lexis surface was acheived doing creative overlaying. Of course, it's not all always necessary, and will depend on what you'll want to point out from the surface. If you'll be talking about cohort patterns, do yourself a favor by labelling the cohort reference lines (probably moving the legend over to the left). 
+\subsubsection{image.plot()}
+
+You can at least save part of the headache dealing with the legend by jumping straight to \texttt{image.plot()} from the \texttt{fields} package. \texttt{image.plot()} simply calls \texttt{image()}, from above, and is basically a convenience function just for the sake of the legend. The default color ramp is divergent \footnote{it's called \texttt{tim.colors()}, no relation}, meaning that it goes from cool colors at low values to warm colors for high values- at first this is intuitive, but then you start thinking: Mortality is always positive, and all mortality is, well, mortality, so why use cool colors at all when there's room for improvement? Here's what the function will spit back if you do minimal argument specification, accepting all the defaults:
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{library}\hlkeyword{(}\hlsymbol{fields}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{load}\hlkeyword{(}\hlstring{"data//MxMat.RData"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{image.plot}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{MxMat}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"Default{\ }image.plot()"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/imageplot1.pdf}
+\caption{image.plot() function, leaving all defaults.}
+\end{figure}
+
+In order to get the surface to render properly, you'll have to do all the same tricks as for \texttt{image()}, so I'll jump right to decent argument specification. The only argument that changes from the prior example was $\texttt{axis.args=list(blabla)}$, which is the part that tells the legend ticks to be spaced evenly over the log scale, but to be labeled with not-logged numbers. Notice that I told it to include 1 and .0001 and it still didn't: it's a bit less flexible. Another downside is that you don't really know where the legend is in coordinates, so you cannot really do the extra tweaking in terms of adding more ticks, or putting in the missing labels, unless you're willing to look into the source code and figure out how it gets positioned. Other adjustments include transposing the data, fixing the aspect ratio to 1 and providing even breaks. As for Lexis reference lines, that would work in the exact same way as for \texttt{image()}, no strings attached: the coordinates are identical. The Lexis reference line code is repeated but not shown.
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{image.plot}\hlkeyword{(}\hlargument{x}{\ }\hlargument{=}{\ }\hlnumber{1933}\hlkeyword{:}\hlnumber{2008}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{:}\hlnumber{111}\hlkeyword{,}{\ }\hlargument{z}{\ }\hlargument{=}{\ }\hlfunctioncall{t}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{MxMat}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{asp}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{,}{\ }\hlargument{axes}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"Year"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{""}\hlkeyword{,}{\ }\hlargument{breaks}{\ }\hlargument{=}{\ }\hlsymbol{brks}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"US{\ }females,{\ }ln(Mx),{\ }1933-2007{\ }(HMD)"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{axis.args}{\ }\hlargument{=}{\ }\hlfunctioncall{list}\hlkeyword{(}\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{legendlabs}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlsymbol{legendlabs}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rect}\hlkeyword{(}\hlnumber{1933}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{2008}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{,}{\ }\hlargument{xpd}{\ }\hlargument{=}{\ }\hlsymbol{T}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{1940}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{2}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{pos}{\ }\hlargument{=}{\ }\hlnumber{1933}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{mtext}\hlkeyword{(}\hlstring{"Age"}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{,}{\ }\hlargument{xpd}{\ }\hlargument{=}{\ }\hlsymbol{T}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+% copied from image() full version. not shown, but called
+
+
+
+
+\begin{figure}
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/imageplotgood.pdf}
+\caption{image.plot() function, tweaked to produce a Lexis surface.}
+\end{figure}
+
+In short, \texttt{image.plot()} is a time-saver, and might be the preferred function if you're powering through your data for diagnostics. The extra goodies on the legend are of course still possible, but not worth our effort, so we lose a bit of legend clarity and aesthetics\footnote{if anyone invests in perfecting the legend, let me know and I'll gladly update this tutorial and you'll get credit.}.
+
+\subsubsection{levelplot()}
+Levelplot is the \texttt{lattice} answer to plotting surfaces. If you really want to understand the guts of what is going on this code, then you should really read the Jakoby material linked earlier in this document. I personally do not use \texttt{lattice} often, precicely because the specification of axes, labels and overplotting is a chore. Here I first display the default output so that you're not shocked when you first try it. On the positive side, note that the aspect ratio by default maintains a 45 degree angle over x and y values, plus there is a color strip legend by default. This we like. The default color ramp is not so useful, nor are the crowded tick labels.
+
+
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{library}\hlkeyword{(}\hlsymbol{lattice}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{levelplot}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{MxMat}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"Default{\ }levelplot()"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}
@@ -1107,10 +1267,90 @@ Finally, another nice detail is to overlay Lexis reference lines. The horizontal
 
 \begin{figure}
 \centering
-\includegraphics[width=4.5in,height=4.5in]{figs/LexisImage.png}
+\includegraphics[width=4.5in,height=4.5in]{figs/latticedefault.pdf}
+\caption{\texttt{levelplot()} function, leaving all defaults.}
+\end{figure}
+
+% hidden stuff that gets used
+
+
+The steps in this code are in need of some explanation, I admit. First, you need to know that lattice does not (easily) let you modify a plot once it's made, so you need to (or it's best to) specify everything from within a single function call. For this reason, all of the Lexis reference line overplotting needs to get pre-written into a custom function, \texttt{lexisreferencelines()}, called a \textit{panel} function that later gets called within the main lattice function, in this case \texttt{levelplot()}. To understand this more, please refer to the online material mentioned before. The other quirks I'll explain here. First, \texttt{levelplot()} will take a variety of things as its main data argument, not necessarily a matrix\footnote{This could also be done with a formula and \texttt{data.frame} in long format, which is not shown here.}. Here we gave it a matrix (the transpose of \texttt{log(MxMat)}), just as with \texttt{image()}, but we need requires a few extra steps in order to get the axes right.\\
+
+When specifying a matrix, by default \texttt{levelplot()} will consider your x and y values to start at 0 and count upward, which is \textit{almost} correct for ages and very far off for years. This we rectify by supplying the \texttt{row.values} and \texttt{column.values} arguments. Like other surface functions in R, each cell will be centered on its assigned x and y value, and so in order to render properly, we shift the x and y values by .5, but specify the x and y limits to stretch over the entire data range (1993-2008 (end of 2007), and 0-111 (110+)). This is a very fine point, easy to not notice, but essential to get right if you want the image to be exact. Next we specify the color ramp with \texttt{color.regions}, just as we did \texttt{col} in the other functions. Color strip legend arguments get sent as a list to the \texttt{colorkey} argument: notice that I give the same values, and they are all correctly plotted (better than \texttt{image.plot()} already). The \texttt{scales} argument is the way to be precise about axis labelling in \texttt{lattice}: it is also give as a list, with elements x and y. If omitted, the plot renders just fine, but you only get axis labels every 20 ages/years\footnote{Actually we also got rather rough labels with \texttt{axis()} before, but this could have been fixed by manually labelling with \texttt{text()}.}. Finally, and most importantly, we specify a panel function, in this case our \texttt{lexisreferencelines} function. Panel functions tend to follow this form, and can be very complex if desired.
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{library}\hlkeyword{(}\hlsymbol{lattice}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }panel{\ }function{\ }for{\ }inside{\ }levelplot():}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{lexisreferencelines}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlkeyword{function}\hlkeyword{(}\hlformalargs{...}\hlkeyword{)}{\ }\hlkeyword{\usebox{\hlnormalsizeboxopenbrace}}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{panel.levelplot}\hlkeyword{(}\hlsymbol{...}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }cohort{\ }lines{\ }(same{\ }cmat{\ }as{\ }before)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{panel.segments}\hlkeyword{(}\hlsymbol{cmat}\hlkeyword{[}\hlnumber{1}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{2}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{3}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{cmat}\hlkeyword{[}\hlnumber{4}\hlkeyword{,}{\ }\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000040"}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }period{\ }lines}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{panel.segments}\hlkeyword{(}\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000040"}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }age{\ }lines}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{panel.segments}\hlkeyword{(}\hlnumber{1933}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{2008}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000040"}\hlkeyword{)}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}\hlkeyword{\usebox{\hlnormalsizeboxclosebrace}}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }the{\ }main{\ }surface{\ }function:}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{print}\hlkeyword{(}\hlfunctioncall{levelplot}\hlkeyword{(}\hlfunctioncall{t}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{MxMat}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{row.values}{\ }\hlargument{=}{\ }\hlnumber{1933.5}\hlkeyword{:}\hlnumber{2007.5}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{column.values}{\ }\hlargument{=}{\ }\hlnumber{0.5}\hlkeyword{:}\hlnumber{110.5}\hlkeyword{,}{\ }\hlargument{xlim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1933}\hlkeyword{,}{\ }\hlnumber{2008}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{ylim}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{111}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlsymbol{brks}\hlkeyword{,}{\ }\hlargument{col.regions}{\ }\hlargument{=}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{colorkey}{\ }\hlargument{=}{\ }\hlfunctioncall{list}\hlkeyword{(}\hlargument{at}{\ }\hlargument{=}{\ }\hlsymbol{brks}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlfunctioncall{list}\hlkeyword{(}\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlsymbol{legendlabs}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlsymbol{legendlabs}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{scales}{\ }\hlargument{=}{\ }\hlfunctioncall{list}\hlkeyword{(}\hlargument{x}{\ }\hlargument{=}{\ }\hlfunctioncall{list}\hlkeyword{(}\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlfunctioncall{list}\hlkeyword{(}\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }{\ }{\ }{\ }{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{110}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{xlab}{\ }\hlargument{=}{\ }\hlstring{"Year"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{ylab}{\ }\hlargument{=}{\ }\hlstring{"Age"}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"Same{\ }surface{\ }plot{\ }using{\ }lattice{\ }levelplot()"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{panel}{\ }\hlargument{=}{\ }\hlsymbol{lexisreferencelines}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/latticegood.pdf}
+\caption{\texttt{levelplot()} function, tweaked to produce a Lexis surface.}
+\end{figure}
+
+Sometimes you see surfaces displayed via contour plots that resemble topographic maps. These may or may not be desirable for your particular surface. The \texttt{contourplot()} function in lattice is a companion to \texttt{levelplot()}, and works in much the same way. A shortcut that I used to produce the below plot was to simply add the argument $\texttt{contour=TRUE}$ to the \texttt{levelplot()} list of arguments. Notice that the contour lines themselves are smooth interpolations and do not follow cell borders exactly. This can often help piont out details in the surface, most often period effects, that can go unnoticed on color-only surfaces. Local maxima and minima are also marked. In my opinion the following plot is locally more legible, but on the whole suffers from information overload, since the contour lines pick up noise from ages. You could clean up the image by not overlaying Lexis lines, but then its difficult for your eyes to keep track of age, period and cohort. Whether or not to use contour lines is thus a matter of judgement.
+
+
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/latticegoodcontour.pdf}
+\caption{\texttt{levelplot()} function, tweaked to produce a Lexis surface, with contour lines.}
 \end{figure}
 
 
-
+This concludes our brief foray into \texttt{lattice} territory. Notice this took considerably fewer lines of code to produce than did the nearly identical \texttt{image()} version. The only drawback is the extra time spent having to learn its idioms, as opposed to brute force intuitive base graphics.
 
 \end{document}

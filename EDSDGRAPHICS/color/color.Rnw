@@ -1,3 +1,4 @@
+\pagebreak
 \section{On the topic of color in R}
 There are different ways to specify colors in R plots. In general, do not always limit yourself to writting \texttt{"red"}, \texttt{"green"} and so forth. If you do, then your head quickly runs out of colors and your plots end up looking cheap. This place \url{http://research.stowers-institute.org/efg/R/Color/Chart/} is a good reference for colors if you just want a quick suggestion. 
 
@@ -25,7 +26,8 @@ The number 7 is how many colors you want back from the function, spread out even
  
 There is no standard color ramp for mortality surfaces at this time in demography. If you want one, you have to define it, and a legend is necessary for reference. At times you'll need to make a custom legend for it to work well. Here's how to make one (\texttt{mxcolors()}):
 
-<<fig=TRUE,results=verbatim>>=
+% we show the code here, but not the pdf part
+<<colorramp,results=verbatim>>=
 library(grDevices) # this package is included in base
 # colors evenly spaced over range(values):
 mxcolors <- colorRampPalette(c("white","blue","palegreen",
@@ -48,6 +50,19 @@ axis(1,
 	labels=c(.00001,.0001,.001,.01,.1,1))
 box() # give it a frame
 @
+% hidden, make pdf using above code
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\colorramp.pdf")
+<<colorramp>>
+dev.off()
+@
+% insert pdf into document
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/colorramp.pdf}
+\caption{Matching labels to a logged color ramp}
+\end{figure}
+
 \subsection{Color tip \#3: use transparency}
 Transparency is useful for managing clutter and/or displaying density in your plots. It allows you to overlap plotted objects, fitting way more in the plot without confusing people's eyes. Let's say you have two different lines fit to data, or a few competing lowess smoothers on a scatterplot, or something like that. If you put in confidence interval lines for each, then your plot suddenly has 6 lines. That gets confusing. You can sort it out a bit with color, but the plot quickly becomes a jungle as the number of plotted lines grows. When that happens, most people just decide not to put in the confidence lines. Bad! Instead, plot the confidence interval as a shaded area using the \texttt{polygon()} function, and make them semitransparent so that these regions can overlap with no loss of information.\\
 

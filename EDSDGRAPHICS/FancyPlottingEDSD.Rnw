@@ -4,6 +4,7 @@
 \usepackage[nogin]{Sweave}
 \usepackage{tikz}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{hyperref,url}
 \SweaveOpts{cache=FALSE,tidy=TRUE,keep.source=TRUE,tikz=TRUE,height=4.5,width=4.5,verbatim=TRUE}
 \SweaveOpts{prefix.string=figs/}
@@ -16,7 +17,7 @@
 
 <<echo=FALSE,results=hide>>=
 options(continue=" ")
-options(width=70)
+options(width=80)
 @
 
 \title{Fancy Plotting in R for EDSDers: A tutorial}
@@ -32,8 +33,8 @@ One of the strong points of R is its graphical power. This document is not a com
 \SweaveInput{color/color}
 \SweaveInput{color/colorexample}
 \SweaveInput{surfaces/surfaces}
-
-
-
+\SweaveInput{surfaces/image}
+\SweaveInput{surfaces/image.plot}
+\SweaveInput{surfaces/levelplot}
 
 \end{document}

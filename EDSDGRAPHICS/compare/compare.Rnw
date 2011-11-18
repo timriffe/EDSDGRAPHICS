@@ -1,3 +1,4 @@
+\pagebreak
 \section{base vs lattice vs ggplot2}
 There are several \textit{systems} for graphics in R. The two main power-houses are \texttt{lattice} and \texttt{ggplot2}. I am in a minority because I prefer \texttt{base} graphics. If you know enough about any of these systems, you find out that they are all perfectly capable of doing the same things. My advice is to choose your weapon, and learn it well. When you are begining to learn R (during the EDSD), do not waste your time trying to figure them all out. Just choose one,  power through a tutorial for it, and use it for all your assignments. If you have a high standard for your plots and always insist on getting the details right, then by the end of the EDSD year you will be a guru in that graphics system because you will have been forced to creatively use the tools provided in that system. Here is an incomplete summary of the 3 weapons you can choose from:
 

@@ -1,0 +1,87 @@
+\subsubsection{image.plot()}
+
+You can at least save part of the headache dealing with the legend by jumping straight to \texttt{image.plot()} from the \texttt{fields} package. \texttt{image.plot()} simply calls \texttt{image()}, from above, and is basically a convenience function just for the sake of the legend. The default color ramp is divergent \footnote{it's called \texttt{tim.colors()}, no relation}, meaning that it goes from cool colors at low values to warm colors for high values- at first this is intuitive, but then you start thinking: Mortality is always positive, and all mortality is, well, mortality, so why use cool colors at all when there's room for improvement? Here's what the function will spit back if you do minimal argument specification, accepting all the defaults:
+
+<<imageplotdefault>>=
+library(fields)
+load("data//MxMat.RData")
+image.plot(log(MxMat),main="Default image.plot()")
+@
+<<echo=FALSE,results=hide>>=
+# default output
+pdf(height=7,width=7,file="figs\\imageplot1.pdf")
+<<imageplotdefault>>
+dev.off()
+@
+
+\begin{figure}
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/imageplot1.pdf}
+\caption{image.plot() function, leaving all defaults.}
+\end{figure}
+
+In order to get the surface to render properly, you'll have to do all the same tricks as for \texttt{image()}, so I'll jump right to decent argument specification. The only argument that changes from the prior example was $\texttt{axis.args=list(blabla)}$, which is the part that tells the legend ticks to be spaced evenly over the log scale, but to be labeled with not-logged numbers. Notice that I told it to include 1 and .0001 and it still didn't: it's a bit less flexible. Another downside is that you don't really know where the legend is in coordinates, so you cannot really do the extra tweaking in terms of adding more ticks, or putting in the missing labels, unless you're willing to look into the source code and figure out how it gets positioned. Other adjustments include transposing the data, fixing the aspect ratio to 1 and providing even breaks. As for Lexis reference lines, that would work in the exact same way as for \texttt{image()}, no strings attached: the coordinates are identical. The Lexis reference line code is repeated but not shown.
+
+<<imageplotgood>>=
+brks <- approx(log(c(1e-5,1)),n=21)$y
+legendlabs <- c(1,.1,.01,1e-3,1e-4,1e-5)
+image.plot(x = 1933:2008,
+	y = 0:111,
+	z = t(log(MxMat)),
+	col = rev(heat.colors(20)),
+	asp = 1,
+	axes = FALSE,
+	xlab = "Year",
+	ylab = "",
+	breaks = brks,
+	main = "US females, ln(Mx), 1933-2007 (HMD)", 
+	axis.args=list(at=log(legendlabs),labels=legendlabs))
+rect(1933, 0, 2008 ,111, xpd = T)
+axis(1,at=seq(from=1940,to=2000,by=10))
+axis(2,at=seq(from=0,to=110,by=10),pos=1933)
+mtext("Age",2,xpd=T)
+@
+% copied from image() full version. not shown, but called
+<<d,echo=FALSE,results=hide>>=
+segments(1933,seq(0,110,by=10),2008,seq(0,110,by=10),col="#00000030")
+segments(seq(1940,2000,by=10),0,seq(1940,2000,by=10),111,col="#00000030")
+# cohort lines are always a head-scratcher:
+cmat <- matrix(ncol=4,nrow=18)
+cmat[,1] <- seq(1830,2000,by=10)
+cmat[,2] <- rep(0,18)
+cmat[,3] <- cmat[,1] + 111
+cmat[,4] <- 111
+# the x argument is a row of cmat
+cslicer <- function(x){
+	if (x[1] < 1933){
+		d <- 1933 - x[1]
+		x[1] <- 1933
+		x[2] <- 0+d
+	}
+	if (x[3] > 2008){
+		d <-  x[3] - 2008 
+		x[3] <- 2008
+		x[4] <- x[4]-d
+	}
+	x
+}
+cmat <- apply(cmat,1,cslicer)
+segments(cmat[1,],cmat[2,],cmat[3,],cmat[4,],col="#00000030")
+@
+
+<<echo=FALSE,results=hide>>=
+# default output
+pdf(height=7,width=7,file="figs\\imageplotgood.pdf")
+<<imageplotgood>>
+<<d>>
+dev.off()
+@
+
+\begin{figure}
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/imageplotgood.pdf}
+\caption{image.plot() function, tweaked to produce a Lexis surface.}
+\end{figure}
+
+In short, \texttt{image.plot()} is a time-saver, and might be the preferred function if you're powering through your data for diagnostics. The extra goodies on the legend are of course still possible, but not worth our effort, so we lose a bit of legend clarity and aesthetics\footnote{if anyone invests in perfecting the legend, let me know and I'll gladly update this tutorial and you'll get credit.}.
+

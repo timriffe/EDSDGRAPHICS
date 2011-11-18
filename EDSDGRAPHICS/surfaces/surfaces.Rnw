@@ -1,4 +1,4 @@
-% 
+\pagebreak
 \section{Demographic Surfaces in R}
 Whenever you have data cross-classified along three or more continuous dimensions, you should think about looking at it as a surface. These might not even be strictly demographic dimensions! You could in principal plot a surface of mortality by income over time \footnote{you'd probably be the first, and a righteous demographer indeed}. Demographers generally choose to plot the variable of interest over age and time. You could also however plot a marriage or fertility surface where age of female runs over one axis and age of male over another- these are rarely seen in the wild, but have a straightforward interpretation. I mention all these atypical examples precisely so that you can start to think creatlively with the powerful tools at your fingertips: You can get really great ideas just by looking at your data in a different way. In any case, data that are cross-tabulated like this are easy to find or can easily be aggregated from microdata.  I'll start this part by running over the simplest surface functions in R, and how to get the most out of them, then we'll do some examples with real data (and make some more color ramps).
 
@@ -6,130 +6,18 @@ Whenever you have data cross-classified along three or more continuous dimension
 
 \begin{enumerate}
 \item{\texttt{image()}} base (\texttt{graphics}). Simplest- Be careful which axis is which if your data happen to be square. \texttt{heat.colors(12)} is the default color ramp
-\item{\texttt{heatmap()}} base (\texttt{stats})- puts a dendogram (cluster tree) in the margins too. Beware- it might reorganize your data according to the dendogram!
-\item{\texttt{image.plot()}} \texttt{fields} package. like \texttt{image()}, but includes legend. Default color ramp goes from cool to hot colors (\texttt{tim.colors(64)})
+\item{\texttt{heatmap()}} base (\texttt{stats})- puts a dendogram (cluster tree) in the margins too. Beware- it might reorganize your data according to the dendogram! Do not use this for demographic surfaces- it's for finding clusters in your data!
+\item{\texttt{image.plot()}} \texttt{fields} package. Like \texttt{image()}, but includes legend. Default color ramp goes from cool to hot colors (\texttt{tim.colors(64)})
 \item{\texttt{levelplot()}} \texttt{lattice} package. Transposes data (columns in y, rows in x). Default color ramp is cyan to pink
 \item{\texttt{contourplot()}} in \texttt{lattice} package. Plots isolines like a topo-map. For color, add \texttt{region=TRUE}. Also transposed.
 \item{\texttt{geom\_tile}} in \texttt{ggplot2} package. No matrices: organize your data as a data.frame with 3 columns "age", "year", and "z". See example later on.
 \end{enumerate}
 
-In general, you need to pay attention to whether surface plotting functions need your data as a matrix, data.frame, in gridded or long format. The examples here use data from the HMD for the USA, 1933-2007 (75 years), ages 0-110+ (111 ages).
-
-\subsubsection{image()}
-Let's jump straight into examples. \texttt{image()} is probably the easiest function to use if you just want to take a quick look at patterns in your data, but its defaults aren't necessarily the most convenient for for Lexis-like surfaces. Function input must be a \texttt{matrix} (no \texttt{data.frame}s). If your data matrix has years across the columns and ages going down the rows, beware: it will be plotted transposed, with years going down the y-axis and ages going over the x axis, and you will not necessarily notice this because 1) axes are scaled to go from 0 to 1 and 2) data are stretched to fit into the plot region evenly. For Lexis surfaces you always want proportionality between the rendering of age and years. This we can force by specifying an aspect ratio of 1 with $\texttt{asp=1}$. \footnote{Notice that I've inserted surfaces into this pdf as raster rather than vector graphics, whereas all the other graphics have been vector so far. You need to experiment to get decent results with surfaces because vector rendering get get complicated. If you have to use a raster in a document or a presentation, make it at least 300 ppi resolution so it doesn't look pixely (but not too big because then your file will get huge)}
-
-<<echo=FALSE,results=hide>>=
-load("data//MxMat.RData")
-# default output
-png(height=7,width=7,units="in",filename="figs\\Image1.png",res=300)
-image(log(MxMat),main="Default image().. need to\n1) transpose, 2) change ramp, 3) set aspect to 1\n4) label properly 5) use intelligent breaks 6) add legend")
-dev.off()
-@
-
-\begin{figure}
-\centering
-\includegraphics[width=4.5in,height=4.5in]{figs/Image1.png}
-\end{figure}
+In general, you need to pay attention to whether surface plotting functions need your data as a matrix, data.frame, in gridded or long format. The examples here use data from the HMD for the USA, 1933-2007 (75 years), ages 0-110+ (111 ages). We start with a matrix object, \texttt{MxMat}, extracted from the HMD and organized to have years across the columns and ages going down the rows (as opposed to the default long format given by the HMD).
 
 <<>>=
 load("data//MxMat.RData")
-image(log(MxMat))
+MxMat[1:4,1:6]
 @
 
-Now we'll run through a variety of pointers for how to get the most out of the image function. Many of these will be little details, and we'll do a large amount of \textit{overplotting} (layering) to get the details.\\ 
 
-First we set value breaks. Remember that one the one hand you want to render your data in logged form, but you want labels to be nice round intuitive numbers. Always specify break points if you'll be 1) making more than one surface plot or 2) want to have a clean and understandable legend. Be sure to specify 1 more break point than you have colors, and that all of your data are contained within your extreme breakpoints. I wanted 20 colors here, so I chose 21 evenly spaced breaks over the range \texttt{log(1e-5)} to \texttt{0}, which will therefore include several nice clean points to be picked out for labelling later: 1e-5, 1e-4, 1e-3, .01, .1, 1 (along with some ugly numbers in between).\\
-
-Second, we reverse the \texttt{heat.colors()} because to most people red is more intense than yellow (don't argue this point with chemists). We are sure this time to take the transpose \texttt{t()} of the matrix, so that ages run up the y axis. The default axes plot ugly, so we switch them off with $\texttt{axes = FALSE}$ and then manually add on axes later with \texttt{axis()}. We also give our own bounding box. One very fine point to get the cells properly centered is to remember that the data begin in 1933, but end at the \textit{end} of 2007, so we specify the x range from 1933 to 2008, rather than 2007. If you specify up until 2007, you'll notice that individual cells overlap years and ages. Likewise, add 1 to your highest age. In this way we have x and y values that cleanly \textit{bound} the data grid.
-
-% first save code chunks so they can be either run together or separately
-<<a>>=
-brks <- approx(log(c(1e-5,1)),n=21)$y
-image(x = 1933:2008,
-		y = 0:111,
-		z = t(log(MxMat)),
-		col = rev(heat.colors(20)),
-		asp = 1,
-		axes = FALSE,
-		xlab = "Year",
-		ylab = "",
-		breaks = brks,
-		main = "US females, ln(Mx), 1933-2007 (HMD)")
-rect(1933, 0, 2008 ,111, xpd = T)
-axis(1,at=seq(from=1940,to=2000,by=10))
-axis(2,at=seq(from=0,to=110,by=10),pos=1933)
-mtext("Age",2,-2,xpd=T)
-@
-
-Unfortunately \texttt{image()} does not offer a legend, but we'll go through and design a nice one here, in case you need to make one for future reference. By the way, we'll be doing \textit{manual} rescaling and shifting in order to get this thing looking good. If you're OK using some else's default color strip legend, then jump to \texttt{image.plot()}, which simply gives you one. Honestly this one is better, though:
-
-<<b>>=
-# the legend is a bit tricky to do by hand:
-legendymax <- 100 ; legendymin <- 10
-legendxleft <- 2012; legendxright <- 2020
-legendy <- seq(from=legendymax,to=legendymin,length.out=21)
-rect(legendxleft,legendy[-1],legendxright,legendy[-21],col=heat.colors(20),xpd=T,border=NA)
-rect(legendxleft,legendymin,legendxright,legendymax)
-# actually just the ticks are tricky:
-legendlabs <- c(1,.1,.01,1e-3,1e-4,1e-5)
-legendticks <- log(legendlabs)
-legendticksscale <- (legendymax-legendymin)/diff(range(legendticks))
-legendticks <- (legendticks+abs(min(legendticks)))*legendticksscale+legendymin
-segments(legendxright,legendticks,legendxright+2,legendticks)
-text(legendxright+1,legendticks,legendlabs,pos=4)
-@
-
-The above code chunk could very easily be converted into a function, but we're not that far along yet. Summarizing, we specify the upper and lower limits of the area where we want to put the legend (over in the right margin, so the coordinates actually go beyond the data). Then we want 21 evenly spaced points to draw the color ramp into (\texttt{legendy}), and we can go ahead and draw the colored rectangles (\texttt{rect()} is vectorized, no need to loop). Remember we want clean labels (\texttt{legendlabs}), but that colors are mapped into log space. Furthermore, we need to spread our ticks out over a different range (in plot coordinates) than that directly given by \texttt{log(legendlabs)}. That's why we make \texttt{legendticksscale} (it stretches our ticks out over the given range), and we shift the whole series upward. Whew! With \texttt{legendticks} defined, we can draw the ticks manually with \texttt{segments()}, which is also vectorized, and likewise with the labels (\texttt{text()}).\\
-
-This however just gets us the major tick marks. Ocassionally, to make such scales clear to the viewer, you'll want to plot minor tick marks in such a way as to make clear that the scale is log (or remind the reader what that means). This little code chunk puts in the minor ticks, by 1) getting a clean sequence from e.g. 1 to .1 (1, .9, .8, .7, .6, .5, .4, .3, .2, .1), then logging, scaling and shifting it prior to drawing the ticks. When completed, it does the same for a clean sequence from .1 to .01, and so forth, until the intermediate legend ranges are filled up nicely. If and when you want to add log ticks that work like these, you'll have to find a manual solution, such as this, as there is no standard or common way of doing it.
-
-<<c>>=
-# and if you really want to be clear about the log scale:
-for (i in 1:5){
-	yi <- log(seq(legendlabs[i],legendlabs[i+1],length.out=10))
-	yi <- (yi + abs(min(yi)))*legendticksscale+rev(legendticks)[i]
-	segments(legendxright,yi,legendxright+1,yi)
-}
-@
-
-Finally, another nice detail is to overlay Lexis reference lines. The horizontal and vertical lines are straightforward, but the diagonals are taken care of with a rather hacky but effective solution: we know we'll need 18 or 19 diagonals in order  to cover the whole surface (number of vertical reference lines plus number of horizontal reference lines), and each will have a lower left and an upper right coordinate. \texttt{cmat} is just a container for these coordinates, in order the columns hold: x left, y low, x right, y high. At first they are given coordinates as if the surface drawn were not bounded by years, the the function \texttt{cslicer()} does proportional snipping (to maintain the 45 degree angle) to make sure that none of the lines go beyond the surface. If and when you want to add reference lines to your surface, you'll always have to think of some kind of hack because there is no standard way to do it. My mantra: if it looks good, adds information to the plot and doesn't cost a lot of ink, then do it. Reference lines in this case turn a shapeless ocean of death into an interpretable Lexis surface.
-
-<<d>>=
-segments(1933,seq(0,110,by=10),2008,seq(0,110,by=10),col="#00000030")
-segments(seq(1940,2000,by=10),0,seq(1940,2000,by=10),111,col="#00000030")
-# cohort lines are always a head-scratcher:
-cmat <- matrix(ncol=4,nrow=18)
-cmat[,1] <- seq(1830,2000,by=10)
-cmat[,2] <- rep(0,18)
-cmat[,3] <- cmat[,1] + 111
-cmat[,4] <- 111
-cslicer <- function(x){
-	if (x[1] < 1933){
-		d <- 1933 - x[1]
-		x[1] <- 1933
-		x[2] <- 0+d
-	}
-	if (x[3] > 2008){
-		d <-  x[3] - 2008 
-		x[3] <- 2008
-		x[4] <- x[4]-d
-	}
-	x
-}
-cmat <- apply(cmat,1,cslicer)
-segments(cmat[1,],cmat[2,],cmat[3,],cmat[4,],col="#00000030")
-@
-
-<<echo=FALSE, results=hide>>=
-png(height=7,width=7,units="in",filename="figs\\LexisImage.png",res=300)
-<<a>>
-<<b>>
-<<c>>
-<<d>>
-dev.off()
-@
-
-\begin{figure}
-\centering
-\includegraphics[width=4.5in,height=4.5in]{figs/LexisImage.png}
-\end{figure}

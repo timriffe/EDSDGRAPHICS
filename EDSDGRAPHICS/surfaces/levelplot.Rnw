@@ -1,0 +1,160 @@
+\subsubsection{levelplot()}
+Levelplot is the \texttt{lattice} answer to plotting surfaces. If you really want to understand the guts of what is going on this code, then you should really read the Jakoby material linked earlier in this document. I personally do not use \texttt{lattice} often, precicely because the specification of axes, labels and overplotting is a chore. Here I first display the default output so that you're not shocked when you first try it. On the positive side, note that the aspect ratio by default maintains a 45 degree angle over x and y values, plus there is a color strip legend by default. This we like. The default color ramp is not so useful, nor are the crowded tick labels.
+
+<<echo=FALSE,results=hide>>=
+load("data//MxMat.RData")
+@
+
+<<latticedefault>>=
+library(lattice)
+levelplot(log(MxMat),main="Default levelplot()")
+@
+
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\latticedefault.pdf")
+<<latticedefault>>
+dev.off()
+@
+
+\begin{figure}
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/latticedefault.pdf}
+\caption{\texttt{levelplot()} function, leaving all defaults.}
+\end{figure}
+
+% hidden stuff that gets used
+<<d,echo=FALSE,results=hide>>=
+# cohort lines are always a head-scratcher:
+cmat <- matrix(ncol=4,nrow=18)
+cmat[,1] <- seq(1830,2000,by=10)
+cmat[,2] <- rep(0,18)
+cmat[,3] <- cmat[,1] + 111
+cmat[,4] <- 111
+# the x argument is a row of cmat
+cslicer <- function(x){
+	if (x[1] < 1933){
+		d <- 1933 - x[1]
+		x[1] <- 1933
+		x[2] <- 0+d
+	}
+	if (x[3] > 2008){
+		d <-  x[3] - 2008 
+		x[3] <- 2008
+		x[4] <- x[4]-d
+	}
+	x
+}
+cmat <- apply(cmat,1,cslicer)
+@
+
+The steps in this code are in need of some explanation, I admit. First, you need to know that lattice does not (easily) let you modify a plot once it's made, so you need to (or it's best to) specify everything from within a single function call. For this reason, all of the Lexis reference line overplotting needs to get pre-written into a custom function, \texttt{lexisreferencelines()}, called a \textit{panel} function that later gets called within the main lattice function, in this case \texttt{levelplot()}. To understand this more, please refer to the online material mentioned before. The other quirks I'll explain here. First, \texttt{levelplot()} will take a variety of things as its main data argument, not necessarily a matrix\footnote{This could also be done with a formula and \texttt{data.frame} in long format, which is not shown here.}. Here we gave it a matrix (the transpose of \texttt{log(MxMat)}), just as with \texttt{image()}, but we need requires a few extra steps in order to get the axes right.\\
+
+When specifying a matrix, by default \texttt{levelplot()} will consider your x and y values to start at 0 and count upward, which is \textit{almost} correct for ages and very far off for years. This we rectify by supplying the \texttt{row.values} and \texttt{column.values} arguments. Like other surface functions in R, each cell will be centered on its assigned x and y value, and so in order to render properly, we shift the x and y values by .5, but specify the x and y limits to stretch over the entire data range (1993-2008 (end of 2007), and 0-111 (110+)). This is a very fine point, easy to not notice, but essential to get right if you want the image to be exact. Next we specify the color ramp with \texttt{color.regions}, just as we did \texttt{col} in the other functions. Color strip legend arguments get sent as a list to the \texttt{colorkey} argument: notice that I give the same values, and they are all correctly plotted (better than \texttt{image.plot()} already). The \texttt{scales} argument is the way to be precise about axis labelling in \texttt{lattice}: it is also give as a list, with elements x and y. If omitted, the plot renders just fine, but you only get axis labels every 20 ages/years\footnote{Actually we also got rather rough labels with \texttt{axis()} before, but this could have been fixed by manually labelling with \texttt{text()}.}. Finally, and most importantly, we specify a panel function, in this case our \texttt{lexisreferencelines} function. Panel functions tend to follow this form, and can be very complex if desired.
+
+<<latticegood>>=
+library(lattice)
+brks <- approx(log(c(1e-5,1)),n=21)$y
+legendlabs <- c(1,.1,.01,1e-3,1e-4,1e-5)
+# panel function for inside levelplot():
+lexisreferencelines <- function(...) { 
+	panel.levelplot(...) 
+	# cohort lines (same cmat as before)
+	panel.segments(cmat[1,],cmat[2,],cmat[3,],cmat[4,],col="#00000040") 
+	# period lines
+	panel.segments(seq(1940,2000,by=10),0,seq(1940,2000,by=10),111,col="#00000040")
+	# age lines
+	panel.segments(1933,seq(0,111,by=10),2008,seq(0,111,by=10),col="#00000040")
+} 
+# the main surface function:
+print(
+levelplot(t(log(MxMat)),
+	row.values=1933.5:2007.5,
+	column.values=0.5:110.5,
+	xlim=c(1933,2008),
+	ylim=c(0,111),
+	at=brks,
+	col.regions=rev(heat.colors(20)),
+	colorkey=list(at=brks,
+			labels=list(at=log(legendlabs),
+					labels=legendlabs)
+	),
+	scales=list(x=list(at=seq(1940,2000,by=10),
+					labels=seq(1940,2000,by=10)),
+			y=list(at=seq(0,110,by=10)),
+			labels=seq(0,110,by=10)),
+	xlab="Year",
+	ylab="Age",
+	main="Same surface plot using lattice levelplot()",
+	panel=lexisreferencelines
+)
+)
+@
+
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\latticegood.pdf")
+<<latticegood>>
+dev.off()
+@
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/latticegood.pdf}
+\caption{\texttt{levelplot()} function, tweaked to produce a Lexis surface.}
+\end{figure}
+
+Sometimes you see surfaces displayed via contour plots that resemble topographic maps. These may or may not be desirable for your particular surface. The \texttt{contourplot()} function in lattice is a companion to \texttt{levelplot()}, and works in much the same way. A shortcut that I used to produce the below plot was to simply add the argument $\texttt{contour=TRUE}$ to the \texttt{levelplot()} list of arguments. Notice that the contour lines themselves are smooth interpolations and do not follow cell borders exactly. This can often help piont out details in the surface, most often period effects, that can go unnoticed on color-only surfaces. Local maxima and minima are also marked. In my opinion the following plot is locally more legible, but on the whole suffers from information overload, since the contour lines pick up noise from ages. You could clean up the image by not overlaying Lexis lines, but then its difficult for your eyes to keep track of age, period and cohort. Whether or not to use contour lines is thus a matter of judgement.
+
+<<latticegoodcontour,echo=FALSE,results=hide>>=
+library(lattice)
+brks <- approx(log(c(1e-5,1)),n=21)$y
+legendlabs <- c(1,.1,.01,1e-3,1e-4,1e-5)
+# panel function for inside levelplot():
+lexisreferencelines <- function(...) { 
+	panel.levelplot(...) 
+	# cohort lines (same cmat as before)
+	panel.segments(cmat[1,],cmat[2,],cmat[3,],cmat[4,],col="#00000040") 
+	# period lines
+	panel.segments(seq(1940,2000,by=10),0,seq(1940,2000,by=10),111,col="#00000040")
+	# age lines
+	panel.segments(1933,seq(0,111,by=10),2008,seq(0,111,by=10),col="#00000040")
+} 
+# the main surface function:
+print(
+levelplot(t(log(MxMat)),
+	row.values=1933.5:2007.5,
+	column.values=0.5:110.5,
+	xlim=c(1933,2008),
+	ylim=c(0,111),
+	at=brks,
+	col.regions=rev(heat.colors(20)),
+	colorkey=list(at=brks,
+			labels=list(at=log(legendlabs),
+					labels=legendlabs)
+	),
+	scales=list(x=list(at=seq(1940,2000,by=10),
+					labels=seq(1940,2000,by=10)),
+			y=list(at=seq(0,110,by=10)),
+			labels=seq(0,110,by=10)),
+	xlab="Year",
+	ylab="Age",
+	contour=TRUE,
+	main="Same surface plot using lattice levelplot() with contours",
+	panel=lexisreferencelines
+)
+)
+@
+
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\latticegoodcontour.pdf")
+<<latticegoodcontour>>
+dev.off()
+@
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/latticegoodcontour.pdf}
+\caption{\texttt{levelplot()} function, tweaked to produce a Lexis surface, with contour lines.}
+\end{figure}
+
+
+This concludes our brief foray into \texttt{lattice} territory. Notice this took considerably fewer lines of code to produce than did the nearly identical \texttt{image()} version. The only drawback is the extra time spent having to learn its idioms, as opposed to brute force intuitive base graphics.
