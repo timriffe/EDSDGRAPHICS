@@ -1,4 +1,4 @@
-\subsubsection{image()}
+\subsection{image()}
 Let's jump straight into examples. \texttt{image()} is probably the most primitive and flexible function for plotting surfaces, but its defaults aren't necessarily the most convenient for for Lexis-like surfaces. That is to say, you can do whatever you want with it, if you have the time. Function input must be a \texttt{matrix} (no \texttt{data.frame}s). If your data matrix has years across the columns and ages going down the rows, beware: it will be plotted transposed, with years going down the y-axis and ages going over the x axis, and you will not necessarily notice this because 1) axes are scaled to go from 0 to 1 and 2) data are stretched to fit into the plot region evenly. For Lexis surfaces you always want proportionality between the rendering of age and years. This we can force by specifying an aspect ratio of 1 with $\texttt{asp=1}$.
 
 <<echo=FALSE,results=hide>>=

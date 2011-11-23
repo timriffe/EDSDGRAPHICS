@@ -1,4 +1,4 @@
-\subsubsection{image.plot()}
+\subsection{image.plot()}
 
 You can at least save part of the headache dealing with the legend by jumping straight to \texttt{image.plot()} from the \texttt{fields} package. \texttt{image.plot()} simply calls \texttt{image()}, from above, and is basically a convenience function just for the sake of the legend. The default color ramp is divergent \footnote{it's called \texttt{tim.colors()}, no relation}, meaning that it goes from cool colors at low values to warm colors for high values- at first this is intuitive, but then you start thinking: Mortality is always positive, and all mortality is, well, mortality, so why use cool colors at all when there's room for improvement? Here's what the function will spit back if you do minimal argument specification, accepting all the defaults:
 

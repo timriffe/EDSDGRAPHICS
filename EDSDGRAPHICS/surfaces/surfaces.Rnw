@@ -10,7 +10,8 @@ Whenever you have data cross-classified along three or more continuous dimension
 \item{\texttt{image.plot()}} \texttt{fields} package. Like \texttt{image()}, but includes legend. Default color ramp goes from cool to hot colors (\texttt{tim.colors(64)})
 \item{\texttt{levelplot()}} \texttt{lattice} package. Transposes data (columns in y, rows in x). Default color ramp is cyan to pink
 \item{\texttt{contourplot()}} in \texttt{lattice} package. Plots isolines like a topo-map. For color, add \texttt{region=TRUE}. Also transposed.
-\item{\texttt{geom\_tile}} in \texttt{ggplot2} package. No matrices: organize your data as a data.frame with 3 columns "age", "year", and "z". See example later on.
+\item{\texttt{ggplot2}} using the $\texttt{geom\{_}tile}$ aesthetic. No matrices: organize your data as a \texttt{data.frame} with 3 columns for x,y and z.
+\item{\texttt{PlotLexisTriangles()}} in my \texttt{LexisSurface} package. Two matrices for upper and lower triangles.
 \end{enumerate}
 
 In general, you need to pay attention to whether surface plotting functions need your data as a matrix, data.frame, in gridded or long format. The examples here use data from the HMD for the USA, 1933-2007 (75 years), ages 0-110+ (111 ages). We start with a matrix object, \texttt{MxMat}, extracted from the HMD and organized to have years across the columns and ages going down the rows (as opposed to the default long format given by the HMD).

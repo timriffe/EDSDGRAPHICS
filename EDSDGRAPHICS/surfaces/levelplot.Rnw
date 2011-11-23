@@ -1,4 +1,4 @@
-\subsubsection{levelplot()}
+\subsection{levelplot()}
 Levelplot is the \texttt{lattice} answer to plotting surfaces. If you really want to understand the guts of what is going on this code, then you should really read the Jakoby material linked earlier in this document. I personally do not use \texttt{lattice} often, precicely because the specification of axes, labels and overplotting is a chore. Here I first display the default output so that you're not shocked when you first try it. On the positive side, note that the aspect ratio by default maintains a 45 degree angle over x and y values, plus there is a color strip legend by default. This we like. The default color ramp is not so useful, nor are the crowded tick labels.
 
 <<echo=FALSE,results=hide>>=
@@ -49,12 +49,16 @@ cmat <- apply(cmat,1,cslicer)
 
 The steps in this code are in need of some explanation, I admit. First, you need to know that lattice does not (easily) let you modify a plot once it's made, so you need to (or it's best to) specify everything from within a single function call. For this reason, all of the Lexis reference line overplotting needs to get pre-written into a custom function, \texttt{lexisreferencelines()}, called a \textit{panel} function that later gets called within the main lattice function, in this case \texttt{levelplot()}. To understand this more, please refer to the online material mentioned before. The other quirks I'll explain here. First, \texttt{levelplot()} will take a variety of things as its main data argument, not necessarily a matrix\footnote{This could also be done with a formula and \texttt{data.frame} in long format, which is not shown here.}. Here we gave it a matrix (the transpose of \texttt{log(MxMat)}), just as with \texttt{image()}, but we need requires a few extra steps in order to get the axes right.\\
 
-When specifying a matrix, by default \texttt{levelplot()} will consider your x and y values to start at 0 and count upward, which is \textit{almost} correct for ages and very far off for years. This we rectify by supplying the \texttt{row.values} and \texttt{column.values} arguments. Like other surface functions in R, each cell will be centered on its assigned x and y value, and so in order to render properly, we shift the x and y values by .5, but specify the x and y limits to stretch over the entire data range (1993-2008 (end of 2007), and 0-111 (110+)). This is a very fine point, easy to not notice, but essential to get right if you want the image to be exact. Next we specify the color ramp with \texttt{color.regions}, just as we did \texttt{col} in the other functions. Color strip legend arguments get sent as a list to the \texttt{colorkey} argument: notice that I give the same values, and they are all correctly plotted (better than \texttt{image.plot()} already). The \texttt{scales} argument is the way to be precise about axis labelling in \texttt{lattice}: it is also give as a list, with elements x and y. If omitted, the plot renders just fine, but you only get axis labels every 20 ages/years\footnote{Actually we also got rather rough labels with \texttt{axis()} before, but this could have been fixed by manually labelling with \texttt{text()}.}. Finally, and most importantly, we specify a panel function, in this case our \texttt{lexisreferencelines} function. Panel functions tend to follow this form, and can be very complex if desired.
+When specifying a matrix, by default \texttt{levelplot()} will consider your x and y values to start at 0 and count upward, which is \textit{almost} correct for ages and very far off for years. This we rectify by supplying the \texttt{row.values} and \texttt{column.values} arguments. Like other surface functions in R, each cell will be centered on its assigned x and y value, and so in order to render properly, we shift the x and y values by .5, but specify the x and y limits to stretch over the entire data range (1993-2008 (end of 2007), and 0-111 (110+)). This is a very fine point, easy to not notice, but essential to get right if you want the image to be exact. Next we specify the color ramp with \texttt{color.regions}, just as we did \texttt{col} in the other functions. Color strip legend arguments get sent as a list to the \texttt{colorkey} argument. In order to get the loggy tick marks I gave the whole series of z values for the ticks, but gave blank labels for all but the ones I wanted labeled, a bit different than the way we did it for base graphics\footnote{Credit goes to Bill Jakoby for this trick}. The \texttt{scales} argument is the way to be precise about axis labelling in \texttt{lattice}: it is also given as a list, with elements x and y. If omitted, the plot renders just fine, but you only get axis labels every 20 ages/years\footnote{Actually we also got rather rough labels with \texttt{axis()} before, but this could have been fixed by manually labelling with \texttt{text()}.}. Finally, and most importantly, we specify a panel function, in this case our \texttt{lexisreferencelines} function. Panel functions tend to follow this form, and can be very complex if desired. This assumes that we've already defined \texttt{cmat}, as before in \texttt{image()} section.
 
 <<latticegood>>=
 library(lattice)
 brks <- approx(log(c(1e-5,1)),n=21)$y
 legendlabs <- c(1,.1,.01,1e-3,1e-4,1e-5)
+tm <- sort(unique(c(outer(seq(from=1,to=.1,by=-.1),10^(4:0),"/"))))
+tml <- rep("",length(tm))
+tml[c(1,10,19,28,37,46)] <- legendlabs
+
 # panel function for inside levelplot():
 lexisreferencelines <- function(...) { 
 	panel.levelplot(...) 
@@ -66,6 +70,7 @@ lexisreferencelines <- function(...) {
 	panel.segments(1933,seq(0,111,by=10),2008,seq(0,111,by=10),col="#00000040")
 } 
 # the main surface function:
+par(mfrow=c(1,2))
 print(
 levelplot(t(log(MxMat)),
 	row.values=1933.5:2007.5,
@@ -75,8 +80,8 @@ levelplot(t(log(MxMat)),
 	at=brks,
 	col.regions=rev(heat.colors(20)),
 	colorkey=list(at=brks,
-			labels=list(at=log(legendlabs),
-					labels=legendlabs)
+			labels=list(at=log(tm),
+					labels=tml)
 	),
 	scales=list(x=list(at=seq(1940,2000,by=10),
 					labels=seq(1940,2000,by=10)),
@@ -108,6 +113,9 @@ Sometimes you see surfaces displayed via contour plots that resemble topographic
 library(lattice)
 brks <- approx(log(c(1e-5,1)),n=21)$y
 legendlabs <- c(1,.1,.01,1e-3,1e-4,1e-5)
+tm <- sort(unique(c(outer(seq(from=1,to=.1,by=-.1),10^(4:0),"/"))))
+tml <- rep("",length(tm))
+tml[c(1,10,19,28,37,46)] <- legendlabs
 # panel function for inside levelplot():
 lexisreferencelines <- function(...) { 
 	panel.levelplot(...) 
@@ -128,8 +136,8 @@ levelplot(t(log(MxMat)),
 	at=brks,
 	col.regions=rev(heat.colors(20)),
 	colorkey=list(at=brks,
-			labels=list(at=log(legendlabs),
-					labels=legendlabs)
+			labels=list(at=log(tm),
+					labels=tml)
 	),
 	scales=list(x=list(at=seq(1940,2000,by=10),
 					labels=seq(1940,2000,by=10)),
