@@ -10,7 +10,7 @@ Whenever you have data cross-classified along three or more continuous dimension
 \item{\texttt{image.plot()}} \texttt{fields} package. Like \texttt{image()}, but includes legend. Default color ramp goes from cool to hot colors (\texttt{tim.colors(64)})
 \item{\texttt{levelplot()}} \texttt{lattice} package. Transposes data (columns in y, rows in x). Default color ramp is cyan to pink
 \item{\texttt{contourplot()}} in \texttt{lattice} package. Plots isolines like a topo-map. For color, add \texttt{region=TRUE}. Also transposed.
-\item{\texttt{ggplot2}} using the $\texttt{geom\{_}tile}$ aesthetic. No matrices: organize your data as a \texttt{data.frame} with 3 columns for x,y and z.
+\item{\texttt{ggplot()}} of the \texttt{ggplot2} package, using the $\texttt{geom\textunderscore tile}$ aesthetic. No matrices: organize your data as a \texttt{data.frame} with 3 columns for x,y and z.
 \item{\texttt{PlotLexisTriangles()}} in my \texttt{LexisSurface} package. Two matrices for upper and lower triangles.
 \end{enumerate}
 
