@@ -1,2 +1,27 @@
 \section{Population pyramids}
-By now you will probably have seen how to make populatin pyramids in Excel, but it's well worth your time to see a couple R-tastic ways of making them as well because 1) it's faster! 2) they are easier to standardize and make comparable and 3) it's way more reproducible. You might disagree with the first point, but actually if you already have your data in the shape required by Excel, then you have a few R functions at your disposal to make the pyramid in a single step. I'll present 2 functions, \texttt{pyramid} from the \texttt{pyramid} package by Minato Nakazawa and my own \texttt{Pyramid} function in the package \texttt{Pyramid}. For your information, there is also a pyramid plotting functions in the \texttt{plotrix} package, and there maybe others on CRAN as well. I show them both because they differ essentially in their plotting strategy. \texttt{}
+By now you will probably have seen how to make populatin pyramids in Excel, but it's well worth your time to see a couple R-tastic ways of making them as well because 1) it's faster! 2) they are easier to standardize and make comparable and 3) it's way more reproducible. You might disagree with the first point, but actually if you already have your data in the shape required by Excel, then you have a few R functions at your disposal to make the pyramid in a single step. I'll present 2 functions, \texttt{pyramid} from the \texttt{pyramid} package by Minato Nakazawa and my own \texttt{Pyramid} function in the package \texttt{Pyramid}. For your information, there is also a pyramid plotting functions in the \texttt{plotrix} package, and there maybe others on CRAN as well. I show them both because they differ essentially in their plotting strategy. \texttt{Pyramid()} wraps directly to \texttt{barplot()} from base graphics, whereas \texttt{pyramid()} calls the even more primitive \texttt{polygon()} function. The plot aesthetics are also a bit different between the two functions.
+
+For both functions, we'll use Spanish data from the year 2000 \footnote{These are included in \txttt{Pyramid} package as examples data} from the HMD.
+
+First a word on population pyramids in general: There are a set of conventions that one must adhere to, just as was the case for Lexis surfaces, in order that population pyramids be correctly interpreted and comparable between populations. First and always: use equal axis extremes for males and females so that the pyrami
+<<>>=
+#install.packages("data/Pyramid_1.11.zip",repos=NULL)
+library(Pyramid)
+data(ESP2000)
+# give age labels
+rownames(ESP2000) <- 0:110
+head(ESP2000)
+@
+
+
+\subsection{pyramid()}
+The \texttt{pyramid()} function takes a \texttt{data.frame} as it's primary argument. This needs to have at least 2 columns, the first for the left side of the pyramid (males in our convention) and the second for the right side (females)
+<<>>=
+# install from CRAN if needed:
+#install.packages("pyramid")
+library(pyramid)
+
+pyramid(GunmaPop2005,Llab="Males",Rlab="Females",Clab="",Laxis=seq(0,20000,len=5),
+		AxisFM="d", AxisBM=",", Csize=0.8, Cstep=10,
+		main="Population pyramid of Gunma Prefecture\n (Data: Census 2005, total by gender)")
+@
