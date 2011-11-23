@@ -36,5 +36,6 @@ One of the strong points of R is its graphical power. This document is not a com
 \SweaveInput{surfaces/image}
 \SweaveInput{surfaces/image.plot}
 \SweaveInput{surfaces/levelplot}
-
+\SweaveInput{surfaces/geomtile} 
+\SweaveInput{surfaces/PlotLexisTriangles}
 \end{document}
