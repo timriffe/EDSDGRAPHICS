@@ -1,0 +1,70 @@
+\subsection{PlotLexisTriangles()}
+Some of you might be lucky enough to have data available in age-period-cohort format (Lexis triangles). The HMD\footnote{The HMD doesn't publish triangle exposures, just deaths, but you can still estimate them if needed.}, Kannisto-Thatcher database, and HFD are some places you can get data prepared in Lexis triangle format. Assuming you've got some data like that and you'd like to plot a true surface, you have few options (that I'm aware of) in R to plot the data \textit{as} triangles. So, a few months ago (summer 2011) I wrote a little (err, big) function that does just this. Here we'll walk through an example using Dutch APC rates from the HFD, including a few steps of pre-processing needed to get the data in the right format. First, sign up for the HFD if you haven't already \url{http://www.humanfertility.org}. I downloaded 2 files from this page: \url{http://www.humanfertility.org/cgi-bin/country.php?country=NLD&tab=asfr&t1=3&t2=4}, year, age, cohort Birth counts and year, age, cohort Female population exposure, which download as \texttt{NLDbirthsTR.txt} and \texttt{NLDexposTR.txt}, respectively.
+
+<<>>=
+B <- read.table("data/NLDbirthsTR.txt", header = TRUE, skip = 2, na.strings = ".", as.is = TRUE)
+E <- read.table("data/NLDexposTR.txt", header = TRUE, skip = 2, na.strings = ".", as.is = TRUE)
+head(B)
+head(E)
+# cut out open ages, match dimensions
+B <- B[B$Age != "12-" & B$Age != "55+", ]
+E <- E[E$Age != 12 & E$Age != 55,]
+Ages <- 13:54
+Years <- unique(B$Year)
+@
+
+Just as a convenience in this case, we cut off the open ages groups for ages 12 and under and 55 and over. This fertility surface will then cover ages 13 to 54 and years 1950 to 2009. The next step involves splitting the data into two matrices, one for upper triangles and another for lower triangles- this we only do because I wrote the function to take matrix objects \texttt{UpperTriangles} and \texttt{LowerTriangles} as primary arguments\footnote{In the future this might be modified to take data as-is and figure out the triangles on its own}. In our case, odd-numered rows correspond with lower triangles and even-numbered rows correspond with upper triangles. The code bit $\texttt{(1:nrow(B)\%\%2)==1}$ means litarally, divide the row indices by 2 and tell me which have a \textit{remainder} (i.e. elementary school math before they teach you decimals) of 1. Really, $\texttt{seq(2,nrow(B),by=2)}$ would have given us the same thing. The next step is to reshape the data from a long \texttt{data.frame} into a wide \texttt{matrix}, then divide counts by exposures to get rates.
+
+<<>>=
+# split into 2 matrices for upper (UB)and lower triangles(LB):
+# LB = lower births, odds
+LB <- B[(1:nrow(B)%%2)==1,]
+# turn into matrix, years columns, ages rows
+LB <- matrix(LB[,4],nrow=length(Ages))  
+# upper births, evens
+UB <- B[(1:nrow(B)%%2)==0,]
+UB <- matrix(UB[,4],nrow=length(Ages))
+#####################
+# Exposures
+LE <- E[(1:nrow(E)%%2)==1,]
+UE <- E[(1:nrow(E)%%2)==0,]
+UE <- matrix(UE[,4],nrow=length(Ages))
+LE <- matrix(LE[,4],nrow=length(Ages))
+# divide to get rates:
+UpperTriangles <- UB/UE
+LowerTriangles <- LB/LE
+rownames(UpperTriangles) <- rownames(LowerTriangles) <- Ages
+colnames(LowerTriangles) <- colnames(LowerTriangles) <- Years
+@
+
+The package \texttt{LexisSurface} is not on CRAN\footnote{yet! The default legend needs to be improved, and after that it'll be ready.}, but I included the zipped package in the data folder for this tutorial. You can do a local install from syntax using $\texttt{install.packages("data/LexisSurface\_1.1.zip",repos=NULL)}$, changing the path as needed. We then load the package and invent a color ramp for fertility, \texttt{myFxcols()}. The legend color strip needs to be told explicitly where to go, using the pattern \texttt{c(xmin,ymin,xmax,ymax)}, and we tell the function to overplot lexis reference lines at 5-year intervals. APC mortality surfaces would be plotted in much the same way, except you would specify $\texttt{log=TRUE}$ and move the legend to somewhere convenient.
+
+<<lextri>>=
+#install.packages("data/LexisSurface_1.1.zip",repos=NULL)
+library(LexisSurface)
+# invent Fx color ramp (any suggestions for better?)
+myFxcols <- grDevices:::colorRampPalette(c("white","blue","green","yellow","orange"),space = "rgb")
+# plot it: dimensions and legend took some experimentation
+#windows(height=7,width=7)
+#x11(height=7,width=7) on *nix 
+#Quartz(height=7,width=7) on mac
+
+par(mar=c(6,2,5,2))
+PlotLexisTriangles(UpperTriangles,LowerTriangles,colorramp=myFxcols,log=FALSE,
+		lex.line.int=5,main="APC Fertility Rates, NE, 1950-2009, HFD",
+		leg.coords=c(1960,3,1999,5))
+@
+
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\lextri.pdf")
+<<lextri>>
+dev.off()
+@
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/lextri.pdf}
+\caption{Fertility surface with \texttt{PlotLexisTriangles()} function.}
+\end{figure}
+
+The insides of this function are based almost entirely on the primitive \texttt{polygon()} and \texttt{segments()} functions. It would be possible to write a function to do the same thing using \texttt{lattice} conventions, and it's likely possible in \texttt{ggplot2}, though I'm still looking into this. Neither of those possible variants will be further explored.

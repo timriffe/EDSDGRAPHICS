@@ -1,0 +1,71 @@
+\subsection{ggplot()}
+As previously mentioned, \texttt{ggplot2} is a self-contained system, with its own syntactic idiosyncrasies. Even within \texttt{ggplot2}, there are multiple ways of doing things. The following comes close to recreating the same plot as shown in the \texttt{levelplot()} and \texttt{image()} sections. It is my understanding that \texttt{ggplot2} does not conveniently let you alter the legend, so the markup with ticks is omitted. Furthermore, note that the surface itself is not split into 20 discrete warm colors, but is itself on a continuous gradient. If someone figures out the code to make the surface itself follow the exact 20 colors from the legend, then I'll alter this document. First, note that inout for \texttt{ggplot2} must be a \texttt{data.frame} in long format, meaning that the data itself are squeezed into one lone column. What before were row and column names become additional columns. There is a quick and easy way to do this in R, using the \texttt{melt()} function of the \texttt{reshape} package. Note that I pre-center the cells to be drawn in this long format by adding .5 to the x and y coordinates.
+
+% hidden stuff that gets used
+<<echo=FALSE,results=hide>>=
+load("data//MxMat.RData")
+@
+
+<<prepare>>=
+# change data to long data.frame:
+library(ggplot2)
+library(reshape)
+brks <- approx(log(c(1e-5,1)),n=21)$y
+legendlabs <- c(1,.1,.01,1e-3,1e-4,1e-5)
+brkl <- rep("",length(brks))
+brkl[round(exp(brks),digits=5)%in%legendlabs] <- legendlabs
+# we want years in x and ages in y, long format
+lnMxMat <- log(MxMat)
+Mxdf <- melt(lnMxMat)
+Mxdf[,1:2] <- Mxdf[,1:2]+.5
+colnames(Mxdf) <- c("Age","Year","Mx")
+# for reference lines:
+a <- seq(-2000,-1830,by=10)
+b <- rep(1,18)
+DF <- data.frame(a,b)
+@
+
+The last three lines of code above make a little data frame that will get used to draw the diagonal cohort lines using a slightly different strategy than the surface functions illustrated earlier. This you'll see below in the \texttt{geom_abline} part. The following code chunk works, but I will not comment it further because I'm still open to comments on improving it.
+
+<<geomtile>>=
+print(ggplot(Mxdf, aes(x=Year,y=Age,z=Mx)) + 
+		geom_tile(aes(fill=Mx)) + 
+		# continuous scale in plot
+		# but just 20 colors plotted in legend
+		scale_fill_gradientn(colour=rev(heat.colors(20)),
+				limits=c(log(1e-5),0),
+				breaks=rev(brks),
+				labels=brkl) + 
+		coord_equal(ratio = 1) + # set aspect to 1
+		# remove ggplot2 gray background
+		theme_bw() +
+		# does 2 things 1) good ticks
+		# 2) no extra buffer
+		scale_x_continuous(expand=c(0,0),
+				breaks=seq(1940,2000,by=10),
+				labels=seq(1940,2000,by=10)) + 
+		scale_y_continuous(expand=c(0,0),
+				breaks=seq(0,110,by=10),
+				labels=seq(0,110,by=10)) +
+		# period lines
+		geom_vline(xintercept=seq(1940,2000,by=10),colour="#00000030") +
+		# age lines
+		geom_hline(yintercept=seq(10,110,by=10),colour="#00000030") +
+		# cohort lines
+		geom_abline(aes(intercept=a, slope=b), data=DF,colour="#00000030")
+)
+@
+
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\ggplot2surface.pdf")
+<<geomtile>>
+dev.off()
+@
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/ggplot2surface.pdf}
+\caption{\texttt{ggplot()} function, tweaked to produce a Lexis surface.}
+\end{figure}
+
+Again, if anyone looks much into \texttt{ggplot2} and thinks they can improve this, pleaes let me know!
