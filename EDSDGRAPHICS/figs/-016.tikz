@@ -1,4 +1,4 @@
-% Created by tikzDevice version 0.6.1 on 2011-11-18 19:00:27
+% Created by tikzDevice version 0.6.1 on 2011-11-23 18:11:28
 % !TEX encoding = UTF-8 Unicode
 \begin{tikzpicture}[x=1pt,y=1pt]
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
@@ -6,7 +6,7 @@
 \fill[color=fillColor,] (0,0) rectangle (325.21,325.21);
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (325.21,325.21);
-\definecolor[named]{drawColor}{rgb}{0.13,0.00,0.33}
+\definecolor[named]{drawColor}{rgb}{0.12,0.00,0.33}
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 
 \draw[color=drawColor,line cap=round,line join=round,fill opacity=0.00,] ( 58.49, 61.20) -- (281.44, 61.20);
@@ -96,7 +96,7 @@
 \end{scope}
 \begin{scope}
 \path[clip] (  0.00,  0.00) rectangle (325.21,325.21);
-\definecolor[named]{drawColor}{rgb}{0.13,0.00,0.33}
+\definecolor[named]{drawColor}{rgb}{0.12,0.00,0.33}
 \definecolor[named]{drawColor}{rgb}{0.00,0.00,0.00}
 
 \node[color=drawColor,anchor=base,inner sep=0pt, outer sep=0pt, scale=  1.00] at (174.61, 13.20) {meaningless x%
@@ -107,7 +107,7 @@
 \end{scope}
 \begin{scope}
 \path[clip] ( 49.20, 61.20) rectangle (300.01,276.01);
-\definecolor[named]{drawColor}{rgb}{0.13,0.00,0.33}
+\definecolor[named]{drawColor}{rgb}{0.12,0.00,0.33}
 \definecolor[named]{drawColor}{rgb}{1.00,0.84,0.00}
 \definecolor[named]{fillColor}{rgb}{1.00,0.84,0.00}
 
