@@ -28,7 +28,7 @@ options(width=80)
 \begin{abstract}
 One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the so-called information-to-ink ratio. I'll also include some thoughts on good form for presentations.
 \end{abstract}
-
+help(tidy.source)
 \SweaveInput{compare/compare}
 \SweaveInput{color/color}
 \SweaveInput{color/colorexample}
@@ -36,6 +36,6 @@ One of the strong points of R is its graphical power. This document is not a com
 \SweaveInput{surfaces/image}
 \SweaveInput{surfaces/image.plot}
 \SweaveInput{surfaces/levelplot}
-\SweaveInput{surfaces/geomtile} 
+\SweaveInput{surfaces/ggplot.Rnw} 
 \SweaveInput{surfaces/PlotLexisTriangles}
 \end{document}
