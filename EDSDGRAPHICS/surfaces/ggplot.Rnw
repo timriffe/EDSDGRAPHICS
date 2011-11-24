@@ -41,8 +41,8 @@ LexSurf <- ggplot(Mxdf, aes(x=Year,y=Age,z=Mx)) +
 @
 
 <<echo=FALSE,results=hide>>=
-
-pdf(height=7,width=7,file="figs\\ggplot2surface.pdf")
+getwd()
+pdf(height=7,width=7,file="figs/ggplot2surface.pdf")
 print(LexSurf)
 dev.off()
 @
