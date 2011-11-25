@@ -4,6 +4,7 @@
 \usepackage[nogin]{Sweave}
 \usepackage{tikz}
 \usepackage{graphicx}
+\usepackage{natbib}  
 \usepackage{float}
 \usepackage{hyperref,url}
 \SweaveOpts{cache=FALSE,tidy=TRUE,keep.source=TRUE,tikz=TRUE,height=4.5,width=4.5,verbatim=TRUE}
@@ -26,16 +27,24 @@ options(width=80)
 \maketitle
 
 \begin{abstract}
-One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the so-called information-to-ink ratio. I'll also include some thoughts on good form for presentations.
+One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics, but rather an ad hoc collection of tips for demography-related plotting in R. This includes dicsussion of color, extensive examples of primitive plotting functions, an example of plotting confidence bands, several ways of doing Lexis surfaces in R, and a couple functions for population pyramids. 
 \end{abstract}
-\SweaveInput{compare/compare}
-\SweaveInput{color/color}
-\SweaveInput{color/colorexample}
-\SweaveInput{surfaces/surfaces}
-\SweaveInput{surfaces/image}
-\SweaveInput{surfaces/image.plot}
-\SweaveInput{surfaces/levelplot}
+
+\tableofcontents
+\listoffigures
+
+\SweaveInput{compare/compare.Rnw}
+\SweaveInput{color/color.Rnw}
+\SweaveInput{color/colorexample.Rnw}
+\SweaveInput{surfaces/surfaces.Rnw}
+\SweaveInput{surfaces/image.Rnw}
+\SweaveInput{surfaces/image.plot.Rnw}
+\SweaveInput{surfaces/levelplot.Rnw}
 \SweaveInput{surfaces/ggplot.Rnw} 
-\SweaveInput{surfaces/PlotLexisTriangles}
+\SweaveInput{surfaces/PlotLexisTriangles.Rnw}
 \SweaveInput{pyramids/pyramids.Rnw}
-\end{document}
+
+\nocite{*} % make sure all references included even if not explicitly in paper
+\bibliographystyle{plainnat}
+\bibliography{References}   % Use the BibTeX file ``References.bib''.
+
