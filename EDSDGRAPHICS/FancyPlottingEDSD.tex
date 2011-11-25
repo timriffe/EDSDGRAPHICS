@@ -373,6 +373,7 @@
 \tikzexternalize[mode=list and make]
 
 \usepackage{graphicx}
+\usepackage{natbib}  
 \usepackage{float}
 \usepackage{hyperref,url}
 
@@ -392,19 +393,22 @@
 \maketitle
 
 \begin{abstract}
-One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics. Rather it's an ad hoc collection of tips and tricks for effective plotting (papers), power-plotting (diagnostics) and beautiful plotting (presentations) in R. A good plot for a presentation is different than a good plot for a publication and so forth. In demography and other disciplines it is important to maximize the so-called information-to-ink ratio. I'll also include some thoughts on good form for presentations.
+One of the strong points of R is its graphical power. This document is not a complete tutorial to R graphics, but rather an ad hoc collection of tips for demography-related plotting in R. This includes dicsussion of color, extensive examples of primitive plotting functions, an example of plotting confidence bands, several ways of doing Lexis surfaces in R, and a couple functions for population pyramids. 
 \end{abstract}
-help(tidy.source)
+
+\tableofcontents
+\listoffigures
+
 \pagebreak
 \section{base vs lattice vs ggplot2}
 There are several \textit{systems} for graphics in R. The two main power-houses are \texttt{lattice} and \texttt{ggplot2}. I am in a minority because I prefer \texttt{base} graphics. If you know enough about any of these systems, you find out that they are all perfectly capable of doing the same things. My advice is to choose your weapon, and learn it well. When you are begining to learn R (during the EDSD), do not waste your time trying to figure them all out. Just choose one,  power through a tutorial for it, and use it for all your assignments. If you have a high standard for your plots and always insist on getting the details right, then by the end of the EDSD year you will be a guru in that graphics system because you will have been forced to creatively use the tools provided in that system. Here is an incomplete summary of the 3 weapons you can choose from:
 
 \begin{enumerate}
-\item{\texttt{lattice}}: for \texttt{lattice} graphics, I recommend the following materials from Prof. Jakoby: \url{http://polisci.msu.edu/jacoby/icpsr/graphics/}. This includes a pdf tutorial, example R scripts and datasets to execute them. His examples start easy and end up getting very advanced. Here's my run-down on \texttt{lattice}, from the little exposure I've had; 1) (+1) if you follow those tutorials and apply the same concepts to your data, you can get started in a single afternoon; 2) (-1) it's a rather self-contained system: you have to learn the lattice way of doing things, so you can't combine base graphics functions with \texttt{lattice}; 3) (+1) \texttt{lattice} has better default aesthetics than base graphics, and is generally color-blind friendly; 4) (+1) the package is capable of handling massive datasets and can often convert huge data into the plot faster than either of the other two systems; 5) (+1) it can make really cool plot matrices that are useful for diagnostics; 6) (-1) it is a legacy system. Most of its dedicated users have been using it for many years and are experts, and so it has a low presence in current discussion forums, but you can still find answers to questions in old mail lists.
+\item{\texttt{lattice}}: for \texttt{lattice} graphics, I recommend the following materials from Prof. Jakoby: \url{http://polisci.msu.edu/jacoby/icpsr/graphics/}\citep{jacoby1998statistical}. This includes a pdf tutorial, example R scripts and datasets to execute them. His examples start easy and end up getting very advanced. Here's my run-down on \texttt{lattice}, from the little exposure I've had; 1) (+1) if you follow those tutorials and apply the same concepts to your data, you can get started in a single afternoon; 2) (-1) it's a rather self-contained system: you have to learn the lattice way of doing things, so you can't combine base graphics functions with \texttt{lattice}; 3) (+1) \texttt{lattice} has better default aesthetics than base graphics, and is generally color-blind friendly; 4) (+1) the package is capable of handling massive datasets and can often convert huge data into the plot faster than either of the other two systems; 5) (+1) it can make really cool plot matrices that are useful for diagnostics; 6) (-1) it is a legacy system. Most of its dedicated users have been using it for many years and are experts, and so it has a low presence in current discussion forums, but you can still find answers to questions in old mail lists.
 
-\item{\texttt{ggplot2}}: Every second question in online discussion forums for R is about a package called \texttt{ggplot2}. There are many programmers of other languages that use R \textit{only} because it has \texttt{ggplot2}. The main idea is to \texttt{ggplot2}, as I understand it, is to implement the so-called \textit{grammar of graphics} (hence gg) proposed by Leland Wilkinson. That is good because it formalizes ones approach to graphics (+1), but it's also a disadvantage because you have to learn a self-contained system, like with lattice (-1). Stackexchange has tons of help for \texttt{ggplot2} (+1) and it has a rapidy growing user base. The system has aesthetically awesome defaults (+1). I have not experimented with it, so I can't be very helpful. Once you learn how things work, I'm convinced that there's nothing you can't do with it. Daniel purchased a \texttt{ggplot2} manual for the EDSD, and I have another copy, if some wants to borrow it. There is also a pdf copy available on request.  The package author, Hadley Wickham, put up a great website as a reference manual as well: \url{http://had.co.nz/ggplot2/}. Also, if anyone is more interested, the R User Group meeting on December 15th will feature an English language presentation of \texttt{ggplot2}, so ask if you are interested. 
+\item{\texttt{ggplot2}}: Every second question in online discussion forums for R is about a package called \texttt{ggplot2}. There are many programmers of other languages that use R \textit{only} because it has \texttt{ggplot2}. The main idea is to \texttt{ggplot2}, as I understand it, is to implement the so-called \textit{grammar of graphics} (hence gg) proposed by Leland Wilkinson\citep{wilkinson2010grammar}. That is good because it formalizes ones approach to graphics (+1), but it's also a disadvantage because you have to learn a self-contained system, like with lattice (-1). Stackexchange has tons of help for \texttt{ggplot2} (+1) and it has a rapidy growing user base. The system has aesthetically awesome defaults (+1). I have not experimented with it, so I can't be very helpful. Once you learn how things work, I'm convinced that there's nothing you can't do with it. Daniel purchased a \texttt{ggplot2} manual for the EDSD\citep{ggplot22009}, and I have another copy, if some wants to borrow it. There is also a pdf copy available on request.  The package author, Hadley Wickham, put up a great website as a reference manual as well: \url{http://had.co.nz/ggplot2/}. Also, if anyone is more interested, the R User Group meeting on December 15th will feature an English language presentation of \texttt{ggplot2}, so ask if you are interested. 
 
-\item{\texttt{base}}: for some reason I never graduated from \texttt{base} graphics. That's bad because \texttt{ggplot2} is where the party is at, but good because 1) you can get really proficient in \texttt{base} graphics simply by trying (and succeeding) to emulate either lattice or ggplot2, 2) (+1) its easier to invent new plots using primitive tools in \texttt{base}, 3) (+1) I have the impression that interactive graphics are easier in base too using the \texttt{locator()} function. (+1) Using its primitive tools, I have been able to write functions for plotting Lexis surfaces as triangles rather than as a grid. This is implemented using primitive \texttt{base} functions, and likewise for population pyramids and Lexis diagrams. I think even a guru would have to struggle for days to figure out how to do these kinds of custom demography plots in \texttt{ggplot2}, but everything follows intuitively in \texttt{base}. I'm certain you can do beautiful pyramids in either \texttt{lattice} or \texttt{ggplot2}, but you'll have to invent that yourself!
+\item{\texttt{base}}: \texttt{base} graphics means making primitive calls to the graphical device. There are a large number of primitive graphical functions, but only a few of them are really essential. There is nothing you can't do with base if you have the time and imagination! Learning base is good because 1) you can get really proficient in \texttt{base} graphics simply by trying (and succeeding) to emulate either lattice or ggplot2, 2) (+1) its easier to invent new plots using primitive tools in \texttt{base}, 3) (+1) I have the impression that interactive graphics are easier in base too using the \texttt{locator()} function. (+1) Using its primitive tools, I have been able to write functions for plotting Lexis surfaces as triangles rather than as a grid. This is implemented using primitive \texttt{base} functions, and likewise for population pyramids and Lexis diagrams. I think even a guru would have to struggle for days to figure out how to do these kinds of custom demography plots in \texttt{ggplot2}, but everything follows intuitively in \texttt{base}. I'm certain you can do beautiful pyramids in either \texttt{lattice} or \texttt{ggplot2}, but you'll have to invent that yourself!
 \end{enumerate}
 
 That being said, most of the tricks that I can show you now are only valid for \texttt{base}, altough 1) color works the same in all systems and 2) most base graphics functions have parallels in \texttt{lattice} and \texttt{ggplot2}. In order to use the latter two, you need to install them as packages and call them using \texttt{library(lattice)}, etc.
@@ -483,7 +487,7 @@ There is no standard color ramp for mortality surfaces at this time in demograph
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{mxvals}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlnumber{1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{500}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{mxvals}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlargument{from}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlnumber{0.00001}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{to}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlnumber{1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{length.out}{\ }\hlargument{=}{\ }\hlnumber{500}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -512,8 +516,8 @@ There is no standard color ramp for mortality surfaces at this time in demograph
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{axis}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlargument{at}{\ }\hlargument{=}{\ }\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0.00001}\hlkeyword{,}{\ }\hlnumber{0.0001}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0.00001}\hlkeyword{,}{\ }\hlnumber{0.0001}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -968,7 +972,7 @@ Second, we reverse the \texttt{heat.colors()} because to most people red is more
 \begin{Houtput}
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0.00001}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1040,7 +1044,7 @@ Unfortunately \texttt{image()} does not offer a legend, but we'll go through and
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.0001}\hlkeyword{,}{\ }\hlnumber{0.00001}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1201,11 +1205,11 @@ In order to get the surface to render properly, you'll have to do all the same t
 \begin{Houtput}
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0.00001}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.0001}\hlkeyword{,}{\ }\hlnumber{0.00001}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1286,11 +1290,11 @@ When specifying a matrix, by default \texttt{levelplot()} will consider your x a
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0.00001}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.0001}\hlkeyword{,}{\ }\hlnumber{0.00001}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1370,7 +1374,7 @@ Sometimes you see surfaces displayed via contour plots that resemble topographic
 
 This concludes our brief foray into \texttt{lattice} territory. Notice this took considerably fewer lines of code to produce than did the nearly identical \texttt{image()} version. The only drawback is the extra time spent having to learn its idioms, as opposed to brute force intuitive base graphics.
 \subsection{ggplot()}
-As previously mentioned, \texttt{ggplot2} is a self-contained system, with its own syntactic idiosyncrasies. Even within \texttt{ggplot2}, there are multiple ways of doing things. The following comes close to recreating the same plot as shown in the \texttt{levelplot()} and \texttt{image()} sections. It is my understanding that \texttt{ggplot2} does not conveniently let you alter the legend, so the markup with ticks is omitted. Furthermore, note that the surface itself is not split into 20 discrete warm colors, but is itself on a continuous gradient. If someone figures out the code to make the surface itself follow the exact 20 colors from the legend, then I'll alter this document. First, note that inout for \texttt{ggplot2} must be a \texttt{data.frame} in long format, meaning that the data itself are squeezed into one lone column. What before were row and column names become additional columns. There is a quick and easy way to do this in R, using the \texttt{melt()} function of the \texttt{reshape} package. Note that I pre-center the cells to be drawn in this long format by adding .5 to the x and y coordinates.
+As previously mentioned, \texttt{ggplot2} is a self-contained system, with its own syntactic idiosyncrasies. Even within \texttt{ggplot2}, there are multiple ways of doing things. The following comes close to recreating the same plot as shown in the \texttt{levelplot()} and \texttt{image()} sections. It is my understanding that \texttt{ggplot2} does not conveniently let you alter the legend, so the markup with ticks is omitted. Furthermore, note that the surface itself is not split into 20 discrete warm colors, but is itself on a continuous gradient. If someone figures out the code to make the surface itself follow the exact 20 colors from the legend, then I'll alter this document. First, note that input for \texttt{ggplot2} must be a \texttt{data.frame} in long format, meaning that the data itself are squeezed into one lone column. What before were row and column names become additional columns. There is a quick and easy way to do this in R, using the \texttt{melt()} function of the \texttt{reshape} package. Note that I pre-center the cells to be drawn in this long format by adding .5 to the x and y coordinates.
 
 % hidden stuff that gets used
 
@@ -1390,11 +1394,11 @@ As previously mentioned, \texttt{ggplot2} is a self-contained system, with its o
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{brks}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{approx}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0.00001}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{n}{\ }\hlargument{=}{\ }\hlnumber{21}\hlkeyword{)}\hlkeyword{\usebox{\hlnormalsizeboxdollar}}\hlsymbol{y}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{1e-04}\hlkeyword{,}{\ }\hlnumber{1e-05}\hlkeyword{)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{legendlabs}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{0.1}\hlkeyword{,}{\ }\hlnumber{0.01}\hlkeyword{,}{\ }\hlnumber{0.001}\hlkeyword{,}{\ }\hlnumber{0.0001}\hlkeyword{,}{\ }\hlnumber{0.00001}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1451,7 +1455,7 @@ The last three lines of code above make a little data frame that will get used t
 \hlstd{}\ttfamily\noindent
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{LexSurf}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{ggplot}\hlkeyword{(}\hlsymbol{Mxdf}\hlkeyword{,}{\ }\hlfunctioncall{aes}\hlkeyword{(}\hlargument{x}{\ }\hlargument{=}{\ }\hlsymbol{Year}\hlkeyword{,}{\ }\hlargument{y}{\ }\hlargument{=}{\ }\hlsymbol{Age}\hlkeyword{,}{\ }\hlargument{z}{\ }\hlargument{=}{\ }\hlsymbol{Mx}\hlkeyword{)}\hlkeyword{)}{\ }\hlkeyword{+}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{geom\usebox{\hlnormalsizeboxunderscore}tile}\hlkeyword{(}\hlfunctioncall{aes}\hlkeyword{(}\hlargument{fill}{\ }\hlargument{=}{\ }\hlsymbol{Mx}\hlkeyword{)}\hlkeyword{)}{\ }\hlkeyword{+}{\ }\hlfunctioncall{scale\usebox{\hlnormalsizeboxunderscore}fill\usebox{\hlnormalsizeboxunderscore}gradientn}\hlkeyword{(}\hlargument{colour}{\ }\hlargument{=}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlfunctioncall{heat.colors}\hlkeyword{(}\hlnumber{20}\hlkeyword{)}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{limits}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlnumber{1e-05}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{breaks}{\ }\hlargument{=}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlsymbol{brks}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlsymbol{brkl}\hlkeyword{)}{\ }\hlkeyword{+}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{limits}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlfunctioncall{log}\hlkeyword{(}\hlnumber{0.00001}\hlkeyword{)}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{breaks}{\ }\hlargument{=}{\ }\hlfunctioncall{rev}\hlkeyword{(}\hlsymbol{brks}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlsymbol{brkl}\hlkeyword{)}{\ }\hlkeyword{+}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlfunctioncall{coord\usebox{\hlnormalsizeboxunderscore}equal}\hlkeyword{(}\hlargument{ratio}{\ }\hlargument{=}{\ }\hlnumber{1}\hlkeyword{)}{\ }\hlkeyword{+}{\ }\hlfunctioncall{theme\usebox{\hlnormalsizeboxunderscore}bw}\hlkeyword{(}\hlkeyword{)}{\ }\hlkeyword{+}{\ }\hlfunctioncall{scale\usebox{\hlnormalsizeboxunderscore}x\usebox{\hlnormalsizeboxunderscore}continuous}\hlkeyword{(}\hlargument{expand}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{breaks}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{labels}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{1940}\hlkeyword{,}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlargument{by}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{)}\hlkeyword{)}{\ }\hlkeyword{+}{\ }\hlfunctioncall{scale\usebox{\hlnormalsizeboxunderscore}y\usebox{\hlnormalsizeboxunderscore}continuous}\hlkeyword{(}\hlargument{expand}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{breaks}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}\hspace*{\fill}\\
@@ -1475,6 +1479,8 @@ The last three lines of code above make a little data frame that will get used t
 Again, if anyone looks much into \texttt{ggplot2} and thinks they can improve this, pleaes let me know!
 \subsection{PlotLexisTriangles()}
 Some of you might be lucky enough to have data available in age-period-cohort format (Lexis triangles). The HMD\footnote{The HMD doesn't publish triangle exposures, just deaths, but you can still estimate them if needed.}, Kannisto-Thatcher database, and HFD are some places you can get data prepared in Lexis triangle format. Assuming you've got some data like that and you'd like to plot a true surface, you have few options (that I'm aware of) in R to plot the data \textit{as} triangles. So, a few months ago (summer 2011) I wrote a little (err, big) function that does just this. Here we'll walk through an example using Dutch APC rates from the HFD, including a few steps of pre-processing needed to get the data in the right format. First, sign up for the HFD if you haven't already \url{http://www.humanfertility.org}. I downloaded 2 files from this page: \url{http://www.humanfertility.org/cgi-bin/country.php?country=NLD&tab=asfr&t1=3&t2=4}, year, age, cohort Birth counts and year, age, cohort Female population exposure, which download as \texttt{NLDbirthsTR.txt} and \texttt{NLDexposTR.txt}, respectively.
+
+
 
 \begin{Houtput}
 \hspace*{\fill}\\
@@ -1626,12 +1632,12 @@ Just as a convenience in this case, we cut off the open ages groups for ages 12 
 \hlstd{}
 \end{Houtput}
 
-The package \texttt{LexisSurface} is not on CRAN\footnote{yet! The default legend needs to be improved, and after that it'll be ready.}, but I included the zipped package in the data folder for this tutorial. You can do a local install from syntax using $\texttt{install.packages("data/LexisSurface\_1.1.zip",repos=NULL)}$, changing the path as needed. We then load the package and invent a color ramp for fertility, \texttt{myFxcols()}. The legend color strip needs to be told explicitly where to go, using the pattern \texttt{c(xmin,ymin,xmax,ymax)}, and we tell the function to overplot lexis reference lines at 5-year intervals. APC mortality surfaces would be plotted in much the same way, except you would specify $\texttt{log=TRUE}$ and move the legend to somewhere convenient.
+The package \texttt{LexisSurface} is not on CRAN\footnote{yet! The default legend needs to be improved, and after that it'll be ready.}, but I included the zipped package in the data folder for this tutorial. You can do a local install from syntax using $\texttt{install.packages("data/LexisSurface\textunderscore 1.1.zip",repos=NULL)}$, changing the path as needed. We then load the package and invent a color ramp for fertility, \texttt{myFxcols()}. The legend color strip needs to be told explicitly where to go, using the pattern \texttt{c(xmin,ymin,xmax,ymax)}, and we tell the function to overplot lexis reference lines at 5-year intervals. APC mortality surfaces would be plotted in much the same way, except you would specify $\texttt{log=TRUE}$ and move the legend to somewhere convenient.
 
 \begin{Houtput}
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}install.packages(\usebox{\hlnormalsizeboxsinglequote}data/LexisSurface\usebox{\hlnormalsizeboxunderscore}1.1.zip\usebox{\hlnormalsizeboxsinglequote},repos=NULL)}\mbox{}
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}install.packages(\usebox{\hlnormalsizeboxsinglequote}data/LexisSurface\usebox{\hlnormalsizeboxunderscore}1.1.zip\usebox{\hlnormalsizeboxsinglequote})}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
@@ -1647,30 +1653,15 @@ The package \texttt{LexisSurface} is not on CRAN\footnote{yet! The default legen
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlstring{"blue"}\hlkeyword{,}{\ }\hlstring{"green"}\hlkeyword{,}{\ }\hlstring{"yellow"}\hlkeyword{,}{\ }\hlstring{"orange"}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{space}{\ }\hlargument{=}{\ }\hlstring{"rgb"}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
-\hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }plot{\ }it:{\ }dimensions{\ }and{\ }legend{\ }took{\ }some{\ }experimentation}\mbox{}
-\normalfont
-\hspace*{\fill}\\
-\hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}windows(height=7,width=7)}\mbox{}
-\normalfont
-\hspace*{\fill}\\
-\hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}x11(height=7,width=7){\ }on{\ }*nix}\mbox{}
-\normalfont
-\hspace*{\fill}\\
-\hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}Quartz(height=7,width=7){\ }on{\ }mac}\mbox{}
-\normalfont
-\hspace*{\fill}\\
-\hlstd{}\ttfamily\noindent
-\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{par}\hlkeyword{(}\hlargument{mar}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{6}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{)}\hlkeyword{)}\mbox{}
-\normalfont
+\hlstd{}
+\end{Houtput}
+
+\begin{Houtput}
 \hspace*{\fill}\\
 \hlstd{}\ttfamily\noindent
 \hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{PlotLexisTriangles}\hlkeyword{(}\hlsymbol{UpperTriangles}\hlkeyword{,}{\ }\hlsymbol{LowerTriangles}\hlkeyword{,}\hspace*{\fill}\\
 \hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{colorramp}{\ }\hlargument{=}{\ }\hlsymbol{myFxcols}\hlkeyword{,}{\ }\hlargument{log}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}{\ }\hlargument{lex.line.int}{\ }\hlargument{=}{\ }\hlnumber{5}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"APC{\ }Fertility{\ }Rates,{\ }NE,{\ }1950-2009,{\ }HFD"}\hlkeyword{,}\hspace*{\fill}\\
-\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{leg.coords}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1960}\hlkeyword{,}{\ }\hlnumber{3}\hlkeyword{,}{\ }\hlnumber{1999}\hlkeyword{,}{\ }\hlnumber{5}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{leg.coords}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{1960}\hlkeyword{,}{\ }\hlnumber{2}\hlkeyword{,}{\ }\hlnumber{1999}\hlkeyword{,}{\ }\hlnumber{4}\hlkeyword{)}\hlkeyword{)}\mbox{}
 \normalfont
 \hspace*{\fill}\\
 \hlstd{}
@@ -1681,8 +1672,281 @@ The package \texttt{LexisSurface} is not on CRAN\footnote{yet! The default legen
 \begin{figure}[H]
 \centering
 \includegraphics[width=4.5in,height=4.5in]{figs/lextri.pdf}
-\caption{Fertility surface with \texttt{PlotLexisTriangles()} function.}
+\caption{Fertility surface with PlotLexisTriangles() function.}
 \end{figure}
 
 The insides of this function are based almost entirely on the primitive \texttt{polygon()} and \texttt{segments()} functions. It would be possible to write a function to do the same thing using \texttt{lattice} conventions, and it's likely possible in \texttt{ggplot2}, though I'm still looking into this. Neither of those possible variants will be further explored.
+
+\pagebreak
+\section{Population pyramids}
+By now you will probably have seen how to make populatin pyramids in Excel, but it's well worth your time to see a couple R-tastic ways of making them as well because 1) it's faster! 2) they are easier to standardize and make comparable and 3) it's way more reproducible. You might disagree with the first point, but actually if you already have your data in the shape required by Excel, then you have a few R functions at your disposal to make the pyramid in a single step. I'll present 2 functions, \texttt{pyramid} from the \texttt{pyramid} package by Minato Nakazawa and my own \texttt{Pyramid} function in the package \texttt{Pyramid}. For your information, there is also a pyramid plotting functions in the \texttt{plotrix} package, and there maybe others on CRAN as well. I show them both because they differ essentially in their plotting strategy. \texttt{Pyramid()} wraps directly to \texttt{barplot()} from base graphics, whereas \texttt{pyramid()} calls the even more primitive \texttt{polygon()} function. The plot aesthetics are also a bit different between the two functions.\\
+
+First some words on population pyramids in general: There are a set of conventions that one must adhere to, just as for Lexis surfaces, in order that population pyramids be correctly interpreted and comparable between populations. First and always: use equal axis extremes for males and females so that the pyramid is centered in your figure. If you are doing multiple pyramids, think carefully about the kind of comparisons you'll want to do. This will bear directly on your decision for x-axis limits. For two populations of similar size, it is OK to use absolute population counts for the axes as long as the axes are the same for both figures and both pyramids are still intelligible. In this way you can get an idea of cohort sizes and population structure at the same time. This circumstance will rarely pertain in reality. If two populations are of different orders of size (or even if one is just 20\% bigger than the other), and you are even remotely interested in comparing population structure then you should rescale the populations before plotting. What number to rescale to is a matter of choice, but 100 is a decent choice, such that the x axis ticks can be clean percentages. You'll typically have 2 vectors of numbers, one for male counts by age and another for female counts by age: Rescaling must be done in terms of the sum of \textit{both} of these vectors together, not separately. There will be an example of theis pre-plotting step for the \texttt{pyramid()} function (\texttt{Pyramid()} does it automagically). Take home message: pyramids are for looking at structure, and are best looked at and compared on the same scale. Finally (and never forget it!), males on the left, females on the right\footnote{I once saw a famous French demographer do just the opposite, and this person failed to point out the fact. Of course you always need to adhere to local standards, but do be aware that most demographer around the world put males on the left.}. This last is in my opinion just as important as always plotting cohort lines at 45 degree angles. Just do it.\\
+
+For both functions, we'll use Spanish data from the year 2000 \footnote{These are included in \texttt{Pyramid} package as examples data} from the HMD.
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{ESP2000}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{read.table}\hlkeyword{(}\hlstring{"data/ES2000.txt"}\hlkeyword{,}{\ }\hlargument{sep}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxbackslash}t"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{header}{\ }\hlargument{=}{\ }\hlnumber{TRUE}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{rownames}\hlkeyword{(}\hlsymbol{ESP2000}\hlkeyword{)}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{0}\hlkeyword{:}\hlnumber{110}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{head}\hlkeyword{(}\hlsymbol{ESP2000}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\begin{Schunk}
+\begin{Soutput}
+   males females
+0 195176  183999
+1 188275  177464
+2 187834  177790
+3 186656  176754
+4 188114  178140
+5 191968  181515
+\end{Soutput}
+
+\end{Schunk}
+\end{Houtput}
+
+\subsection{pyramid()}
+The \texttt{pyramid()} function takes a \texttt{data.frame} as it's primary argument\footnote{the same package also offers \texttt{pyramids()}, which takes vector arguments.}. This needs to have at least 2 columns, the first for the left side of the pyramid (males in our convention) and the second for the right side (females). Ages are either taken from the rownames or from an optional third column in the \texttt{data.frame}.
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }install{\ }from{\ }CRAN{\ }if{\ }needed:}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}install.packages(\usebox{\hlnormalsizeboxsinglequote}pyramid\usebox{\hlnormalsizeboxsinglequote},lib=\usebox{\hlnormalsizeboxsinglequote}C:/Program}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }{\ }{\ }Files/R/R-2.14.0/library\usebox{\hlnormalsizeboxsinglequote})}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{source}\hlkeyword{(}\hlstring{"http://bioconductor.org/biocLite.R"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{biocLite}\hlkeyword{(}\hlstring{"pyramid"}\hlkeyword{,}{\ }\hlargument{ask}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}{\ }\hlargument{suppressUpdates}{\ }\hlargument{=}{\ }\hlnumber{TRUE}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\begin{Schunk}
+\begin{Soutput}
+package 'pyramid' successfully unpacked and MD5 sums checked
+
+The downloaded packages are in
+	C:\Users\triffe\AppData\Local\Temp\Rtmp6vwjKV\downloaded_packages
+\end{Soutput}
+\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{library}\hlkeyword{(}\hlsymbol{pyramid}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }convert{\ }to{\ }data.frame}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{ESP2000df}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{as.data.frame}\hlkeyword{(}\hlsymbol{ESP2000}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Schunk}
+\end{Houtput}
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{pyramid}\hlkeyword{(}\hlsymbol{ESP2000df}\hlkeyword{,}{\ }\hlargument{Llab}{\ }\hlargument{=}{\ }\hlstring{"Males"}\hlkeyword{,}{\ }\hlargument{Rlab}{\ }\hlargument{=}{\ }\hlstring{"Females"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{Clab}{\ }\hlargument{=}{\ }\hlstring{""}\hlkeyword{,}{\ }\hlargument{Laxis}{\ }\hlargument{=}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{350000}\hlkeyword{,}{\ }\hlargument{len}{\ }\hlargument{=}{\ }\hlnumber{5}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{AxisFM}{\ }\hlargument{=}{\ }\hlstring{"d"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{AxisBM}{\ }\hlargument{=}{\ }\hlstring{","}\hlkeyword{,}{\ }\hlargument{Csize}{\ }\hlargument{=}{\ }\hlnumber{0.5}\hlkeyword{,}{\ }\hlargument{Cstep}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"Population{\ }pyramid{\ }of{\ }Spain\usebox{\hlnormalsizeboxbackslash}n{\ }(Data:{\ }HMD)"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+Some prefer the age axis to go up the middle, as is the standard with \texttt{pyramid()}. In this case the axis labels are a bit sloppy, and the function unfortunately offers no control over this at this time. I think we can get around that problem by simply rescaling the population prior to plotting (next step)
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/pyramid1.pdf}
+\caption{\texttt{pyramid()}, with unscaled population.}
+\end{figure}
+
+
+Rescaling in R is super easy, just divide the thing by its own sum and multiply by whatever you want the new sum to be. In this case I multiply by 100 so that the age bars canbe thought of as percents (or fractions of percents).
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }rescale{\ }to{\ }100}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{ESP2000df}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlnumber{100}{\ }\hlkeyword{*}{\ }\hlkeyword{(}\hlsymbol{ESP2000df}\hlkeyword{/}\hlfunctioncall{sum}\hlkeyword{(}\hlsymbol{ESP2000df}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+We have to change the lower axis limits. Replotting with essentially the same function call:
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{pyramid}\hlkeyword{(}\hlsymbol{ESP2000df}\hlkeyword{,}{\ }\hlargument{Llab}{\ }\hlargument{=}{\ }\hlstring{"Males"}\hlkeyword{,}{\ }\hlargument{Rlab}{\ }\hlargument{=}{\ }\hlstring{"Females"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{Clab}{\ }\hlargument{=}{\ }\hlstring{""}\hlkeyword{,}{\ }\hlargument{Laxis}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0.2}\hlkeyword{,}{\ }\hlnumber{0.4}\hlkeyword{,}{\ }\hlnumber{0.6}\hlkeyword{,}{\ }\hlnumber{0.8}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{Cstep}{\ }\hlargument{=}{\ }\hlnumber{10}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"Population{\ }pyramid{\ }of{\ }Spain\usebox{\hlnormalsizeboxbackslash}n{\ }(Data:{\ }HMD)"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/pyramid2.pdf}
+\caption{\texttt{pyramid()}, with unscaled population.}
+\end{figure}
+
+I find the function rather inflexible in terms of labelling: it'd be nice to be able to add \% signs to the axis labels, and for the default axes to use clean numbers, but otherwise it does the job right. You can, for instance, adjust the spacing of the middle. Tick marks would be nice for the ages as well.
+
+\subsection{Pyramid()}
+The \texttt{Pyramid()} function takes care of several of these shortcomings, and has its own different set of defaults. The left axis labels are for ages and the right axis labels are for generations. Data are by default rescaled to percent (argument $\texttt{prop = TRUE}$). In order for the generations to calculate right, you need to specify the data year in the arguments, although the default year and the data year in this case (2000) coincide. 
+
+
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlcomment{\usebox{\hlnormalsizeboxhash}{\ }library(Pyramid)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{Pyramid}\hlkeyword{(}\hlsymbol{ESP2000}\hlkeyword{[}\hlkeyword{,}{\ }\hlstring{"males"}\hlkeyword{]}\hlkeyword{,}{\ }\hlsymbol{ESP2000}\hlkeyword{[}\hlkeyword{,}{\ }\hlstring{"females"}\hlkeyword{]}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{widths}{\ }\hlargument{=}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/Pyramid3.pdf}
+\caption{\texttt{Pyramid()}, leaving all defaults.}
+\end{figure}
+
+Nearly all aspects of the pyramid can be adjusted from the arguments, for instance for abridged 5-year age groups (with the \texttt{widths} argument), the colors, bars, reference lines, whether or not to plot generations, and so forth. In following, the same pyramid with several specified arguments:
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{Pyramid}\hlkeyword{(}\hlargument{males}{\ }\hlargument{=}{\ }\hlsymbol{ESP2000}\hlkeyword{[}\hlkeyword{,}{\ }\hlnumber{1}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{females}{\ }\hlargument{=}{\ }\hlsymbol{ESP2000}\hlkeyword{[}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlnumber{2}\hlkeyword{]}\hlkeyword{,}{\ }\hlargument{border.males}{\ }\hlargument{=}{\ }\hlstring{"black"}\hlkeyword{,}{\ }\hlargument{border.females}{\ }\hlargument{=}{\ }\hlstring{"black"}\hlkeyword{,}{\ }\hlargument{fill.males}{\ }\hlargument{=}{\ }\hlstring{"cadetblue"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{fill.females}{\ }\hlargument{=}{\ }\hlstring{"salmon"}\hlkeyword{,}{\ }\hlargument{gen.col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{,}{\ }\hlargument{year}{\ }\hlargument{=}{\ }\hlnumber{2000}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"Spain{\ }population{\ }structure,{\ }year{\ }2000\usebox{\hlnormalsizeboxbackslash}ntotal{\ }population{\ }={\ }40.1{\ }million"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{prop}{\ }\hlargument{=}{\ }\hlnumber{FALSE}\hlkeyword{,}{\ }\hlargument{widths}{\ }\hlargument{=}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/Pyramid4.pdf}
+\caption{\texttt{Pyramid()}, adjusting several arguments.}
+\end{figure}
+
+
+Again, if comparing populations or the same population at different points in time, do two things: 1) Leave the default rescaling to percent and 2) set the \texttt{xlim} argument, just as you would for a normal plot. You would want, for instance, to fix the \texttt{xlim} argument if animating a population pyramid over a projection horizon, or a historical times series. This is a good way to get a feel for the concept of ergodicity. Refer to the following blog post for a guide to animating population pyramids in R \url{http://sites.google.com/site/timriffepersonal/DemogBlog/animatingapopulationpyramidinr}.\\\
+
+\texttt{Pyramid()} also handles multistate population pyramids with no additional hassel. Multistate population pyramids are identical, but further subdivided into states such as marital states, health, employment, educational attainment, nationality, race, or any other state you might have information on in addition to age and sex. In this case, instead of specifying a vector, specify a matrix, where each column distinguishes a state, and specify the colors as vectors as well (one for each column). Here's a little example- I'll derive some fake states from the Spanish data just for the example plotting syntax:
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{m}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{ESP2000}\hlkeyword{[}\hlkeyword{,}{\ }\hlstring{"males"}\hlkeyword{]}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{f}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{ESP2000}\hlkeyword{[}\hlkeyword{,}{\ }\hlstring{"females"}\hlkeyword{]}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{pmales}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{15}\hlkeyword{)}\hlkeyword{,}{\ }\hlfunctioncall{seq}\hlkeyword{(}\hlnumber{0}\hlkeyword{,}{\ }\hlnumber{0.7}\hlkeyword{,}{\ }\hlargument{length}{\ }\hlargument{=}{\ }\hlnumber{96}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{pfemales}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlsymbol{pmales}{\ }\hlkeyword{*}{\ }\hlnumber{0.9}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{MalesMS}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{cbind}\hlkeyword{(}\hlsymbol{m}{\ }\hlkeyword{*}{\ }\hlsymbol{pmales}\hlkeyword{,}{\ }\hlsymbol{m}{\ }\hlkeyword{*}{\ }\hlkeyword{(}\hlnumber{1}{\ }\hlkeyword{-}{\ }\hlsymbol{pmales}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlsymbol{FemalesMS}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{cbind}\hlkeyword{(}\hlsymbol{f}{\ }\hlkeyword{*}{\ }\hlsymbol{pfemales}\hlkeyword{,}{\ }\hlsymbol{f}{\ }\hlkeyword{*}{\ }\hlkeyword{(}\hlnumber{1}{\ }\hlkeyword{-}{\ }\hlsymbol{pfemales}\hlkeyword{)}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{colnames}\hlkeyword{(}\hlsymbol{MalesMS}\hlkeyword{)}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"state{\ }1"}\hlkeyword{,}{\ }\hlstring{"state{\ }2"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{colnames}\hlkeyword{(}\hlsymbol{FemalesMS}\hlkeyword{)}{\ }\hlassignement{\usebox{\hlnormalsizeboxlessthan}-}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"state{\ }1"}\hlkeyword{,}{\ }\hlstring{"state{\ }2"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{is.matrix}\hlkeyword{(}\hlsymbol{MalesMS}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}\begin{Schunk}
+\begin{Soutput}
+[1] TRUE
+\end{Soutput}
+
+\end{Schunk}
+\end{Houtput}
+
+\begin{Houtput}
+\hspace*{\fill}\\
+\hlstd{}\ttfamily\noindent
+\hlprompt{\usebox{\hlnormalsizeboxgreaterthan}{\ }}\hlfunctioncall{Pyramid}\hlkeyword{(}\hlargument{males}{\ }\hlargument{=}{\ }\hlsymbol{MalesMS}\hlkeyword{,}{\ }\hlargument{females}{\ }\hlargument{=}{\ }\hlsymbol{FemalesMS}\hlkeyword{,}{\ }\hlargument{border.males}{\ }\hlargument{=}{\ }\hlstring{"black"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{border.females}{\ }\hlargument{=}{\ }\hlstring{"black"}\hlkeyword{,}{\ }\hlargument{fill.males}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"skyblue2"}\hlkeyword{,}{\ }\hlstring{"orange"}\hlkeyword{)}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{fill.females}{\ }\hlargument{=}{\ }\hlfunctioncall{c}\hlkeyword{(}\hlstring{"skyblue2"}\hlkeyword{,}{\ }\hlstring{"orange"}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{gen.col}{\ }\hlargument{=}{\ }\hlstring{"\usebox{\hlnormalsizeboxhash}00000030"}\hlkeyword{,}\hspace*{\fill}\\
+\hlstd{}\hlprompt{{\ }}{\ }{\ }{\ }{\ }\hlargument{year}{\ }\hlargument{=}{\ }\hlnumber{2000}\hlkeyword{,}{\ }\hlkeyword{,}{\ }\hlargument{widths}{\ }\hlargument{=}{\ }\hlfunctioncall{rep}\hlkeyword{(}\hlnumber{1}\hlkeyword{,}{\ }\hlnumber{111}\hlkeyword{)}\hlkeyword{,}{\ }\hlargument{main}{\ }\hlargument{=}{\ }\hlstring{"Spain{\ }multistate{\ }pop.{\ }structure,{\ }year{\ }2000\usebox{\hlnormalsizeboxbackslash}ntotal{\ }population{\ }={\ }40.1{\ }million"}\hlkeyword{)}\mbox{}
+\normalfont
+\hspace*{\fill}\\
+\hlstd{}
+\end{Houtput}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/Pyramid5.pdf}
+\caption{\texttt{Pyramid()}, for multistate population data.}
+\end{figure}
+
+There is no limit to the number of states you can introduce into the pyramid in this way (i.e. simply adding columns).
+
+\nocite{*} % make sure all references included even if not explicitly in paper
+\bibliographystyle{plainnat}
+\bibliography{References}   % Use the BibTeX file ``References.bib''.
+
 \end{document}

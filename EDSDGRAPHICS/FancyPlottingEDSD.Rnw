@@ -44,7 +44,9 @@ One of the strong points of R is its graphical power. This document is not a com
 \SweaveInput{surfaces/PlotLexisTriangles.Rnw}
 \SweaveInput{pyramids/pyramids.Rnw}
 
+\pagebreak
 \nocite{*} % make sure all references included even if not explicitly in paper
 \bibliographystyle{plainnat}
 \bibliography{References}   % Use the BibTeX file ``References.bib''.
 
+\end{document}

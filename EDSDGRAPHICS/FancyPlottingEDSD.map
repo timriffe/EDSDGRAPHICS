@@ -2,287 +2,389 @@ chunk: figs/-001
 chunkprefix: figs/-001
 fig:
 cacheDB:
-time: 2011-11-23 18:11:26
+time: 2011-11-25 11:52:00
 
 chunk: figs/-002
 chunkprefix: figs/-002
 fig:
 cacheDB:
-time: 2011-11-23 18:11:26
+time: 2011-11-25 11:52:00
 
 chunk: figs/-003
 chunkprefix: figs/-003
 fig:
 cacheDB:
-time: 2011-11-23 18:11:26
+time: 2011-11-25 11:52:00
 
 chunk: colorramp
 chunkprefix: figs/-colorramp
 fig:
 cacheDB:
-time: 2011-11-23 18:11:26
+time: 2011-11-25 11:52:00
 
 chunk: figs/-005
 chunkprefix: figs/-005
 fig:
 cacheDB:
-time: 2011-11-23 18:11:26
+time: 2011-11-25 11:52:00
 
 chunk: figs/-006
 chunkprefix: figs/-006
 fig:
 cacheDB:
-time: 2011-11-23 18:11:26
+time: 2011-11-25 11:52:00
 
 chunk: figs/-007
 chunkprefix: figs/-007
 fig:
 cacheDB:
-time: 2011-11-23 18:11:26
+time: 2011-11-25 11:52:00
 
 chunk: figs/-008
 chunkprefix: figs/-008
 fig:
 cacheDB:
-time: 2011-11-23 18:11:26
+time: 2011-11-25 11:52:00
 
 chunk: simpson
 chunkprefix: figs/-simpson
 fig:
 cacheDB:
-time: 2011-11-23 18:11:27
+time: 2011-11-25 11:52:01
 
 chunk: figs/-010
 chunkprefix: figs/-010
 fig: figs/-010.tikz
 cacheDB:
-time: 2011-11-23 18:11:27
+time: 2011-11-25 11:52:01
 
 chunk: figs/-011
 chunkprefix: figs/-011
 fig:
 cacheDB:
-time: 2011-11-23 18:11:27
+time: 2011-11-25 11:52:01
 
 chunk: colorscatter
 chunkprefix: figs/-colorscatter
 fig:
 cacheDB:
-time: 2011-11-23 18:11:27
+time: 2011-11-25 11:52:01
 
 chunk: figs/-013
 chunkprefix: figs/-013
 fig: figs/-013.tikz
 cacheDB:
-time: 2011-11-23 18:11:27
+time: 2011-11-25 11:52:02
 
 chunk: figs/-014
 chunkprefix: figs/-014
 fig:
 cacheDB:
-time: 2011-11-23 18:11:27
+time: 2011-11-25 11:52:02
 
 chunk: colorscatterOLS
 chunkprefix: figs/-colorscatterOLS
 fig:
 cacheDB:
-time: 2011-11-23 18:11:28
+time: 2011-11-25 11:52:02
 
 chunk: figs/-016
 chunkprefix: figs/-016
 fig: figs/-016.tikz
 cacheDB:
-time: 2011-11-23 18:11:28
+time: 2011-11-25 11:52:02
 
 chunk: part1
 chunkprefix: figs/-part1
 fig:
 cacheDB:
-time: 2011-11-23 18:11:28
+time: 2011-11-25 11:52:02
 
 chunk: part2
 chunkprefix: figs/-part2
 fig:
 cacheDB:
-time: 2011-11-23 18:11:28
+time: 2011-11-25 11:52:03
 
 chunk: figs/-019
 chunkprefix: figs/-019
 fig: figs/-019.tikz
 cacheDB:
-time: 2011-11-23 18:11:28
+time: 2011-11-25 11:52:03
 
 chunk: figs/-020
 chunkprefix: figs/-020
 fig:
 cacheDB:
-time: 2011-11-23 18:11:29
+time: 2011-11-25 11:52:03
 
 chunk: figs/-021
 chunkprefix: figs/-021
 fig:
 cacheDB:
-time: 2011-11-23 18:11:29
+time: 2011-11-25 11:52:03
 
 chunk: figs/-022
 chunkprefix: figs/-022
 fig:
 cacheDB:
-time: 2011-11-23 18:11:29
+time: 2011-11-25 11:52:03
 
 chunk: a
 chunkprefix: figs/-a
 fig:
 cacheDB:
-time: 2011-11-23 18:11:29
+time: 2011-11-25 11:52:04
 
 chunk: b
 chunkprefix: figs/-b
 fig:
 cacheDB:
-time: 2011-11-23 18:11:29
+time: 2011-11-25 11:52:04
 
 chunk: c
 chunkprefix: figs/-c
 fig:
 cacheDB:
-time: 2011-11-23 18:11:30
+time: 2011-11-25 11:52:04
 
 chunk: d
 chunkprefix: figs/-d
 fig:
 cacheDB:
-time: 2011-11-23 18:11:30
+time: 2011-11-25 11:52:04
 
 chunk: figs/-027
 chunkprefix: figs/-027
 fig:
 cacheDB:
-time: 2011-11-23 18:11:30
+time: 2011-11-25 11:52:04
 
 chunk: imageplotdefault
 chunkprefix: figs/-imageplotdefault
 fig:
 cacheDB:
-time: 2011-11-23 18:11:30
+time: 2011-11-25 11:52:05
 
 chunk: figs/-029
 chunkprefix: figs/-029
 fig:
 cacheDB:
-time: 2011-11-23 18:11:30
+time: 2011-11-25 11:52:05
 
 chunk: imageplotgood
 chunkprefix: figs/-imageplotgood
 fig:
 cacheDB:
-time: 2011-11-23 18:11:30
+time: 2011-11-25 11:52:05
 
 chunk: d
 chunkprefix: figs/-d
 fig:
 cacheDB:
-time: 2011-11-23 18:11:30
+time: 2011-11-25 11:52:05
 
 chunk: figs/-032
 chunkprefix: figs/-032
 fig:
 cacheDB:
-time: 2011-11-23 18:11:31
+time: 2011-11-25 11:52:05
 
 chunk: figs/-033
 chunkprefix: figs/-033
 fig:
 cacheDB:
-time: 2011-11-23 18:11:31
+time: 2011-11-25 11:52:05
 
 chunk: latticedefault
 chunkprefix: figs/-latticedefault
 fig:
 cacheDB:
-time: 2011-11-23 18:11:31
+time: 2011-11-25 11:52:05
 
 chunk: figs/-035
 chunkprefix: figs/-035
 fig:
 cacheDB:
-time: 2011-11-23 18:11:31
+time: 2011-11-25 11:52:06
 
 chunk: d
 chunkprefix: figs/-d
 fig:
 cacheDB:
-time: 2011-11-23 18:11:31
+time: 2011-11-25 11:52:06
 
 chunk: latticegood
 chunkprefix: figs/-latticegood
 fig:
 cacheDB:
-time: 2011-11-23 18:11:31
+time: 2011-11-25 11:52:06
 
 chunk: figs/-038
 chunkprefix: figs/-038
 fig:
 cacheDB:
-time: 2011-11-23 18:11:32
+time: 2011-11-25 11:52:06
 
 chunk: latticegoodcontour
 chunkprefix: figs/-latticegoodcontour
 fig:
 cacheDB:
-time: 2011-11-23 18:11:32
+time: 2011-11-25 11:52:07
 
 chunk: figs/-040
 chunkprefix: figs/-040
 fig:
 cacheDB:
-time: 2011-11-23 18:11:32
+time: 2011-11-25 11:52:07
 
 chunk: figs/-041
 chunkprefix: figs/-041
 fig:
 cacheDB:
-time: 2011-11-23 18:11:32
+time: 2011-11-25 11:52:07
 
 chunk: prepare
 chunkprefix: figs/-prepare
 fig:
 cacheDB:
-time: 2011-11-23 18:11:32
+time: 2011-11-25 11:52:07
 
 chunk: geomtile
 chunkprefix: figs/-geomtile
 fig:
 cacheDB:
-time: 2011-11-23 18:11:33
+time: 2011-11-25 11:52:08
 
 chunk: figs/-044
 chunkprefix: figs/-044
 fig:
 cacheDB:
-time: 2011-11-23 18:11:33
+time: 2011-11-25 11:52:08
 
 chunk: figs/-045
 chunkprefix: figs/-045
 fig:
 cacheDB:
-time: 2011-11-23 18:11:34
+time: 2011-11-25 11:52:10
 
 chunk: figs/-046
 chunkprefix: figs/-046
 fig:
 cacheDB:
-time: 2011-11-23 18:11:35
+time: 2011-11-25 11:52:10
 
-chunk: lextri
-chunkprefix: figs/-lextri
+chunk: figs/-047
+chunkprefix: figs/-047
 fig:
 cacheDB:
-time: 2011-11-23 18:11:35
+time: 2011-11-25 11:52:10
 
 chunk: figs/-048
 chunkprefix: figs/-048
 fig:
 cacheDB:
-time: 2011-11-23 18:11:37
+time: 2011-11-25 11:52:10
+
+chunk: lextri
+chunkprefix: figs/-lextri
+fig:
+cacheDB:
+time: 2011-11-25 11:52:11
+
+chunk: figs/-050
+chunkprefix: figs/-050
+fig:
+cacheDB:
+time: 2011-11-25 11:52:13
+
+chunk: figs/-051
+chunkprefix: figs/-051
+fig:
+cacheDB:
+time: 2011-11-25 11:52:15
+
+chunk: figs/-052
+chunkprefix: figs/-052
+fig:
+cacheDB:
+time: 2011-11-25 11:52:15
+
+chunk: pyramidcall1
+chunkprefix: figs/-pyramidcall1
+fig:
+cacheDB:
+time: 2011-11-25 11:52:17
+
+chunk: figs/-054
+chunkprefix: figs/-054
+fig:
+cacheDB:
+time: 2011-11-25 11:52:17
+
+chunk: figs/-055
+chunkprefix: figs/-055
+fig:
+cacheDB:
+time: 2011-11-25 11:52:17
+
+chunk: pyramidcall2
+chunkprefix: figs/-pyramidcall2
+fig:
+cacheDB:
+time: 2011-11-25 11:52:17
+
+chunk: figs/-057
+chunkprefix: figs/-057
+fig:
+cacheDB:
+time: 2011-11-25 11:52:18
+
+chunk: figs/-058
+chunkprefix: figs/-058
+fig:
+cacheDB:
+time: 2011-11-25 11:52:18
+
+chunk: Pyramidcall3
+chunkprefix: figs/-Pyramidcall3
+fig:
+cacheDB:
+time: 2011-11-25 11:52:18
+
+chunk: figs/-060
+chunkprefix: figs/-060
+fig:
+cacheDB:
+time: 2011-11-25 11:52:18
+
+chunk: Pyramidcall4
+chunkprefix: figs/-Pyramidcall4
+fig:
+cacheDB:
+time: 2011-11-25 11:52:18
+
+chunk: figs/-062
+chunkprefix: figs/-062
+fig:
+cacheDB:
+time: 2011-11-25 11:52:18
+
+chunk: figs/-063
+chunkprefix: figs/-063
+fig:
+cacheDB:
+time: 2011-11-25 11:52:18
+
+chunk: Pyramidcall5
+chunkprefix: figs/-Pyramidcall5
+fig:
+cacheDB:
+time: 2011-11-25 11:52:19
+
+chunk: figs/-065
+chunkprefix: figs/-065
+fig:
+cacheDB:
+time: 2011-11-25 11:52:19
 
