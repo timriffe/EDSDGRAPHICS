@@ -1,6 +1,11 @@
 \subsection{PlotLexisTriangles()}
 Some of you might be lucky enough to have data available in age-period-cohort format (Lexis triangles). The HMD\footnote{The HMD doesn't publish triangle exposures, just deaths, but you can still estimate them if needed.}, Kannisto-Thatcher database, and HFD are some places you can get data prepared in Lexis triangle format. Assuming you've got some data like that and you'd like to plot a true surface, you have few options (that I'm aware of) in R to plot the data \textit{as} triangles. So, a few months ago (summer 2011) I wrote a little (err, big) function that does just this. Here we'll walk through an example using Dutch APC rates from the HFD, including a few steps of pre-processing needed to get the data in the right format. First, sign up for the HFD if you haven't already \url{http://www.humanfertility.org}. I downloaded 2 files from this page: \url{http://www.humanfertility.org/cgi-bin/country.php?country=NLD&tab=asfr&t1=3&t2=4}, year, age, cohort Birth counts and year, age, cohort Female population exposure, which download as \texttt{NLDbirthsTR.txt} and \texttt{NLDexposTR.txt}, respectively.
 
+<<echo=FALSE,results=hide>>=
+dev.off()
+rm(list=ls())
+@
+
 <<>>=
 B <- read.table("data/NLDbirthsTR.txt", header = TRUE, skip = 2, na.strings = ".", as.is = TRUE)
 E <- read.table("data/NLDexposTR.txt", header = TRUE, skip = 2, na.strings = ".", as.is = TRUE)
@@ -37,22 +42,17 @@ rownames(UpperTriangles) <- rownames(LowerTriangles) <- Ages
 colnames(LowerTriangles) <- colnames(LowerTriangles) <- Years
 @
 
-The package \texttt{LexisSurface} is not on CRAN\footnote{yet! The default legend needs to be improved, and after that it'll be ready.}, but I included the zipped package in the data folder for this tutorial. You can do a local install from syntax using $\texttt{install.packages("data/LexisSurface\_1.1.zip",repos=NULL)}$, changing the path as needed. We then load the package and invent a color ramp for fertility, \texttt{myFxcols()}. The legend color strip needs to be told explicitly where to go, using the pattern \texttt{c(xmin,ymin,xmax,ymax)}, and we tell the function to overplot lexis reference lines at 5-year intervals. APC mortality surfaces would be plotted in much the same way, except you would specify $\texttt{log=TRUE}$ and move the legend to somewhere convenient.
+The package \texttt{LexisSurface} is not on CRAN\footnote{yet! The default legend needs to be improved, and after that it'll be ready.}, but I included the zipped package in the data folder for this tutorial. You can do a local install from syntax using $\texttt{install.packages("data/LexisSurface\textunderscore 1.1.zip",repos=NULL)}$, changing the path as needed. We then load the package and invent a color ramp for fertility, \texttt{myFxcols()}. The legend color strip needs to be told explicitly where to go, using the pattern \texttt{c(xmin,ymin,xmax,ymax)}, and we tell the function to overplot lexis reference lines at 5-year intervals. APC mortality surfaces would be plotted in much the same way, except you would specify $\texttt{log=TRUE}$ and move the legend to somewhere convenient.
 
-<<lextri>>=
-#install.packages("data/LexisSurface_1.1.zip",repos=NULL)
+<<>>=
+#install.packages("data/LexisSurface_1.1.zip")
 library(LexisSurface)
 # invent Fx color ramp (any suggestions for better?)
 myFxcols <- grDevices:::colorRampPalette(c("white","blue","green","yellow","orange"),space = "rgb")
-# plot it: dimensions and legend took some experimentation
-#windows(height=7,width=7)
-#x11(height=7,width=7) on *nix 
-#Quartz(height=7,width=7) on mac
+@
 
-par(mar=c(6,2,5,2))
-PlotLexisTriangles(UpperTriangles,LowerTriangles,colorramp=myFxcols,log=FALSE,
-		lex.line.int=5,main="APC Fertility Rates, NE, 1950-2009, HFD",
-		leg.coords=c(1960,3,1999,5))
+<<lextri>>=
+PlotLexisTriangles(UpperTriangles,LowerTriangles,colorramp=myFxcols,log=FALSE,lex.line.int=5,main="APC Fertility Rates, NE, 1950-2009, HFD",leg.coords=c(1960,2,1999,4))
 @
 
 <<echo=FALSE,results=hide>>=
@@ -64,7 +64,8 @@ dev.off()
 \begin{figure}[H]
 \centering
 \includegraphics[width=4.5in,height=4.5in]{figs/lextri.pdf}
-\caption{Fertility surface with \texttt{PlotLexisTriangles()} function.}
+\caption{Fertility surface with PlotLexisTriangles() function.}
 \end{figure}
 
 The insides of this function are based almost entirely on the primitive \texttt{polygon()} and \texttt{segments()} functions. It would be possible to write a function to do the same thing using \texttt{lattice} conventions, and it's likely possible in \texttt{ggplot2}, though I'm still looking into this. Neither of those possible variants will be further explored.
+
