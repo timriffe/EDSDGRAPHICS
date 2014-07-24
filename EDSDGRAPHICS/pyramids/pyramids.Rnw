@@ -1,16 +1,13 @@
+\pagebreak
 \section{Population pyramids}
-By now you will probably have seen how to make populatin pyramids in Excel, but it's well worth your time to see a couple R-tastic ways of making them as well because 1) it's faster! 2) they are easier to standardize and make comparable and 3) it's way more reproducible. You might disagree with the first point, but actually if you already have your data in the shape required by Excel, then you have a few R functions at your disposal to make the pyramid in a single step. I'll present 2 functions, \texttt{pyramid} from the \texttt{pyramid} package by Minato Nakazawa and my own \texttt{Pyramid} function in the package \texttt{Pyramid}. For your information, there is also a pyramid plotting functions in the \texttt{plotrix} package, and there maybe others on CRAN as well. I show them both because they differ essentially in their plotting strategy. \texttt{Pyramid()} wraps directly to \texttt{barplot()} from base graphics, whereas \texttt{pyramid()} calls the even more primitive \texttt{polygon()} function. The plot aesthetics are also a bit different between the two functions.
+By now you will probably have seen how to make populatin pyramids in Excel, but it's well worth your time to see a couple R-tastic ways of making them as well because 1) it's faster! 2) they are easier to standardize and make comparable and 3) it's way more reproducible. You might disagree with the first point, but actually if you already have your data in the shape required by Excel, then you have a few R functions at your disposal to make the pyramid in a single step. I'll present 2 functions, \texttt{pyramid} from the \texttt{pyramid} package by Minato Nakazawa and my own \texttt{Pyramid} function in the package \texttt{Pyramid}. For your information, there is also a pyramid plotting functions in the \texttt{plotrix} package, and there maybe others on CRAN as well. I show them both because they differ essentially in their plotting strategy. \texttt{Pyramid()} wraps directly to \texttt{barplot()} from base graphics, whereas \texttt{pyramid()} calls the even more primitive \texttt{polygon()} function. The plot aesthetics are also a bit different between the two functions.\\
 
-For both functions, we'll use Spanish data from the year 2000 \footnote{These are included in \txttt{Pyramid} package as examples data} from the HMD.
+First some words on population pyramids in general: There are a set of conventions that one must adhere to, just as for Lexis surfaces, in order that population pyramids be correctly interpreted and comparable between populations. First and always: use equal axis extremes for males and females so that the pyramid is centered in your figure. If you are doing multiple pyramids, think carefully about the kind of comparisons you'll want to do. This will bear directly on your decision for x-axis limits. For two populations of similar size, it is OK to use absolute population counts for the axes as long as the axes are the same for both figures and both pyramids are still intelligible. In this way you can get an idea of cohort sizes and population structure at the same time. This circumstance will rarely pertain in reality. If two populations are of different orders of size (or even if one is just 20\% bigger than the other), and you are even remotely interested in comparing population structure then you should rescale the populations before plotting. What number to rescale to is a matter of choice, but 100 is a decent choice, such that the x axis ticks can be clean percentages. You'll typically have 2 vectors of numbers, one for male counts by age and another for female counts by age: Rescaling must be done in terms of the sum of \textit{both} of these vectors together, not separately. There will be an example of theis pre-plotting step for the \texttt{pyramid()} function (\texttt{Pyramid()} does it automagically). Take home message: pyramids are for looking at structure, and are best looked at and compared on the same scale. Finally (and never forget it!), males on the left, females on the right\footnote{I once saw a famous French demographer do just the opposite, and this person failed to point out the fact. Of course you always need to adhere to local standards, but do be aware that most demographer around the world put males on the left.}. This last is in my opinion just as important as always plotting cohort lines at 45 degree angles. Just do it.\\
 
-First some words on population pyramids in general: There are a set of conventions that one must adhere to, just as for Lexis surfaces, in order that population pyramids be correctly interpreted and comparable between populations. First and always: use equal axis extremes for males and females so that the pyramid is centered in your figure. If you are doing multiple pyramids, think carefully about the kind of comparisons you'll want to do. This will bear directly on your decision for x-axis limits. For two populations of similar size, it is OK to use absolute population counts for the axes as long as the axes are the same for both figures and both pyramids are still intelligible. In this way you can get an idea of cohort sizes and population structure at the same time. This circumstance will rarely pertain in reality. If two populations are of different orders of size (or even if one is just 20\% bigger than the other), and you are even remotely interested in comparing population structure then you should rescale the populations before plotting. What number to rescale to is a matter of choice, but 100 is a decent choice, such that the x axis ticks can be clean percentages. You'll typically have 2 vectors of numbers, one for male counts by age and another for female counts by age: Rescaling must be done in terms of the sum of \textit{both} of these vectors together, not separately. There will be an example of theis pre-plotting step for the \texttt{pyramid()} function (\texttt{Pyramid()} does it automagically). Take home message: pyramids are for looking at structure, and are best looked at and compared on the same scale. Finally (and never forget it!), males on the left, females on the right\footnote{I once saw a famous French demographer do just the opposite, and this person failed to point out the fact. Of course you always need to adhere to local standards, but do be aware that most demographer around the world put males on the left.}. This last is in my opinion just as important as always plotting cohort lines at 45 degree angles. Just do it.
+For both functions, we'll use Spanish data from the year 2000 \footnote{These are included in \texttt{Pyramid} package as examples data} from the HMD.
 
 <<>>=
-#install.packages("data/Pyramid_1.11.zip",repos=NULL)
-library(Pyramid)
-data(ESP2000)
-#load("/home/triffe/git/Pyramid/Pyramid/data/ESP2000.rda")
-# give age labels
+ESP2000 <- read.table("data/ES2000.txt",sep="\t",header=TRUE)
 rownames(ESP2000) <- 0:110
 head(ESP2000)
 @
@@ -20,7 +17,9 @@ The \texttt{pyramid()} function takes a \texttt{data.frame} as it's primary argu
 
 <<>>=
 # install from CRAN if needed:
-#install.packages("pyramid")
+#install.packages("pyramid",lib="C:/Program Files/R/R-2.14.0/library")
+source("http://bioconductor.org/biocLite.R")
+biocLite("pyramid",ask=FALSE,suppressUpdates=TRUE)
 library(pyramid)
 # convert to data.frame
 ESP2000df <- as.data.frame(ESP2000)
@@ -34,13 +33,18 @@ pyramid(ESP2000df,Llab="Males",Rlab="Females",Clab="",Laxis=seq(0,350000,len=5),
 
 Some prefer the age axis to go up the middle, as is the standard with \texttt{pyramid()}. In this case the axis labels are a bit sloppy, and the function unfortunately offers no control over this at this time. I think we can get around that problem by simply rescaling the population prior to plotting (next step)
 
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\pyramid1.pdf")
+<<pyramidcall1>>
+dev.off()
+@
+
 \begin{figure}[H]
 \centering
-<<echo=FALSE,results=hide,fig=TRUE>>=
-<<pyramidcall1>>
-@
+\includegraphics[width=4.5in,height=4.5in]{figs/pyramid1.pdf}
 \caption{\texttt{pyramid()}, with unscaled population.}
 \end{figure}
+
 
 Rescaling in R is super easy, just divide the thing by its own sum and multiply by whatever you want the new sum to be. In this case I multiply by 100 so that the age bars canbe thought of as percents (or fractions of percents).
 
@@ -49,23 +53,117 @@ Rescaling in R is super easy, just divide the thing by its own sum and multiply 
 ESP2000df <- 100*(ESP2000df/sum(ESP2000df))
 @
 
-We have to change the lower axis limits.
+We have to change the lower axis limits. Replotting with essentially the same function call:
 
 <<pyramidcall2>>=
-pyramid(ESP2000df,Llab="Males",Rlab="Females",Clab="",Laxis=c(0,.2,.4,.6,.8,1), Cstep=10,
-		main="Population pyramid of Spain\n (Data: HMD)")
+pyramid(ESP2000df,Llab="Males",Rlab="Females",Clab="",Laxis=c(0,.2,.4,.6,.8,1), Cstep=10,main="Population pyramid of Spain\n (Data: HMD)")
 @
 
-Replotting with essentially the same function call:
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\pyramid2.pdf")
+<<pyramidcall2>>
+dev.off()
+@
 
 \begin{figure}[H]
 \centering
-<<echo=FALSE,results=hide,fig=TRUE>>=
-<<pyramidcall2>>
-@
-\caption{\texttt{pyramid()}, with scaled population.}
+\includegraphics[width=4.5in,height=4.5in]{figs/pyramid2.pdf}
+\caption{\texttt{pyramid()}, with unscaled population.}
 \end{figure}
 
-I find the function rather inflexible in terms of labelling: it'd be nice to be able to add \% signs to the axis labels, and for the default axes to use clean numbers, but otherwise it does the job right.
+I find the function rather inflexible in terms of labelling: it'd be nice to be able to add \% signs to the axis labels, and for the default axes to use clean numbers, but otherwise it does the job right. You can, for instance, adjust the spacing of the middle. Tick marks would be nice for the ages as well.
 
-\subsection{Pyramid}
+\subsection{Pyramid()}
+The \texttt{Pyramid()} function takes care of several of these shortcomings, and has its own different set of defaults. The left axis labels are for ages and the right axis labels are for generations. Data are by default rescaled to percent (argument $\texttt{prop = TRUE}$). In order for the generations to calculate right, you need to specify the data year in the arguments, although the default year and the data year in this case (2000) coincide. 
+
+<<echo=FALSE,results=hide>>=
+detach("package:pyramid", unload = TRUE)
+rm(list=ls())
+if (!any("tmp"%in%dir())) {dir.create("tmp\\")}
+url <- "http://sites.google.com/site/timriffepersonal/Pyramid_1.11.zip?attredirects=0"
+to <- paste("tmp/Pyramid_1.11.zip")
+download.file(url=url, destfile=to, method="auto", quiet = FALSE, mode = "wb", cacheOK = TRUE)
+install.packages(to,repos=NULL)
+library(Pyramid)
+ESP2000 <- read.table("data/ES2000.txt",sep="\t",header=TRUE)
+rownames(ESP2000) <- 0:110
+@
+
+<<Pyramidcall3>>=
+# library(Pyramid)
+Pyramid(ESP2000[,"males"],ESP2000[,"females"],widths=rep(1,111))
+@
+
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\Pyramid3.pdf")
+<<Pyramidcall3>>
+dev.off()
+@
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/Pyramid3.pdf}
+\caption{\texttt{Pyramid()}, leaving all defaults.}
+\end{figure}
+
+Nearly all aspects of the pyramid can be adjusted from the arguments, for instance for abridged 5-year age groups (with the \texttt{widths} argument), the colors, bars, reference lines, whether or not to plot generations, and so forth. In following, the same pyramid with several specified arguments:
+
+<<Pyramidcall4>>=
+Pyramid(males=ESP2000[,1],females=ESP2000[,2],border.males="black",border.females="black",fill.males="cadetblue",fill.females="salmon",gen.col="#00000030",year=2000,main="Spain population structure, year 2000\ntotal population = 40.1 million",prop=FALSE,widths=rep(1,111))
+@
+
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\Pyramid4.pdf")
+<<Pyramidcall4>>
+dev.off()
+@
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/Pyramid4.pdf}
+\caption{\texttt{Pyramid()}, adjusting several arguments.}
+\end{figure}
+
+
+Again, if comparing populations or the same population at different points in time, do two things: 1) Leave the default rescaling to percent and 2) set the \texttt{xlim} argument, just as you would for a normal plot. You would want, for instance, to fix the \texttt{xlim} argument if animating a population pyramid over a projection horizon, or a historical times series. This is a good way to get a feel for the concept of ergodicity. Refer to the following blog post for a guide to animating population pyramids in R \url{http://sites.google.com/site/timriffepersonal/DemogBlog/animatingapopulationpyramidinr}.\\\
+
+\texttt{Pyramid()} also handles multistate population pyramids with no additional hassel. Multistate population pyramids are identical, but further subdivided into states such as marital states, health, employment, educational attainment, nationality, race, or any other state you might have information on in addition to age and sex. In this case, instead of specifying a vector, specify a matrix, where each column distinguishes a state, and specify the colors as vectors as well (one for each column). Here's a little example- I'll derive some fake states from the Spanish data just for the example plotting syntax:
+
+<<>>=
+m <- ESP2000[,"males"]
+f <- ESP2000[,"females"]
+pmales <- c(rep(0, 15),seq(0, .7, length = 96))
+pfemales <- pmales * .9
+MalesMS <- cbind(m * pmales, m * (1 - pmales))
+FemalesMS <- cbind(f * pfemales, f * (1 - pfemales))
+colnames(MalesMS) <- c("state 1", "state 2")
+colnames(FemalesMS) <- c("state 1", "state 2")
+is.matrix(MalesMS)
+@
+
+<<Pyramidcall5>>=
+Pyramid(males=MalesMS, 
+		females=FemalesMS, 
+		border.males="black", 
+		border.females="black", 
+		fill.males = c("skyblue2", "orange"), 
+		fill.females=c("skyblue2","orange"), 
+		gen.col="#00000030", 
+		year=2000,
+		,widths=rep(1,111),
+		main = "Spain multistate pop. structure, year 2000\ntotal population = 40.1 million")
+@
+
+<<echo=FALSE,results=hide>>=
+pdf(height=7,width=7,file="figs\\Pyramid5.pdf")
+<<Pyramidcall5>>
+dev.off()
+@
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=4.5in,height=4.5in]{figs/Pyramid5.pdf}
+\caption{\texttt{Pyramid()}, for multistate population data.}
+\end{figure}
+
+There is no limit to the number of states you can introduce into the pyramid in this way (i.e. simply adding columns).
